@@ -14,8 +14,3 @@ A roguelike survival game inspired by **SoulKnight** and **HoloCure**, built in 
 - **JavaFX** (Graphical User Interface)
 - **Data Structures & Algorithms** (Lists, Queues, Trees for enemy spawning and attacks)
 - **JDBC** (Database for player stats and game progress)
-
-## How to Run
-1. Clone this repository:
-   ```sh
-   git clone https://github.com/YOUR_GITHUB_USERNAME/SurvivalOfTheFittest.git
