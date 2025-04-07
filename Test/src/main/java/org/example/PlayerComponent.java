@@ -7,49 +7,91 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
 
 public class PlayerComponent extends Component {
+    private double speed = 3.0; // PLAYER SPEED
 
     public void moveLeft() {
-        entity.translateX(-2);
+        entity.translateX(-speed);
+        boundPlayerInWorld();
     }
 
     public void moveRight() {
-        entity.translateX(2);
+        entity.translateX(speed);
+        boundPlayerInWorld();
     }
 
     public void moveUp() {
-        entity.translateY(-2);
+        entity.translateY(-speed);
+        boundPlayerInWorld();
     }
 
     public void moveDown() {
-        entity.translateY(2);
+        entity.translateY(speed);
+        boundPlayerInWorld();
+    }
+
+    // KEEP FROM GOING OUT OF BOUNDS
+    private void boundPlayerInWorld() {
+        double worldWidth = FXGL.getAppWidth() * 2;
+        double worldHeight = FXGL.getAppHeight() * 2;
+        double playerSize = 40; // SIZE OF PLAYER RECTANGLE
+
+        if (entity.getX() < 0) {
+            entity.setX(0);
+        } else if (entity.getX() > worldWidth - playerSize) {
+            entity.setX(worldWidth - playerSize);
+        }
+
+        if (entity.getY() < 0) {
+            entity.setY(0);
+        } else if (entity.getY() > worldHeight - playerSize) {
+            entity.setY(worldHeight - playerSize);
+        }
     }
 
     public void shoot() {
-        Point2D mousePosition = FXGL.getInput().getMousePositionWorld();
-        Point2D direction = mousePosition.subtract(entity.getCenter());
+        // GET MOUSE POS AND COVERT TO WORLD POSITION
+        Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
+        double viewportX = FXGL.getGameScene().getViewport().getX();
+        double viewportY = FXGL.getGameScene().getViewport().getY();
+        Point2D mouseWorldPos = new Point2D(
+                mouseScreenPos.getX() + viewportX,
+                mouseScreenPos.getY() + viewportY
+        );
+
+        // GET DIRECTION FROM PLAYER TO MOUSE
+        Point2D direction = mouseWorldPos.subtract(entity.getCenter());
 
         Entity bullet = FXGL.spawn("bullet", entity.getCenter());
         bullet.getComponent(BulletComponent.class).setDirection(direction);
     }
 
     public void shootTripleBurst() {
-        // Get the mouse position
-        Point2D mousePosition = FXGL.getInput().getMousePositionWorld();
-        Point2D direction = mousePosition.subtract(entity.getCenter()).normalize();
+        // GET MOUSE POS AND COVERT TO WORLD POSITION
+        Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
+        double viewportX = FXGL.getGameScene().getViewport().getX();
+        double viewportY = FXGL.getGameScene().getViewport().getY();
+        Point2D mouseWorldPos = new Point2D(
+                mouseScreenPos.getX() + viewportX,
+                mouseScreenPos.getY() + viewportY
+        );
 
-        // Spawn 3 bullets with slight angle variations
+        // GET DIRECTION FROM PLAYER TO MOUSE
+        Point2D direction = mouseWorldPos.subtract(entity.getCenter()).normalize();
+
+        // SHOTGUN BANG BUSLOT KALAG
         spawnBulletWithAngle(direction, 0);         // Center bullet
         spawnBulletWithAngle(direction, -10);       // Left bullet (10 degrees left)
         spawnBulletWithAngle(direction, 10);        // Right bullet (10 degrees right)
     }
 
+    // SPAWN BALA
     private void spawnBulletWithAngle(Point2D direction, double angleDegrees) {
         Point2D rotatedDirection = rotate(direction, angleDegrees);
         Entity bullet = FXGL.spawn("bullet", entity.getCenter());
         bullet.getComponent(BulletComponent.class).setDirection(rotatedDirection);
     }
 
-    // Helper method to rotate a vector by an angle (in degrees)
+    // ROTATE FOR BURST SHOT
     private Point2D rotate(Point2D vector, double angleDegrees) {
         double angleRadians = Math.toRadians(angleDegrees);
         double cos = Math.cos(angleRadians);
