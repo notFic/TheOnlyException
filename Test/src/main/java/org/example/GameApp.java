@@ -16,6 +16,7 @@ public class GameApp extends GameApplication {
     private Entity player;
     private Random random = new Random();
 
+    // GAME SETTINGS
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setWidth(1280);
@@ -24,6 +25,7 @@ public class GameApp extends GameApplication {
         settings.setVersion("0.1");
     }
 
+    // MOVEMENT KEY
     @Override
     protected void initInput() {
         onKey(KeyCode.A, () -> player.getComponent(PlayerComponent.class).moveLeft());
@@ -36,58 +38,71 @@ public class GameApp extends GameApplication {
     protected void initGame() {
         FXGL.getGameWorld().addEntityFactory(new GameEntityFactor());
 
-        player = spawn("player", getAppWidth() / 2.0, getAppHeight() / 2.0);
+        // GAMEWORLD SIZE
+        getGameScene().setBackgroundColor(javafx.scene.paint.Color.SKYBLUE);
+        int worldWidth = getAppWidth() * 2;
+        int worldHeight = getAppHeight() * 2;
+        player = spawn("player", worldWidth / 2.0, worldHeight / 2.0);
 
-        // Set up a timer to make the player shoot 3 projectiles every 1 second
+        // CAMERA FOLLOW PLAYER
+        getGameScene().getViewport().bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
+        getGameScene().getViewport().setBounds(0, 0, worldWidth, worldHeight);
+
+        // SHOOT EVERY 1s
         FXGL.getGameTimer().runAtInterval(() -> {
             player.getComponent(PlayerComponent.class).shootTripleBurst();
         }, Duration.seconds(1));
 
-        // Spawn regular enemies every 2 seconds
+        // SPAWN ENEMY EVERY 2s
         FXGL.getGameTimer().runAtInterval(() -> {
-            spawnEnemyOutsideScreen("enemy");
+            spawnEnemyOutsideViewport("enemy");
         }, Duration.seconds(2));
 
-        // Spawn fast enemies every 5 seconds
+        // SPAWN NIGGERS EVERY 5s
         FXGL.getGameTimer().runAtInterval(() -> {
-            spawnEnemyOutsideScreen("fastEnemy");
+            spawnEnemyOutsideViewport("fastEnemy");
         }, Duration.seconds(5));
     }
 
-    private void spawnEnemyOutsideScreen(String enemyType) {
-        // Choose a random side (0=top, 1=right, 2=bottom, 3=left)
+    private void spawnEnemyOutsideViewport(String enemyType) {
+        // GET VIEWPORT BOUNDS
+        double viewMinX = getGameScene().getViewport().getX();
+        double viewMinY = getGameScene().getViewport().getY();
+        double viewMaxX = viewMinX + getAppWidth();
+        double viewMaxY = viewMinY + getAppHeight();
+
+        double x, y;
+        int margin = 50; // How far outside the viewport to spawn
+
+        // CHOOSE WHICH SIDE TO SPAWN
         int side = random.nextInt(4);
 
-        // Position variables
-        double x, y;
-        int margin = 50; // How far outside the screen to spawn
-
         switch (side) {
-            case 0: // Top
-                x = random.nextDouble() * getAppWidth();
-                y = -margin;
+            case 0: // TOP
+                x = viewMinX + random.nextDouble() * getAppWidth();
+                y = viewMinY - margin;
                 break;
-            case 1: // Right
-                x = getAppWidth() + margin;
-                y = random.nextDouble() * getAppHeight();
+            case 1: // RIGHT
+                x = viewMaxX + margin;
+                y = viewMinY + random.nextDouble() * getAppHeight();
                 break;
-            case 2: // Bottom
-                x = random.nextDouble() * getAppWidth();
-                y = getAppHeight() + margin;
+            case 2: // BOTTOM
+                x = viewMinX + random.nextDouble() * getAppWidth();
+                y = viewMaxY + margin;
                 break;
-            case 3: // Left
-                x = -margin;
-                y = random.nextDouble() * getAppHeight();
+            case 3: // LEFT
+                x = viewMinX - margin;
+                y = viewMinY + random.nextDouble() * getAppHeight();
                 break;
             default:
-                x = 0;
-                y = 0;
+                x = viewMinX;
+                y = viewMinY;
         }
 
-        // Also randomly spawn at corners sometimes
-        if (random.nextDouble() < 0.2) { // 20% chance to spawn at corners
-            x = (random.nextBoolean() ? -margin : getAppWidth() + margin);
-            y = (random.nextBoolean() ? -margin : getAppHeight() + margin);
+        // SPAWN CORNERS
+        if (random.nextDouble() < 0.2) { // 20% CHANCE TO SPAWN IN CORNER
+            x = viewMinX + (random.nextBoolean() ? -margin : getAppWidth() + margin);
+            y = viewMinY + (random.nextBoolean() ? -margin : getAppHeight() + margin);
         }
 
         SpawnData data = new SpawnData(x, y);
@@ -95,6 +110,7 @@ public class GameApp extends GameApplication {
         FXGL.getGameWorld().spawn(enemyType, data);
     }
 
+    // COLLISION
     @Override
     protected void initPhysics() {
         onCollisionBegin(EntityType.BULLET, EntityType.ENEMY, (bullet, enemy) -> {

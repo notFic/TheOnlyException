@@ -41,7 +41,7 @@ public class GameEntityFactor implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(new Rectangle(40, 40, Color.RED))
-                .with(new EnemyComponent(player, 1.5)) // Regular speed enemy
+                .with(new EnemyComponent(player, 1.5)) // NORMAL
                 .collidable()
                 .build();
     }
@@ -51,10 +51,10 @@ public class GameEntityFactor implements EntityFactory {
         Entity player = (Entity) data.getData().getOrDefault("player", null);
 
         return entityBuilder()
-                .type(EntityType.ENEMY) // Still using ENEMY type for collision detection
+                .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(new Rectangle(40, 40, Color.BLACK))
-                .with(new EnemyComponent(player, 3.0)) // Fast enemy - double the speed
+                .with(new EnemyComponent(player, 3.0)) // FAST NIGGER
                 .collidable()
                 .build();
     }

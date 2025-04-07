@@ -16,10 +16,6 @@ public class BulletComponent extends Component {
     public void onUpdate(double tpf) {
         entity.translate(direction);
 
-        // Remove bullet if it goes off-screen
-        if (entity.getX() < 0 || entity.getX() > FXGL.getAppWidth() ||
-                entity.getY() < 0 || entity.getY() > FXGL.getAppHeight()) {
-            entity.removeFromWorld();
-        }
+
     }
 }
