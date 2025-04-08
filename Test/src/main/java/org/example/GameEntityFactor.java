@@ -9,6 +9,7 @@ import com.almasb.fxgl.entity.Spawns;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -27,7 +28,8 @@ public class GameEntityFactor implements EntityFactory {
         return entityBuilder()
                 .type(EntityType.PLAYER)
                 .from(data)
-                .view(new Rectangle(40, 40, Color.BLUE))
+                //.view(texture("walk.png").toAnimatedTexture(8, Duration.seconds(1)).loop())
+                //.view(new Rectangle(40, 40, Color.BLUE))
                 .with(new PlayerComponent())
                 .collidable()
                 .build();

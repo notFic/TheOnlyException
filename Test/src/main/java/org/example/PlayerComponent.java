@@ -3,11 +3,57 @@ package org.example;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.texture.AnimatedTexture;
+import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
-import javafx.scene.input.MouseButton;
+import javafx.util.Duration;
 
 public class PlayerComponent extends Component {
-    private double speed = 3.0; // PLAYER SPEED
+    private double speed = 1.5; // PLAYER SPEED
+
+    private AnimatedTexture texture;
+    private AnimationChannel animIdle;
+    private AnimationChannel animWalk;
+
+    private boolean isMoving = false;
+    private Point2D previousPosition;
+
+    public PlayerComponent() {
+        animIdle = new AnimationChannel(FXGL.image("pixel_character_pale_blue_original.png"), 5,
+                48, 48, Duration.seconds(1), 0, 4);
+        animWalk = new AnimationChannel(FXGL.image("pixel_character_pale_blue_original.png"), 8,
+                48, 48, Duration.seconds(1), 16, 23);
+
+        texture = new AnimatedTexture(animIdle);
+        texture.loop();
+    }
+
+    @Override
+    public void onAdded() {
+        entity.getViewComponent().addChild(texture);
+        previousPosition = entity.getPosition();
+    }
+
+    @Override
+    public void onUpdate(double tpf) {
+        // Check if player has moved by comparing current position with previous position
+        Point2D currentPosition = entity.getPosition();
+        isMoving = !currentPosition.equals(previousPosition);
+
+        // Update animation based on movement
+        if (isMoving) {
+            if (texture.getAnimationChannel() != animWalk) {
+                texture.loopAnimationChannel(animWalk);
+            }
+        } else {
+            if (texture.getAnimationChannel() != animIdle) {
+                texture.loopAnimationChannel(animIdle);
+            }
+        }
+
+        // Store current position for next frame comparison
+        previousPosition = currentPosition;
+    }
 
     public void moveLeft() {
         entity.translateX(-speed);
