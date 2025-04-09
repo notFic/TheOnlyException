@@ -22,7 +22,7 @@ public class GameApp extends GameApplication {
         settings.setWidth(1280);
         settings.setHeight(720);
         settings.setTitle("Prototype");
-        settings.setVersion("0.1.2");
+        settings.setVersion("0.1.3");
     }
 
     // MOVEMENT KEY

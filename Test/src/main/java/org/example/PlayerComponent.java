@@ -12,20 +12,56 @@ public class PlayerComponent extends Component {
     private double speed = 1.5; // PLAYER SPEED
 
     private AnimatedTexture texture;
-    private AnimationChannel animIdle;
-    private AnimationChannel animWalk;
+    private AnimationChannel animIdleLeft;
+    private AnimationChannel animIdleRight;
+    private AnimationChannel animWalkLeft;
+    private AnimationChannel animWalkRight;
 
     private boolean isMoving = false;
     private Point2D previousPosition;
 
     public PlayerComponent() {
-        animIdle = new AnimationChannel(FXGL.image("pixel_character_pale_blue_original.png"), 5,
+        animIdleLeft = new AnimationChannel(FXGL.image("pixel_character_pale_blue_original.png"), 5,
                 48, 48, Duration.seconds(1), 0, 4);
-        animWalk = new AnimationChannel(FXGL.image("pixel_character_pale_blue_original.png"), 8,
+        animIdleRight = new AnimationChannel(FXGL.image("pixel_character_pale_blue_original.png"), 5,
+                48, 48, Duration.seconds(1), 5, 9);
+        animWalkLeft = new AnimationChannel(FXGL.image("pixel_character_pale_blue_original.png"), 8,
                 48, 48, Duration.seconds(1), 16, 23);
+        animWalkRight = new AnimationChannel(FXGL.image("pixel_character_pale_blue_original.png"), 8,
+                48, 48, Duration.seconds(1), 24, 31);
 
-        texture = new AnimatedTexture(animIdle);
+        texture = new AnimatedTexture(animIdleLeft);
         texture.loop();
+    }
+
+    public void idleAnimation() {
+        Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
+        double screenWidth = FXGL.getGameScene().getAppWidth();
+
+        if (mouseScreenPos.getX() < screenWidth / 2) {                  // MOUSE IS ON LEFT SIDE OF SCREEN
+            if (texture.getAnimationChannel() != animIdleLeft) {
+                texture.loopAnimationChannel(animIdleLeft);
+            }
+        } else {                                                        // MOUSE IS ON RIGHT SIDE OF SCREEN
+            if (texture.getAnimationChannel() != animIdleRight) {
+                texture.loopAnimationChannel(animIdleRight);
+            }
+        }
+    }
+
+    public void walkAnimation() {
+        Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
+        double screenWidth = FXGL.getGameScene().getAppWidth();
+
+        if (mouseScreenPos.getX() < screenWidth / 2) {                  // MOUSE IS ON LEFT SIDE OF SCREEN
+            if (texture.getAnimationChannel() != animWalkLeft) {
+                texture.loopAnimationChannel(animWalkLeft);
+            }
+        } else {                                                        // MOUSE IS ON RIGHT SIDE OF SCREEN
+            if (texture.getAnimationChannel() != animWalkRight) {
+                texture.loopAnimationChannel(animWalkRight);
+            }
+        }
     }
 
     @Override
@@ -42,13 +78,9 @@ public class PlayerComponent extends Component {
 
         // Update animation based on movement
         if (isMoving) {
-            if (texture.getAnimationChannel() != animWalk) {
-                texture.loopAnimationChannel(animWalk);
-            }
+            walkAnimation();
         } else {
-            if (texture.getAnimationChannel() != animIdle) {
-                texture.loopAnimationChannel(animIdle);
-            }
+            idleAnimation();
         }
 
         // Store current position for next frame comparison
