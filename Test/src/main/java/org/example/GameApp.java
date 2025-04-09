@@ -51,17 +51,17 @@ public class GameApp extends GameApplication {
         // SHOOT EVERY 1s
         FXGL.getGameTimer().runAtInterval(() -> {
             player.getComponent(PlayerComponent.class).shootTripleBurst();
-        }, Duration.seconds(1));
+        }, Duration.seconds(0.1));
 
         // SPAWN ENEMY EVERY 2s
         FXGL.getGameTimer().runAtInterval(() -> {
             spawnEnemyOutsideViewport("enemy");
-        }, Duration.seconds(2));
+        }, Duration.seconds(0.2));
 
         // SPAWN NIGGERS EVERY 5s
         FXGL.getGameTimer().runAtInterval(() -> {
             spawnEnemyOutsideViewport("fastEnemy");
-        }, Duration.seconds(5));
+        }, Duration.seconds(1));
     }
 
     private void spawnEnemyOutsideViewport(String enemyType) {
@@ -114,9 +114,14 @@ public class GameApp extends GameApplication {
     @Override
     protected void initPhysics() {
         onCollisionBegin(EntityType.BULLET, EntityType.ENEMY, (bullet, enemy) -> {
-            System.out.println("Collision!");
+            BulletComponent bulletComponent = bullet.getComponent(BulletComponent.class);
+            EnemyComponent enemyComponent = enemy.getComponent(EnemyComponent.class);
+
+            int damage = bulletComponent.getDamage();
+
+            enemyComponent.damage(damage);
+
             bullet.removeFromWorld();
-            enemy.removeFromWorld();
         });
     }
 
