@@ -43,7 +43,7 @@ public class GameEntityFactor implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(new Rectangle(40, 40, Color.RED))
-                .with(new EnemyComponent(player, 1.5)) // NORMAL
+                .with(new EnemyComponent(player, 1.5, 50)) // NORMAL
                 .collidable()
                 .build();
     }
@@ -56,7 +56,7 @@ public class GameEntityFactor implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(new Rectangle(40, 40, Color.BLACK))
-                .with(new EnemyComponent(player, 3.0)) // FAST NIGGER
+                .with(new EnemyComponent(player, 3.0, 30)) // FAST NIGGER
                 .collidable()
                 .build();
     }
