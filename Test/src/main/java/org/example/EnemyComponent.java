@@ -76,6 +76,10 @@ public class EnemyComponent extends Component {
         showDamageText(dmg);
 
         if (health <= 0) {
+            if(Math.random() < 0.5){
+                FXGL.spawn("drop", entity.getCenter());
+            }
+
             entity.removeFromWorld();
         }
     }

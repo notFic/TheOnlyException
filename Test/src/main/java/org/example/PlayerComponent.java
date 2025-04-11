@@ -22,6 +22,9 @@ public class PlayerComponent extends Component {
     private boolean isMoving = false;
     private Point2D previousPosition;
 
+    // KURT'S DEBUGGER VARIABLES
+    private boolean isAlive = true;
+
     // PLAYER DIMENSIONS
     private final double PLAYER_WIDTH = 96 * 0.75;
     private final double PLAYER_HEIGHT = 96 * 0.75;
@@ -218,6 +221,11 @@ public class PlayerComponent extends Component {
     public void damage(int dmg) {
         health -= dmg;
 
+        // para dili mag clutter ang sa console
+        if(isAlive){
+            System.out.println("DEBUG: player health = " + health);
+        }
+
         // FLASH RED WHEN HIT
         javafx.scene.effect.ColorAdjust colorAdjust = new javafx.scene.effect.ColorAdjust();
         colorAdjust.setHue(-0.1);
@@ -231,8 +239,9 @@ public class PlayerComponent extends Component {
 
         showDamageText(dmg);
 
-        if (health <= 0) {
+        if (health <= 0 && isAlive) {
             System.out.println("Player dead");
+            isAlive = false;
         }
     }
 

@@ -58,10 +58,15 @@ public class GameApp extends GameApplication {
             spawnEnemyOutsideViewport("enemy");
         }, Duration.seconds(1));
 
-        // SPAWN NIGGERS EVERY 5s
+        // SPAWN nis EVERY 5s
         FXGL.getGameTimer().runAtInterval(() -> {
             spawnEnemyOutsideViewport("fastEnemy");
         }, Duration.seconds(2));
+
+        // SPAWN nis EVERY 5s
+        FXGL.getGameTimer().runAtInterval(() -> {
+            spawnEnemyOutsideViewport("tankEnemy");
+        }, Duration.seconds(20));
     }
 
     private void spawnEnemyOutsideViewport(String enemyType) {

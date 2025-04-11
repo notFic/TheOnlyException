@@ -15,6 +15,12 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class GameEntityFactor implements EntityFactory {
 
+    /*
+    dinhi i-define ang mga entities (player, bullet, enemy, etc) and ang sa pag
+    create nila in a centralized way. if need mo mag create ug new na entity, refer to this file
+    but when it comes to actually spawning them in game, refer to GameApp.java
+     */
+
     private static final boolean showHitbox = false; // SWITCH TO TRUE FOR DEBUGGING PURPOSES
 
     @Spawns("background")
@@ -73,7 +79,20 @@ public class GameEntityFactor implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(new Rectangle(40, 40, Color.BLACK))
-                .with(new EnemyComponent(player, 3.0, 30, 10)) // FAST NIGGER
+                .with(new EnemyComponent(player, 3.0, 30, 10)) // FAST nis
+                .collidable()
+                .build();
+    }
+
+    @Spawns("tankEnemy")
+    public Entity newTankEnemy(SpawnData data) {
+        Entity player = (Entity) data.getData().getOrDefault("player", null);
+
+        return entityBuilder()
+                .type(EntityType.ENEMY)
+                .from(data)
+                .viewWithBBox(new Rectangle(40, 40, Color.VIOLET))
+                .with(new EnemyComponent(player, 1.0, 300, 15)) // SLOW nis
                 .collidable()
                 .build();
     }
@@ -86,6 +105,17 @@ public class GameEntityFactor implements EntityFactory {
                 .viewWithBBox(new Rectangle(10, 10, Color.BLACK))
                 .with(new BulletComponent())
                 .with(new OffscreenCleanComponent())
+                .collidable()
+                .build();
+    }
+
+    @Spawns("drop")
+    public Entity newDrop(SpawnData data) {
+        return entityBuilder()
+                .type(EntityType.DROP)
+                .from(data)
+                .viewWithBBox(new Rectangle(15, 15, Color.GOLD))
+                .with(new DropComponent())
                 .collidable()
                 .build();
     }
