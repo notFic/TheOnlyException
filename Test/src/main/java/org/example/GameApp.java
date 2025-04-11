@@ -22,7 +22,7 @@ public class GameApp extends GameApplication {
         settings.setWidth(1280);
         settings.setHeight(720);
         settings.setTitle("Prototype");
-        settings.setVersion("0.1.3");
+        settings.setVersion("0.1.4");
     }
 
     // MOVEMENT KEY
@@ -51,17 +51,17 @@ public class GameApp extends GameApplication {
         // SHOOT EVERY 1s
         FXGL.getGameTimer().runAtInterval(() -> {
             player.getComponent(PlayerComponent.class).shootTripleBurst();
-        }, Duration.seconds(0.1));
+        }, Duration.seconds(0.5));
 
         // SPAWN ENEMY EVERY 2s
         FXGL.getGameTimer().runAtInterval(() -> {
             spawnEnemyOutsideViewport("enemy");
-        }, Duration.seconds(0.2));
+        }, Duration.seconds(1));
 
         // SPAWN NIGGERS EVERY 5s
         FXGL.getGameTimer().runAtInterval(() -> {
             spawnEnemyOutsideViewport("fastEnemy");
-        }, Duration.seconds(1));
+        }, Duration.seconds(2));
     }
 
     private void spawnEnemyOutsideViewport(String enemyType) {
@@ -72,7 +72,7 @@ public class GameApp extends GameApplication {
         double viewMaxY = viewMinY + getAppHeight();
 
         double x, y;
-        int margin = 50; // How far outside the viewport to spawn
+        int margin = 50; // HOW FAR OUTSIDE OF VIEWPORT TO SPAWN
 
         // CHOOSE WHICH SIDE TO SPAWN
         int side = random.nextInt(4);
@@ -113,6 +113,7 @@ public class GameApp extends GameApplication {
     // COLLISION
     @Override
     protected void initPhysics() {
+        // BULLET DAMAGE TO ENEMY
         onCollisionBegin(EntityType.BULLET, EntityType.ENEMY, (bullet, enemy) -> {
             BulletComponent bulletComponent = bullet.getComponent(BulletComponent.class);
             EnemyComponent enemyComponent = enemy.getComponent(EnemyComponent.class);
@@ -123,6 +124,22 @@ public class GameApp extends GameApplication {
 
             bullet.removeFromWorld();
         });
+
+        // ENEMY DAMAGE TO PLAYER
+        onCollision(EntityType.PLAYER, EntityType.ENEMY, (player, enemy) -> {
+            EnemyComponent enemyComponent = enemy.getComponent(EnemyComponent.class);
+            PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+
+            long now = System.nanoTime();
+
+            if (now - enemyComponent.getLastDamageTime() >= 1_000_000_000) {
+                int damage = enemyComponent.getDamage();
+                playerComponent.damage(damage);
+                enemyComponent.setLastDamageTime(now);
+            }
+        });
+
+
     }
 
     public static void main(String[] args) {

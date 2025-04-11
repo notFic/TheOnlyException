@@ -6,10 +6,12 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 public class PlayerComponent extends Component {
     private double speed = 1.5; // PLAYER SPEED
+    int health = 100;
 
     private AnimatedTexture texture;
     private AnimationChannel animIdleLeft;
@@ -20,15 +22,26 @@ public class PlayerComponent extends Component {
     private boolean isMoving = false;
     private Point2D previousPosition;
 
+    // PLAYER DIMENSIONS
+    private final double PLAYER_WIDTH = 96 * 0.75;
+    private final double PLAYER_HEIGHT = 96 * 0.75;
+    private final double PLAYER_CENTER_OFFSET_X = PLAYER_WIDTH / 2;
+    private final double PLAYER_CENTER_OFFSET_Y = PLAYER_HEIGHT / 2;
+
+    private final double HITBOX_WIDTH = 24;
+    private final double HITBOX_HEIGHT = 45;
+    private final double HITBOX_CENTER_X = HITBOX_WIDTH / 2;
+    private final double HITBOX_CENTER_Y = HITBOX_HEIGHT / 2;
+
     public PlayerComponent() {
-        animIdleLeft = new AnimationChannel(FXGL.image("pixel_character_pale_blue_original.png"), 5,
-                48, 48, Duration.seconds(1), 0, 4);
-        animIdleRight = new AnimationChannel(FXGL.image("pixel_character_pale_blue_original.png"), 5,
-                48, 48, Duration.seconds(1), 5, 9);
-        animWalkLeft = new AnimationChannel(FXGL.image("pixel_character_pale_blue_original.png"), 8,
-                48, 48, Duration.seconds(1), 16, 23);
-        animWalkRight = new AnimationChannel(FXGL.image("pixel_character_pale_blue_original.png"), 8,
-                48, 48, Duration.seconds(1), 24, 31);
+        animIdleLeft = new AnimationChannel(FXGL.image("player-scaled.png"), 5,
+                96, 96, Duration.seconds(0.8), 0, 4);
+        animIdleRight = new AnimationChannel(FXGL.image("player-scaled.png"), 5,
+                96, 96, Duration.seconds(0.8), 5, 9);
+        animWalkLeft = new AnimationChannel(FXGL.image("player-scaled.png"), 8,
+                96, 96, Duration.seconds(0.6), 16, 23);
+        animWalkRight = new AnimationChannel(FXGL.image("player-scaled.png"), 8,
+                96, 96, Duration.seconds(0.6), 24, 31);
 
         texture = new AnimatedTexture(animIdleLeft);
         texture.loop();
@@ -66,24 +79,31 @@ public class PlayerComponent extends Component {
 
     @Override
     public void onAdded() {
+        // PLAYER SCALING
+        texture.setScaleX(0.75);
+        texture.setScaleY(0.75);
+
         entity.getViewComponent().addChild(texture);
+
+        // ADJUST TO ALIGN WITH HITBOX
+        texture.setTranslateX(-35);
+        texture.setTranslateY(-27);
+
         previousPosition = entity.getPosition();
     }
 
+    // UPDATE ANIMATION BASED ON MOVEMENT
     @Override
     public void onUpdate(double tpf) {
-        // Check if player has moved by comparing current position with previous position
         Point2D currentPosition = entity.getPosition();
         isMoving = !currentPosition.equals(previousPosition);
 
-        // Update animation based on movement
         if (isMoving) {
             walkAnimation();
         } else {
             idleAnimation();
         }
 
-        // Store current position for next frame comparison
         previousPosition = currentPosition;
     }
 
@@ -111,23 +131,23 @@ public class PlayerComponent extends Component {
     private void boundPlayerInWorld() {
         double worldWidth = FXGL.getAppWidth() * 2;
         double worldHeight = FXGL.getAppHeight() * 2;
-        double playerSize = 40; // SIZE OF PLAYER RECTANGLE
 
+        // GET BOUNDARY USING PLAYER SIZE
         if (entity.getX() < 0) {
             entity.setX(0);
-        } else if (entity.getX() > worldWidth - playerSize) {
-            entity.setX(worldWidth - playerSize);
+        } else if (entity.getX() > worldWidth - PLAYER_WIDTH) {
+            entity.setX(worldWidth - PLAYER_WIDTH);
         }
 
         if (entity.getY() < 0) {
             entity.setY(0);
-        } else if (entity.getY() > worldHeight - playerSize) {
-            entity.setY(worldHeight - playerSize);
+        } else if (entity.getY() > worldHeight - PLAYER_HEIGHT) {
+            entity.setY(worldHeight - PLAYER_HEIGHT);
         }
     }
 
     public void shoot() {
-        // GET MOUSE POS AND COVERT TO WORLD POSITION
+        // GET MOUSE POS AND CONVERT TO WORLD POSITION
         Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
         double viewportX = FXGL.getGameScene().getViewport().getX();
         double viewportY = FXGL.getGameScene().getViewport().getY();
@@ -136,15 +156,22 @@ public class PlayerComponent extends Component {
                 mouseScreenPos.getY() + viewportY
         );
 
-        // GET DIRECTION FROM PLAYER TO MOUSE
-        Point2D direction = mouseWorldPos.subtract(entity.getCenter());
+        // SPAWN BULLET AT PLAYER LOCATION
+        Point2D bulletSpawnPoint = new Point2D(
+                entity.getX(),
+                entity.getY()
+        );
 
-        Entity bullet = FXGL.spawn("bullet", entity.getCenter());
+        // GET DIRECTION FROM PLAYER TO MOUSE
+        Point2D direction = mouseWorldPos.subtract(bulletSpawnPoint).normalize();
+
+
+        Entity bullet = FXGL.spawn("bullet", bulletSpawnPoint);
         bullet.getComponent(BulletComponent.class).setDirection(direction);
     }
 
     public void shootTripleBurst() {
-        // GET MOUSE POS AND COVERT TO WORLD POSITION
+        // GET MOUSE POS AND CONVERT TO WORLD POSITION
         Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
         double viewportX = FXGL.getGameScene().getViewport().getX();
         double viewportY = FXGL.getGameScene().getViewport().getY();
@@ -153,19 +180,26 @@ public class PlayerComponent extends Component {
                 mouseScreenPos.getY() + viewportY
         );
 
+
+        // SPAWN BULLET AT PLAYER LOCATION
+        Point2D bulletSpawnPoint = new Point2D(
+                entity.getX(),
+                entity.getY()
+        );
+
         // GET DIRECTION FROM PLAYER TO MOUSE
-        Point2D direction = mouseWorldPos.subtract(entity.getCenter()).normalize();
+        Point2D direction = mouseWorldPos.subtract(bulletSpawnPoint).normalize();
 
         // SHOTGUN BANG BUSLOT KALAG
-        spawnBulletWithAngle(direction, 0);         // Center bullet
-        spawnBulletWithAngle(direction, -10);       // Left bullet (10 degrees left)
-        spawnBulletWithAngle(direction, 10);        // Right bullet (10 degrees right)
+        spawnBulletWithAngle(bulletSpawnPoint, direction, 0);  // CENTER BULLET
+        spawnBulletWithAngle(bulletSpawnPoint, direction, -10); // LEFT
+        spawnBulletWithAngle(bulletSpawnPoint, direction, 10);  // RIGHT
     }
 
     // SPAWN BALA
-    private void spawnBulletWithAngle(Point2D direction, double angleDegrees) {
+    private void spawnBulletWithAngle(Point2D spawnPoint, Point2D direction, double angleDegrees) {
         Point2D rotatedDirection = rotate(direction, angleDegrees);
-        Entity bullet = FXGL.spawn("bullet", entity.getCenter());
+        Entity bullet = FXGL.spawn("bullet", spawnPoint);
         bullet.getComponent(BulletComponent.class).setDirection(rotatedDirection);
     }
 
@@ -179,5 +213,50 @@ public class PlayerComponent extends Component {
         double newY = vector.getX() * sin + vector.getY() * cos;
 
         return new Point2D(newX, newY);
+    }
+
+    public void damage(int dmg) {
+        health -= dmg;
+
+        // FLASH RED WHEN HIT
+        javafx.scene.effect.ColorAdjust colorAdjust = new javafx.scene.effect.ColorAdjust();
+        colorAdjust.setHue(-0.1);
+        colorAdjust.setSaturation(0.7);
+        colorAdjust.setBrightness(0.3);
+        colorAdjust.setContrast(0.2);
+        texture.setEffect(colorAdjust);
+        FXGL.getGameTimer().runOnceAfter(() -> {
+            texture.setEffect(null);
+        }, javafx.util.Duration.millis(150));
+
+        showDamageText(dmg);
+
+        if (health <= 0) {
+            System.out.println("Player dead");
+        }
+    }
+
+    private void showDamageText(double dmg) {
+        var damageText = FXGL.getUIFactoryService().newText(String.valueOf((int) dmg), Color.RED, 18);
+        var textEntity = FXGL.entityBuilder()
+                .at(entity.getPosition().subtract(0, 30))
+                .view(damageText)
+                .buildAndAttach();
+
+        FXGL.animationBuilder()
+                .duration(javafx.util.Duration.seconds(1))
+                .translate(textEntity)
+                .from(textEntity.getPosition())
+                .to(textEntity.getPosition().subtract(0, 30))  // MOVE TEXT UPWARDS | STILL NEED FIX
+                .build()
+                .start();
+
+        FXGL.animationBuilder()
+                .duration(javafx.util.Duration.seconds(1))
+                .fadeOut(textEntity)
+                .build()
+                .start();
+
+        FXGL.getGameTimer().runOnceAfter(() -> textEntity.removeFromWorld(), javafx.util.Duration.seconds(1));
     }
 }
