@@ -15,6 +15,8 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class GameEntityFactor implements EntityFactory {
 
+    private static final boolean showHitbox = false; // SWITCH TO TRUE FOR DEBUGGING PURPOSES
+
     @Spawns("background")
     public Entity newBackgroundr(SpawnData data) {
         return entityBuilder()
@@ -25,11 +27,26 @@ public class GameEntityFactor implements EntityFactory {
 
     @Spawns("player")
     public Entity newPlayer(SpawnData data) {
+        // HITBOX SIZE
+        double width = 24;
+        double height = 45;
+
+        Rectangle hitbox = new Rectangle(width, height);
+
+        if (showHitbox) {
+            // VISIBLE HITBOX FOR DEBUGGING
+            hitbox.setFill(Color.color(0, 1, 0, 0.3)); // Semi-transparent green
+            hitbox.setStroke(Color.RED);
+            hitbox.setStrokeWidth(2);
+        } else {
+            hitbox.setFill(Color.TRANSPARENT);
+            hitbox.setStroke(Color.TRANSPARENT);
+        }
+
         return entityBuilder()
                 .type(EntityType.PLAYER)
                 .from(data)
-                //.view(texture("walk.png").toAnimatedTexture(8, Duration.seconds(1)).loop())
-                //.view(new Rectangle(40, 40, Color.BLUE))
+                .viewWithBBox(hitbox)
                 .with(new PlayerComponent())
                 .collidable()
                 .build();
@@ -43,7 +60,7 @@ public class GameEntityFactor implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(new Rectangle(40, 40, Color.RED))
-                .with(new EnemyComponent(player, 1.5, 50)) // NORMAL
+                .with(new EnemyComponent(player, 1.5, 50, 5)) // NORMAL
                 .collidable()
                 .build();
     }
@@ -56,7 +73,7 @@ public class GameEntityFactor implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(new Rectangle(40, 40, Color.BLACK))
-                .with(new EnemyComponent(player, 3.0, 30)) // FAST NIGGER
+                .with(new EnemyComponent(player, 3.0, 30, 10)) // FAST NIGGER
                 .collidable()
                 .build();
     }

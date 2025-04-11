@@ -11,11 +11,17 @@ public class EnemyComponent extends Component {
     private double speed;
     private double variableSpeedFactor = 0.95 + Math.random() * 0.3; // RANDOM SPEED (0.95-1.25)
     private int health;
+    private int damage;
 
-    public EnemyComponent(Entity player, double baseSpeed, int baseHealth) {
+    private long lastDamageTime = 0;
+    private final long damageCooldown = 500_000_000; // 0.5 SEC INTERNAL COOLDOWN
+
+
+    public EnemyComponent(Entity player, double baseSpeed, int baseHealth, int damage) {
         this.player = player;
         this.speed = baseSpeed * variableSpeedFactor;
         this.health = baseHealth;
+        this.damage = damage;
     }
 
     @Override
@@ -62,10 +68,10 @@ public class EnemyComponent extends Component {
         // FLASHES WHITE WHEN HIT
         var originalView = entity.getViewComponent().getChildren().getFirst();
         var originalEffect = originalView.getEffect();
-        originalView.setEffect(new javafx.scene.effect.ColorAdjust(0, -1, 1, 0)); // makes it look white
+        originalView.setEffect(new javafx.scene.effect.ColorAdjust(0, -1, 1, 0)); // WHITE
         FXGL.getGameTimer().runOnceAfter(() -> {
             originalView.setEffect(originalEffect);
-        }, javafx.util.Duration.millis(150));
+        }, javafx.util.Duration.millis(25));
 
         showDamageText(dmg);
 
@@ -86,7 +92,7 @@ public class EnemyComponent extends Component {
                 .duration(javafx.util.Duration.seconds(1))
                 .translate(textEntity)
                 .from(textEntity.getPosition())
-                .to(textEntity.getPosition().subtract(0, 30))  // Move text upwards
+                .to(textEntity.getPosition().subtract(0, 30))  // MOVE TEXT UPWARDS | STILL NEED FIX
                 .build()
                 .start();
 
@@ -98,6 +104,19 @@ public class EnemyComponent extends Component {
 
         FXGL.getGameTimer().runOnceAfter(() -> textEntity.removeFromWorld(), javafx.util.Duration.seconds(1));
     }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public long getLastDamageTime() {
+        return lastDamageTime;
+    }
+
+    public void setLastDamageTime(long time) {
+        lastDamageTime = time;
+    }
+
 
 
 }
