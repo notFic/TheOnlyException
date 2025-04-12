@@ -62,11 +62,27 @@ public class GameEntityFactor implements EntityFactory {
     public Entity newEnemy(SpawnData data) {
         Entity player = (Entity) data.getData().getOrDefault("player", null);
 
+        // Create hitbox with same visibility options as player
+        double width = 45;
+        double height = 20;
+
+        Rectangle hitbox = new Rectangle(width, height);
+
+        if (showHitbox) {
+            // VISIBLE HITBOX FOR DEBUGGING
+            hitbox.setFill(Color.color(1, 0, 0, 0.3)); // Semi-transparent red
+            hitbox.setStroke(Color.GREEN);
+            hitbox.setStrokeWidth(2);
+        } else {
+            hitbox.setFill(Color.TRANSPARENT);
+            hitbox.setStroke(Color.TRANSPARENT);
+        }
+
         return entityBuilder()
                 .type(EntityType.ENEMY)
                 .from(data)
-                .viewWithBBox(new Rectangle(40, 40, Color.RED))
-                .with(new EnemyComponent(player, 1.5, 50, 5)) // NORMAL
+                .viewWithBBox(hitbox)  // Using viewWithBBox instead of bbox
+                .with(new EnemyComponent(player, 1.5, 50, 5, "maggot")) // NORMAL
                 .collidable()
                 .build();
     }
@@ -79,7 +95,7 @@ public class GameEntityFactor implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(new Rectangle(40, 40, Color.BLACK))
-                .with(new EnemyComponent(player, 3.0, 30, 10)) // FAST nis
+                .with(new EnemyComponent(player, 3.0, 30, 10, "none")) // FAST nis
                 .collidable()
                 .build();
     }
@@ -92,7 +108,7 @@ public class GameEntityFactor implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(new Rectangle(40, 40, Color.VIOLET))
-                .with(new EnemyComponent(player, 1.0, 300, 15)) // SLOW nis
+                .with(new EnemyComponent(player, 1.0, 300, 15, "none")) // SLOW nis
                 .collidable()
                 .build();
     }
