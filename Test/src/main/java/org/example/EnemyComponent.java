@@ -45,13 +45,11 @@ public class EnemyComponent extends Component {
     @Override
     public void onAdded() {
         if (type.equals("maggot")) {
-            // Add the animated texture to the entity view
             entity.getViewComponent().addChild(texture);
 
-            // Position the sprite relative to the hitbox
-            // Adjust these values to center the sprite over the hitbox
-            texture.setTranslateX(-10); // Adjust as needed
-            texture.setTranslateY(-40); // Adjust as needed
+            // ADJUST TO ALIGN WITH HITBOX
+            texture.setTranslateX(-10);
+            texture.setTranslateY(-40);
         }
     }
 
@@ -66,15 +64,15 @@ public class EnemyComponent extends Component {
         Point2D enemyPosition = entity.getPosition();
         Point2D direction = playerPosition.subtract(enemyPosition).normalize().multiply(speed * tpf * 60);
 
-        // Update animation based on horizontal movement direction
+        // UPDATE MOVEMENT BASED ON DIRECTION
         if (type.equals("maggot")) {
             if (direction.getX() > 0) {
-                // Moving right, so use the right animation
+                // MOVING RIGHT
                 if (texture.getAnimationChannel() != animWalkRight) {
                     texture.loopAnimationChannel(animWalkRight);
                 }
             } else if (direction.getX() < 0) {
-                // Moving left, so use the left animation
+                // MOVING LEFT
                 if (texture.getAnimationChannel() != animWalkLeft) {
                     texture.loopAnimationChannel(animWalkLeft);
                 }
@@ -113,13 +111,11 @@ public class EnemyComponent extends Component {
 
         // FLASHES WHITE WHEN HIT
         if (type.equals("maggot")) {
-            // For maggot, flash the animated texture
             texture.setEffect(new javafx.scene.effect.ColorAdjust(0, -1, 1, 0)); // WHITE
             FXGL.getGameTimer().runOnceAfter(() -> {
                 texture.setEffect(null);
             }, javafx.util.Duration.millis(25));
         } else {
-            // For other enemies, use the original flashing method
             var originalView = entity.getViewComponent().getChildren().getFirst();
             var originalEffect = originalView.getEffect();
             originalView.setEffect(new javafx.scene.effect.ColorAdjust(0, -1, 1, 0)); // WHITE

@@ -6,10 +6,8 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -24,10 +22,53 @@ public class GameEntityFactor implements EntityFactory {
     private static final boolean showHitbox = false; // SWITCH TO TRUE FOR DEBUGGING PURPOSES
 
     @Spawns("background")
-    public Entity newBackgroundr(SpawnData data) {
+    public Entity newBackground(SpawnData data) {
         return entityBuilder()
                 .from(data)
                 .view(new Rectangle(getAppWidth(), getAppHeight(), Color.SKYBLUE))
+                .build();
+    }
+
+    @Spawns("tiledBackground")
+    public Entity newTiledBackground(SpawnData data) {
+        int worldWidth = data.get("worldWidth");
+        int worldHeight = data.get("worldHeight");
+
+        var backgroundView = new javafx.scene.Group();
+
+        // TEMPORARY BACKGROUND || GENERIC AHH GRASS
+        var backgroundImage = FXGL.image("dasd.png");
+
+        // TILE SIZE
+        double tileWidth = 24;
+        double tileHeight = 24;
+
+        int tilesX = (int) Math.ceil((double) worldWidth / tileWidth);
+        int tilesY = (int) Math.ceil((double) worldHeight / tileHeight);
+
+        // TILE PATTERN
+        for (int x = 0; x < tilesX; x++) {
+            for (int y = 0; y < tilesY; y++) {
+                var tile = new javafx.scene.image.ImageView(backgroundImage);
+
+                tile.setFitWidth(tileWidth);
+                tile.setFitHeight(tileHeight);
+
+                tile.setTranslateX(x * tileWidth);
+                tile.setTranslateY(y * tileHeight);
+
+                // PRESERVE ASPECT RATIO IF NEEDED
+                // tile.setPreserveRatio(true);
+
+                backgroundView.getChildren().add(tile);
+            }
+        }
+
+        return entityBuilder()
+                .type(EntityType.BACKGROUND)
+                .at(0, 0)
+                .view(backgroundView)
+                .zIndex(-100)
                 .build();
     }
 
@@ -41,7 +82,7 @@ public class GameEntityFactor implements EntityFactory {
 
         if (showHitbox) {
             // VISIBLE HITBOX FOR DEBUGGING
-            hitbox.setFill(Color.color(0, 1, 0, 0.3)); // Semi-transparent green
+            hitbox.setFill(Color.color(0, 1, 0, 0.3)); // SEMI-TRANSPARENT GREEN
             hitbox.setStroke(Color.RED);
             hitbox.setStrokeWidth(2);
         } else {
@@ -61,8 +102,7 @@ public class GameEntityFactor implements EntityFactory {
     @Spawns("enemy")
     public Entity newEnemy(SpawnData data) {
         Entity player = (Entity) data.getData().getOrDefault("player", null);
-
-        // Create hitbox with same visibility options as player
+        // HITBOX SIZE
         double width = 45;
         double height = 20;
 
@@ -70,7 +110,7 @@ public class GameEntityFactor implements EntityFactory {
 
         if (showHitbox) {
             // VISIBLE HITBOX FOR DEBUGGING
-            hitbox.setFill(Color.color(1, 0, 0, 0.3)); // Semi-transparent red
+            hitbox.setFill(Color.color(1, 0, 0, 0.3)); // // SEMI-TRANSPARENT RED
             hitbox.setStroke(Color.GREEN);
             hitbox.setStrokeWidth(2);
         } else {
@@ -81,7 +121,7 @@ public class GameEntityFactor implements EntityFactory {
         return entityBuilder()
                 .type(EntityType.ENEMY)
                 .from(data)
-                .viewWithBBox(hitbox)  // Using viewWithBBox instead of bbox
+                .viewWithBBox(hitbox)
                 .with(new EnemyComponent(player, 1.5, 50, 5, "maggot")) // NORMAL
                 .collidable()
                 .build();
