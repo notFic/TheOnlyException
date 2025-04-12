@@ -22,7 +22,7 @@ public class GameApp extends GameApplication {
         settings.setWidth(1280);
         settings.setHeight(720);
         settings.setTitle("Prototype");
-        settings.setVersion("0.1.4");
+        settings.setVersion("0.1.5");
     }
 
     // MOVEMENT KEY
@@ -39,9 +39,18 @@ public class GameApp extends GameApplication {
         FXGL.getGameWorld().addEntityFactory(new GameEntityFactor());
 
         // GAMEWORLD SIZE
-        getGameScene().setBackgroundColor(javafx.scene.paint.Color.SKYBLUE);
         int worldWidth = getAppWidth() * 2;
         int worldHeight = getAppHeight() * 2;
+
+        // SPAWN BG TILES
+        SpawnData backgroundData = new SpawnData(0, 0);
+        backgroundData.put("worldWidth", worldWidth);
+        backgroundData.put("worldHeight", worldHeight);
+        spawn("tiledBackground", backgroundData);
+
+        // OLD BG
+        // getGameScene().setBackgroundColor(javafx.scene.paint.Color.SKYBLUE);
+
         player = spawn("player", worldWidth / 2.0, worldHeight / 2.0);
 
         // CAMERA FOLLOW PLAYER
