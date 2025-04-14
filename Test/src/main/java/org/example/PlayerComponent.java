@@ -50,6 +50,10 @@ public class PlayerComponent extends Component {
         texture.loop();
     }
 
+    public String getPlayerName() {
+        return FXGL.getWorldProperties().getString("playerName");
+    }
+
     public void idleAnimation() {
         Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
         double screenWidth = FXGL.getGameScene().getAppWidth();
