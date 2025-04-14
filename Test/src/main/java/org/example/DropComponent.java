@@ -22,7 +22,7 @@ public class DropComponent extends Component {
     private Rectangle dropVisual;
     private Entity player;
     private final double MAGNET_RANGE = 150.0; // para ni for when na mag start ug follow ang drop
-    private final double MOVE_SPEED = 2.5; // attraction speed
+    private final double MOVE_SPEED = 5; // attraction speed
 
     @Override
     public void onAdded() {

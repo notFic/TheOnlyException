@@ -37,11 +37,11 @@ public class GameEntityFactor implements EntityFactory {
         var backgroundView = new javafx.scene.Group();
 
         // TEMPORARY BACKGROUND || GENERIC AHH GRASS
-        var backgroundImage = FXGL.image("dasd.png");
+        var backgroundImage = FXGL.image("ambatukam.png");
 
         // TILE SIZE
-        double tileWidth = 24;
-        double tileHeight = 24;
+        double tileWidth = 2000;
+        double tileHeight = 2000;
 
         int tilesX = (int) Math.ceil((double) worldWidth / tileWidth);
         int tilesY = (int) Math.ceil((double) worldHeight / tileHeight);

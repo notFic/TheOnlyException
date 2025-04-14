@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 public class PlayerComponent extends Component {
-    private double speed = 1.5; // PLAYER SPEED
+    private double speed = 10; // PLAYER SPEED
     int health = 100;
 
     private AnimatedTexture texture;

@@ -130,7 +130,7 @@ public class EnemyComponent extends Component {
             Point2D center = entity.getCenter();
 
             // Spawn exp drop with offset
-            if(Math.random() < 0.5) {
+            if(Math.random() < 0.7) {
                 FXGL.spawn("expDrop", center.add(
                         Math.random() * 30 - 10,
                         Math.random() * 30 - 10
@@ -138,12 +138,12 @@ public class EnemyComponent extends Component {
             }
 
             // Spawn item drop with different offset
-            if(Math.random() < 0.2) {
-                FXGL.spawn("itemDrop", center.add(
-                        Math.random() * 20 - 10,
-                        Math.random() * 20 - 10
-                ));
-            }
+//            if(Math.random() < 0.1) {
+//                FXGL.spawn("itemDrop", center.add(
+//                        Math.random() * 20 - 10,
+//                        Math.random() * 20 - 10
+//                ));
+//            }
 
             entity.removeFromWorld();
         }
