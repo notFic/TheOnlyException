@@ -18,3 +18,11 @@ A roguelike survival game inspired by **SoulKnight** and **HoloCure**, built in 
 
 
 JOHN KHEINZY MANDAWE WAS HERE
+
+![image](https://github.com/user-attachments/assets/c09037c2-4313-4751-b56b-2ba3bf79058d)
+
+![image](https://github.com/user-attachments/assets/85e89bc8-9c89-45a5-bc02-bbe3611c5195)
+
+![image](https://github.com/user-attachments/assets/88ffc802-ac3f-43dd-83c3-7bfe146ea77b)
+
+![image](https://github.com/user-attachments/assets/df04d5f4-57cf-49ee-9f42-a7b879e93cb8)
