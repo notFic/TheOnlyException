@@ -44,9 +44,9 @@ public class GameApp extends GameApplication {
     // Add player's name to global variables
     @Override
     protected void initGameVars(Map<String, Object> vars) {
-        vars.put("playerName", storedPlayerName); // Use our stored name
+        vars.put("playerName", storedPlayerName);
         vars.put("score", 0);
-        vars.put("health", 100);
+        vars.put("health", 100); // Initialize health to match PlayerComponent
 
         // Debug
         System.out.println("Game vars initialized with playerName: " + storedPlayerName);
@@ -70,21 +70,21 @@ public class GameApp extends GameApplication {
     // Add a UI element to display player name
     @Override
     protected void initUI() {
-        // Create a text to display player name
+        // Player name display
         Text nameText = getUIFactoryService().newText("", 20);
-
-        // Use stringProperty() binding correctly
         nameText.textProperty().bind(
                 getWorldProperties().stringProperty("playerName").concat("'s Game")
         );
-
+        nameText.setFill(javafx.scene.paint.Color.WHITE); // Ensure visibility
         addUINode(nameText, 20, 20);
 
         // Health display
-        Text healthText = getUIFactoryService().newText("", 20);
+        Text healthText = getUIFactoryService().newText("", 24); // Slightly larger font
         healthText.textProperty().bind(
                 getWorldProperties().intProperty("health").asString("Health: %d")
         );
+        healthText.setFill(javafx.scene.paint.Color.RED); // Red for health
+        healthText.setStyle("-fx-font-weight: bold;"); // Bold for emphasis
         addUINode(healthText, 20, 50);
     }
 

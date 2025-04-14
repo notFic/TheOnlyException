@@ -129,6 +129,9 @@ public class PlayerComponent extends Component {
         boundPlayerInWorld();
     }
 
+    public int getHealth(){
+        return health;
+    }
     public void moveDown() {
         entity.translateY(speed);
         boundPlayerInWorld();
@@ -224,9 +227,10 @@ public class PlayerComponent extends Component {
 
     public void damage(int dmg) {
         health -= dmg;
+        FXGL.getWorldProperties().setValue("health", health); // Sync with world property
 
         // para dili mag clutter ang sa console
-        if(isAlive){
+        if (isAlive) {
             System.out.println("DEBUG: player health = " + health);
         }
 
