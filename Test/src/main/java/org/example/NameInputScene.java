@@ -1,71 +1,173 @@
 package org.example;
 
-import com.almasb.fxgl.app.scene.FXGLMenu;
-import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
+import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.texture.AnimatedTexture;
+import com.almasb.fxgl.texture.AnimationChannel;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+import javafx.util.Duration;
 
-public class NameInputScene extends FXGLMenu {
+public class EnemyComponent extends Component {
+    private Entity player;
+    private double speed;
+    private double variableSpeedFactor = 0.95 + Math.random() * 0.3; // RANDOM SPEED (0.95-1.25)
+    private int health;
+    private int damage;
 
-    private TextField nameField;
+    private long lastDamageTime = 0;
+    private final long damageCooldown = 500_000_000; // 0.5 SEC INTERNAL COOLDOWN
 
-    public NameInputScene() {
-        super(MenuType.MAIN_MENU);
+    private AnimatedTexture texture;
+    private AnimationChannel animWalkLeft;
+    private AnimationChannel animWalkRight;
+    private String type;
 
-        // Create a semi-transparent overlay for better text visibility
-        Rectangle overlay = new Rectangle(FXGL.getAppWidth(), FXGL.getAppHeight(), Color.color(0, 0, 0, 0.5));
-        getContentRoot().getChildren().add(overlay);
+    public EnemyComponent(Entity player, double baseSpeed, int baseHealth, int damage, String type) {
+        this.player = player;
+        this.speed = baseSpeed * variableSpeedFactor;
+        this.health = baseHealth;
+        this.damage = damage;
+        this.type = type;
 
-        // Create a title label
-        Label titleLabel = new Label("Enter Your Name");
-        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-        titleLabel.setTextFill(Color.WHITE);
+        if (type.equals("maggot")) {
+            animWalkLeft = new AnimationChannel(FXGL.image("MaggotWalk-scaled.png"), 4,
+                    64, 64, Duration.seconds(0.8), 4, 7);
+            animWalkRight = new AnimationChannel(FXGL.image("MaggotWalk-scaled.png"), 4,
+                    64, 64, Duration.seconds(0.8), 8, 11);
 
-        // Create a text field for name input
-        nameField = new TextField();
-        nameField.setMaxWidth(200);
-        nameField.setPromptText("Your Name");
+            texture = new AnimatedTexture(animWalkRight);
+            texture.loop();
+        }
+    }
 
+    @Override
+    public void onAdded() {
+        if (type.equals("maggot")) {
+            entity.getViewComponent().addChild(texture);
 
-        // Create a start button
-        Button startButton = new Button("Start Game");
-        startButton.setPrefWidth(120);
-        startButton.setOnAction(e -> {
-            if (!nameField.getText().trim().isEmpty()) {
-                // Store the name in world properties
-                String playerName = nameField.getText().trim();
+            // ADJUST TO ALIGN WITH HITBOX
+            texture.setTranslateX(-10);
+            texture.setTranslateY(-40);
+        }
+    }
 
-                // Make sure we're setting it correctly
-                FXGL.getWorldProperties().setValue("playerName", playerName);
+    @Override
+    public void onUpdate(double tpf) {
+        if (player == null || !player.isActive()) {
+            return;
+        }
 
-                // For debugging
-                System.out.println("Setting player name to: " + playerName);
+        // GET PLAYER DIRECTION AND MOVE TOWARDS IT
+        Point2D playerPosition = player.getPosition();
+        Point2D enemyPosition = entity.getPosition();
+        Point2D direction = playerPosition.subtract(enemyPosition).normalize().multiply(speed * tpf * 60);
 
-                // Call the static method to ensure the name is set before game starts
-                GameApp.startGameWithName(playerName);
-
-                // Start the actual game
-                fireNewGame();
+        // UPDATE MOVEMENT BASED ON DIRECTION
+        if (type.equals("maggot")) {
+            if (direction.getX() > 0) {
+                // MOVING RIGHT
+                if (texture.getAnimationChannel() != animWalkRight) {
+                    texture.loopAnimationChannel(animWalkRight);
+                }
+            } else if (direction.getX() < 0) {
+                // MOVING LEFT
+                if (texture.getAnimationChannel() != animWalkLeft) {
+                    texture.loopAnimationChannel(animWalkLeft);
+                }
             }
-        });
+        }
 
-        // Create a container for all elements
-        VBox container = new VBox(20);
-        container.setAlignment(Pos.CENTER);
-        container.getChildren().addAll(titleLabel, nameField, startButton);
+        entity.translate(direction);
 
-        // Make the container center of the screen
-        container.setTranslateX(FXGL.getAppWidth() / 2.0 - 100);
-        container.setTranslateY(FXGL.getAppHeight() / 2.0 - 100);
+        // GET VIEWPORT BOUNDS
+        double viewMinX = FXGL.getGameScene().getViewport().getX();
+        double viewMinY = FXGL.getGameScene().getViewport().getY();
+        double viewMaxX = viewMinX + FXGL.getAppWidth();
+        double viewMaxY = viewMinY + FXGL.getAppHeight();
 
-        getContentRoot().getChildren().add(container);
+        // REMOVE ENEMY IF OUTSIDE VIEWPORT
+        double margin = 500; // EXTRA MARGIN OUTSIDE VIEWPORT
+        if (entity.getX() < viewMinX - margin || entity.getX() > viewMaxX + margin ||
+                entity.getY() < viewMinY - margin || entity.getY() > viewMaxY + margin) {
+
+            double viewCenterX = viewMinX + FXGL.getAppWidth() / 2;
+            double viewCenterY = viewMinY + FXGL.getAppHeight() / 2;
+
+            double dx = entity.getX() - viewCenterX;
+            double dy = entity.getY() - viewCenterY;
+            Point2D toCenter = new Point2D(dx, dy).normalize();
+            Point2D normalizedDir = direction.normalize();
+
+            if (toCenter.dotProduct(normalizedDir) > 0.7) {
+                entity.removeFromWorld();
+            }
+        }
+    }
+
+    public void damage(double dmg) {
+        health -= dmg;
+
+        // FLASHES WHITE WHEN HIT
+        if (type.equals("maggot")) {
+            texture.setEffect(new javafx.scene.effect.ColorAdjust(0, -1, 1, 0)); // WHITE
+            FXGL.getGameTimer().runOnceAfter(() -> {
+                texture.setEffect(null);
+            }, javafx.util.Duration.millis(25));
+        } else {
+            var originalView = entity.getViewComponent().getChildren().get(0);
+            var originalEffect = originalView.getEffect();
+            originalView.setEffect(new javafx.scene.effect.ColorAdjust(0, -1, 1, 0)); // WHITE
+            FXGL.getGameTimer().runOnceAfter(() -> {
+                originalView.setEffect(originalEffect);
+            }, javafx.util.Duration.millis(25));
+        }
+
+        showDamageText(dmg);
+
+        if (health <= 0) {
+            if(Math.random() < 0.5){
+                FXGL.spawn("drop", entity.getCenter());
+            }
+
+            entity.removeFromWorld();
+        }
+    }
+
+    private void showDamageText(double dmg) {
+        var damageText = FXGL.getUIFactoryService().newText(String.valueOf((int) dmg), Color.WHITE, 18);
+        var textEntity = FXGL.entityBuilder()
+                .at(entity.getPosition().subtract(0, 30))
+                .view(damageText)
+                .buildAndAttach();
+
+        FXGL.animationBuilder()
+                .duration(javafx.util.Duration.seconds(1))
+                .translate(textEntity)
+                .from(textEntity.getPosition())
+                .to(textEntity.getPosition().subtract(0, 30))  // MOVE TEXT UPWARDS | STILL NEED FIX
+                .build()
+                .start();
+
+        FXGL.animationBuilder()
+                .duration(javafx.util.Duration.seconds(1))
+                .fadeOut(textEntity)
+                .build()
+                .start();
+
+        FXGL.getGameTimer().runOnceAfter(() -> textEntity.removeFromWorld(), javafx.util.Duration.seconds(1));
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public long getLastDamageTime() {
+        return lastDamageTime;
+    }
+
+    public void setLastDamageTime(long time) {
+        lastDamageTime = time;
     }
 }
