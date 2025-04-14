@@ -95,7 +95,7 @@ public class NameInputScene extends FXGLMenu {
         }
 
         // Database connection details
-        String url = "jdbc:mysql://localhost:3306/gametestdata";
+        String url = "jdbc:mysql://localhost:3306/dbtheonlyexception";
         String dbUser = "root";
         String dbPass = "";
 
@@ -203,7 +203,7 @@ public class NameInputScene extends FXGLMenu {
 
     private boolean registerNewUser(String username, String password) {
         // Database connection details
-        String url = "jdbc:mysql://localhost:3306/gametestdata";
+        String url = "jdbc:mysql://localhost:3306/dbtheonlyexception";
         String dbUser = "root";
         String dbPass = "";
 
