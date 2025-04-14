@@ -2,11 +2,15 @@ package org.example;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.scene.FXGLMenu;
+import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import javafx.scene.input.KeyCode;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
+import java.util.Map;
 import java.util.Random;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -14,6 +18,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class GameApp extends GameApplication {
 
     private Entity player;
+    private static String storedPlayerName = "Unknown";
     private Random random = new Random();
 
     // GAME SETTINGS
@@ -23,6 +28,64 @@ public class GameApp extends GameApplication {
         settings.setHeight(720);
         settings.setTitle("Prototype");
         settings.setVersion("0.1.5");
+
+        // Set main menu to be shown
+        settings.setMainMenuEnabled(true);
+
+        // Set a custom SceneFactory to use our NameInputScene
+        settings.setSceneFactory(new SceneFactory() {
+            @Override
+            public FXGLMenu newMainMenu() {
+                return new NameInputScene();
+            }
+        });
+    }
+
+    // Add player's name to global variables
+    @Override
+    protected void initGameVars(Map<String, Object> vars) {
+        vars.put("playerName", storedPlayerName); // Use our stored name
+        vars.put("score", 0);
+        vars.put("health", 100);
+
+        // Debug
+        System.out.println("Game vars initialized with playerName: " + storedPlayerName);
+    }
+
+    @Override
+    protected void onPreInit() {
+        // This runs before the game is fully initialized
+        System.out.println("onPreInit called");
+    }
+
+    // When starting the game from the menu
+    // Optional static method if you want to use it
+    public static void startGameWithName(String name) {
+        if (name != null && !name.trim().isEmpty()) {
+            System.out.println("Static method called with name: " + name);
+            storedPlayerName = name; // Store in our static field
+        }
+    }
+
+    // Add a UI element to display player name
+    @Override
+    protected void initUI() {
+        // Create a text to display player name
+        Text nameText = getUIFactoryService().newText("", 20);
+
+        // Use stringProperty() binding correctly
+        nameText.textProperty().bind(
+                getWorldProperties().stringProperty("playerName").concat("'s Game")
+        );
+
+        addUINode(nameText, 20, 20);
+
+        // Health display
+        Text healthText = getUIFactoryService().newText("", 20);
+        healthText.textProperty().bind(
+                getWorldProperties().intProperty("health").asString("Health: %d")
+        );
+        addUINode(healthText, 20, 50);
     }
 
     // MOVEMENT KEY
@@ -38,6 +101,22 @@ public class GameApp extends GameApplication {
     protected void initGame() {
         FXGL.getGameWorld().addEntityFactory(new GameEntityFactor());
 
+        // Double check the player name and ensure it's correctly set
+        if (!storedPlayerName.equals("Unknown")) {
+            FXGL.getWorldProperties().setValue("playerName", storedPlayerName);
+            System.out.println("Re-applying stored player name: " + storedPlayerName);
+        }
+
+        String playerName = FXGL.getWorldProperties().getString("playerName");
+        System.out.println("Player name from world properties: " + playerName);
+
+        // Display welcome message with player's name
+        FXGL.runOnce(() -> {
+            String currentName = FXGL.getWorldProperties().getString("playerName");
+            System.out.println("Showing welcome notification for: " + currentName);
+            FXGL.getNotificationService().pushNotification("Welcome, " + currentName + "!");
+        }, Duration.seconds(0.2));
+
         // GAMEWORLD SIZE
         int worldWidth = getAppWidth() * 2;
         int worldHeight = getAppHeight() * 2;
@@ -48,9 +127,6 @@ public class GameApp extends GameApplication {
         backgroundData.put("worldHeight", worldHeight);
         spawn("tiledBackground", backgroundData);
 
-        // OLD BG
-        // getGameScene().setBackgroundColor(javafx.scene.paint.Color.SKYBLUE);
-
         player = spawn("player", worldWidth / 2.0, worldHeight / 2.0);
 
         // CAMERA FOLLOW PLAYER
@@ -60,22 +136,22 @@ public class GameApp extends GameApplication {
         // SHOOT EVERY 1s
         FXGL.getGameTimer().runAtInterval(() -> {
             player.getComponent(PlayerComponent.class).shootTripleBurst();
-        }, Duration.seconds(0.5));
+        }, javafx.util.Duration.seconds(0.5));
 
         // SPAWN ENEMY EVERY 2s
         FXGL.getGameTimer().runAtInterval(() -> {
             spawnEnemyOutsideViewport("enemy");
-        }, Duration.seconds(1));
+        }, javafx.util.Duration.seconds(1));
 
         // SPAWN nis EVERY 5s
         FXGL.getGameTimer().runAtInterval(() -> {
             spawnEnemyOutsideViewport("fastEnemy");
-        }, Duration.seconds(2));
+        }, javafx.util.Duration.seconds(2));
 
         // SPAWN nis EVERY 5s
         FXGL.getGameTimer().runAtInterval(() -> {
             spawnEnemyOutsideViewport("tankEnemy");
-        }, Duration.seconds(20));
+        }, javafx.util.Duration.seconds(20));
     }
 
     private void spawnEnemyOutsideViewport(String enemyType) {
@@ -152,8 +228,6 @@ public class GameApp extends GameApplication {
                 enemyComponent.setLastDamageTime(now);
             }
         });
-
-
     }
 
     public static void main(String[] args) {
