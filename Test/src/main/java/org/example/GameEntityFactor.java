@@ -165,12 +165,23 @@ public class GameEntityFactor implements EntityFactory {
                 .build();
     }
 
-    @Spawns("drop")
-    public Entity newDrop(SpawnData data) {
+    @Spawns("expDrop")
+    public Entity newExpDrop(SpawnData data) {
         return entityBuilder()
                 .type(EntityType.DROP)
                 .from(data)
                 .viewWithBBox(new Rectangle(15, 15, Color.GOLD))
+                .with(new DropComponent())
+                .collidable()
+                .build();
+    }
+
+    @Spawns("itemDrop")
+    public Entity newItemDrop(SpawnData data) {
+        return entityBuilder()
+                .type(EntityType.DROP)
+                .from(data)
+                .viewWithBBox(new Rectangle(15, 15, Color.BLUE))
                 .with(new DropComponent())
                 .collidable()
                 .build();

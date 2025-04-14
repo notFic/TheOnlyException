@@ -116,7 +116,7 @@ public class EnemyComponent extends Component {
                 texture.setEffect(null);
             }, javafx.util.Duration.millis(25));
         } else {
-            var originalView = entity.getViewComponent().getChildren().getFirst();
+            var originalView = entity.getViewComponent().getChildren().get(0);
             var originalEffect = originalView.getEffect();
             originalView.setEffect(new javafx.scene.effect.ColorAdjust(0, -1, 1, 0)); // WHITE
             FXGL.getGameTimer().runOnceAfter(() -> {
@@ -127,8 +127,22 @@ public class EnemyComponent extends Component {
         showDamageText(dmg);
 
         if (health <= 0) {
-            if(Math.random() < 0.5){
-                FXGL.spawn("drop", entity.getCenter());
+            Point2D center = entity.getCenter();
+
+            // Spawn exp drop with offset
+            if(Math.random() < 0.5) {
+                FXGL.spawn("expDrop", center.add(
+                        Math.random() * 30 - 10,
+                        Math.random() * 30 - 10
+                ));
+            }
+
+            // Spawn item drop with different offset
+            if(Math.random() < 0.2) {
+                FXGL.spawn("itemDrop", center.add(
+                        Math.random() * 20 - 10,
+                        Math.random() * 20 - 10
+                ));
             }
 
             entity.removeFromWorld();

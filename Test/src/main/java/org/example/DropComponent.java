@@ -31,20 +31,20 @@ public class DropComponent extends Component {
                 .findFirst()
                 .orElse(null);
 
-        if (entity.getViewComponent().getChildren().get(0) instanceof Rectangle) {
-            dropVisual = (Rectangle) entity.getViewComponent().getChildren().get(0);
-
-            // ang pulsing/"shining" animation. di ko ka implement tarong sa kato built in function sa
-            // fxgl so ako nalanag gi manually ug change and shift ang colors sa drop. i dont know unsa
-            // ang effects ani niya like what if demanding ni siya sa gpu or something. maybe expensive
-            // ba diay ni or maka slow siya sa program in general.
-            FXGL.getGameTimer().runAtInterval(() -> {
-                if (entity != null && entity.isActive()) {
-                    currentColorIndex = (currentColorIndex + 1) % YELLOW_SHADES.length;
-                    dropVisual.setFill(YELLOW_SHADES[currentColorIndex]);
-                }
-            }, Duration.seconds(0.2)); // animation change, the lower the value, the quicker the color shift happens
-        }
+//        if (entity.getViewComponent().getChildren().get(0) instanceof Rectangle) {
+//            dropVisual = (Rectangle) entity.getViewComponent().getChildren().get(0);
+//
+//            // ang pulsing/"shining" animation. di ko ka implement tarong sa kato built in function sa
+//            // fxgl so ako nalanag gi manually ug change and shift ang colors sa drop. i dont know unsa
+//            // ang effects ani niya like what if demanding ni siya sa gpu or something. maybe expensive
+//            // ba diay ni or maka slow siya sa program in general.
+//            FXGL.getGameTimer().runAtInterval(() -> {
+//                if (entity != null && entity.isActive()) {
+//                    currentColorIndex = (currentColorIndex + 1) % YELLOW_SHADES.length;
+//                    dropVisual.setFill(YELLOW_SHADES[currentColorIndex]);
+//                }
+//            }, Duration.seconds(0.2)); // animation change, the lower the value, the quicker the color shift happens
+//        }
 
         FXGL.getGameTimer().runOnceAfter(() -> {
             if (entity != null && entity.isActive()) {
