@@ -196,6 +196,10 @@ public class EnemyComponent extends Component {
         return damage;
     }
 
+    public int getHealth(){
+        return health;
+    }
+
     public long getLastDamageTime() {
         return lastDamageTime;
     }
