@@ -6,7 +6,10 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class PlayerComponent extends Component {
@@ -18,6 +21,7 @@ public class PlayerComponent extends Component {
     private AnimationChannel animIdleRight;
     private AnimationChannel animWalkLeft;
     private AnimationChannel animWalkRight;
+    private GameApp gameApp;
 
     private boolean isMoving = false;
     private Point2D previousPosition;
@@ -97,11 +101,13 @@ public class PlayerComponent extends Component {
         texture.setTranslateY(-27);
 
         previousPosition = entity.getPosition();
+        gameApp = entity.getObject("gameApp");
     }
 
     // UPDATE ANIMATION BASED ON MOVEMENT
     @Override
     public void onUpdate(double tpf) {
+        if(!isAlive) return;
         Point2D currentPosition = entity.getPosition();
         isMoving = !currentPosition.equals(previousPosition);
 
@@ -115,26 +121,30 @@ public class PlayerComponent extends Component {
     }
 
     public void moveLeft() {
+        if(!isAlive) return;
         entity.translateX(-speed);
         boundPlayerInWorld();
     }
 
     public void moveRight() {
+        if(!isAlive) return;
         entity.translateX(speed);
         boundPlayerInWorld();
     }
 
     public void moveUp() {
+        if(!isAlive) return;
         entity.translateY(-speed);
+        boundPlayerInWorld();
+    }
+    public void moveDown() {
+        if(!isAlive) return;
+        entity.translateY(speed);
         boundPlayerInWorld();
     }
 
     public int getHealth(){
         return health;
-    }
-    public void moveDown() {
-        entity.translateY(speed);
-        boundPlayerInWorld();
     }
 
     // KEEP FROM GOING OUT OF BOUNDS
@@ -157,6 +167,7 @@ public class PlayerComponent extends Component {
     }
 
     public void shoot() {
+        if(!isAlive) return;
         // GET MOUSE POS AND CONVERT TO WORLD POSITION
         Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
         double viewportX = FXGL.getGameScene().getViewport().getX();
@@ -181,6 +192,7 @@ public class PlayerComponent extends Component {
     }
 
     public void shootTripleBurst() {
+        if(!isAlive) return;
         // GET MOUSE POS AND CONVERT TO WORLD POSITION
         Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
         double viewportX = FXGL.getGameScene().getViewport().getX();
@@ -226,7 +238,9 @@ public class PlayerComponent extends Component {
     }
 
     public void damage(int dmg) {
+        if(!isAlive) return;
         health -= dmg;
+        if(health < 0) health = 0;
         FXGL.getWorldProperties().setValue("health", health); // Sync with world property
 
         // para dili mag clutter ang sa console
@@ -241,17 +255,46 @@ public class PlayerComponent extends Component {
         colorAdjust.setBrightness(0.3);
         colorAdjust.setContrast(0.2);
         texture.setEffect(colorAdjust);
-        FXGL.getGameTimer().runOnceAfter(() -> {
-            texture.setEffect(null);
-        }, javafx.util.Duration.millis(150));
+        FXGL.getGameTimer().runOnceAfter(() -> texture.setEffect(null), Duration.millis(150));
 
         showDamageText(dmg);
 
         if (health <= 0 && isAlive) {
             System.out.println("Player dead");
             isAlive = false;
+            if(gameApp != null){
+                gameApp.stopTimer();
+            }else{
+                System.err.println("Warning: gameApp is null, cannot stop timer");
+            }
+
+            FXGL.getGameController().pauseEngine();
+
+            int survivalTime = FXGL.getWorldProperties().getInt("survivalTime");
+            VBox gameOverMenu = new VBox(10);
+            gameOverMenu.setAlignment(javafx.geometry.Pos.CENTER);
+            gameOverMenu.setPadding(new javafx.geometry.Insets(20));
+            gameOverMenu.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-border-color: white; -fx-border-width: 2;");
+
+            Text gameOverText = new Text("Game Over!");
+            gameOverText.setFill(Color.RED);
+            gameOverText.setFont(javafx.scene.text.Font.font("Arial", javafx.scene.text.FontWeight.BOLD, 36));
+
+            Text survivalText = new Text("You survived for " + survivalTime + " seconds");
+            survivalText.setFill(Color.WHITE);
+            survivalText.setFont(javafx.scene.text.Font.font("Arial", 24));
+
+            Button menuButton = new Button("Back to Main Menu");
+            menuButton.setStyle("-fx-font-size: 16; -fx-background-color: #444; -fx-text-fill: white;");
+            menuButton.setOnAction(e -> FXGL.getGameController().gotoMainMenu());
+
+            gameOverMenu.getChildren().addAll(gameOverText, survivalText, menuButton);
+
+            FXGL.getDialogService().showBox("Game Over", gameOverMenu, menuButton);
+
         }
     }
+
 
     private void showDamageText(double dmg) {
         var damageText = FXGL.getUIFactoryService().newText(String.valueOf((int) dmg), Color.RED, 18);
@@ -276,4 +319,6 @@ public class PlayerComponent extends Component {
 
         FXGL.getGameTimer().runOnceAfter(() -> textEntity.removeFromWorld(), javafx.util.Duration.seconds(1));
     }
+
+
 }
