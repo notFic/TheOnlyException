@@ -9,12 +9,20 @@ import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class PlayerComponent extends Component {
     private double speed = 1.5; // PLAYER SPEED
     int health = 100;
+
+    private Entity healthBar;
+    private Rectangle healthBarBackground;
+    private Rectangle healthBarFill;
+    private final double HEALTH_BAR_WIDTH = 40;
+    private final double HEALTH_BAR_HEIGHT = 5;
+    private final double HEALTH_BAR_Y_OFFSET = 15; // DISTANCE ABOVE PLAYER
 
     private AnimatedTexture texture;
     private AnimationChannel animIdleLeft;
@@ -88,6 +96,48 @@ public class PlayerComponent extends Component {
         }
     }
 
+    private void createHealthBar() {
+        // BLACK BACKGROUND
+        healthBarBackground = new Rectangle(HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT);
+        healthBarBackground.setFill(Color.BLACK);
+
+        // GREEN FILL
+        healthBarFill = new Rectangle(HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT);
+        healthBarFill.setFill(Color.GREEN);
+
+        // GROUP TO HOLD BOTH RECTANGLES
+        var healthBarGroup = new javafx.scene.Group();
+        healthBarGroup.getChildren().addAll(healthBarBackground, healthBarFill);
+
+        // ENTITY TO FOLLOW PLAYER
+        healthBar = FXGL.entityBuilder()
+                .view(healthBarGroup)
+                .build();
+
+        FXGL.getGameWorld().addEntity(healthBar);
+        updateHealthBar();
+    }
+
+    private void updateHealthBar() {
+        if (healthBar != null) {
+            // POS ABOVE PLAYER
+            double xPos = entity.getX() + (HITBOX_WIDTH / 2) - (HEALTH_BAR_WIDTH / 2);
+            double yPos = entity.getY() - HEALTH_BAR_Y_OFFSET;
+            healthBar.setPosition(xPos, yPos);
+
+            // CHANGE COLOR BASED ON HEALTH %
+            double healthPercentage = Math.max(0, health) / 100.0;
+            healthBarFill.setWidth(HEALTH_BAR_WIDTH * healthPercentage);
+            if (healthPercentage > 0.6) {
+                healthBarFill.setFill(Color.GREEN);
+            } else if (healthPercentage > 0.3) {
+                healthBarFill.setFill(Color.YELLOW);
+            } else {
+                healthBarFill.setFill(Color.RED);
+            }
+        }
+    }
+
     @Override
     public void onAdded() {
         // PLAYER SCALING
@@ -101,6 +151,8 @@ public class PlayerComponent extends Component {
         texture.setTranslateY(-27);
 
         previousPosition = entity.getPosition();
+        createHealthBar();
+      
         gameApp = entity.getObject("gameApp");
     }
 
@@ -118,6 +170,7 @@ public class PlayerComponent extends Component {
         }
 
         previousPosition = currentPosition;
+        updateHealthBar();
     }
 
     public void moveLeft() {
@@ -258,6 +311,7 @@ public class PlayerComponent extends Component {
         FXGL.getGameTimer().runOnceAfter(() -> texture.setEffect(null), Duration.millis(150));
 
         showDamageText(dmg);
+        updateHealthBar();
 
         if (health <= 0 && isAlive) {
             System.out.println("Player dead");
@@ -320,5 +374,11 @@ public class PlayerComponent extends Component {
         FXGL.getGameTimer().runOnceAfter(() -> textEntity.removeFromWorld(), javafx.util.Duration.seconds(1));
     }
 
+    @Override
+    public void onRemoved() {
+        if (healthBar != null) {
+            healthBar.removeFromWorld();
+        }
+    }
 
 }

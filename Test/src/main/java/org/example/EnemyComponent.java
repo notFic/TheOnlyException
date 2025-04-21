@@ -42,8 +42,17 @@ public class EnemyComponent extends Component {
         }
         if (type.equals("beetle")) {
             animWalkLeft = new AnimationChannel(FXGL.image("BeetleMove-scaled.png"), 4,
-                    64, 64, Duration.seconds(0.8), 4, 7);
+                    64, 64, Duration.seconds(0.4), 4, 7);
             animWalkRight = new AnimationChannel(FXGL.image("BeetleMove-scaled.png"), 4,
+                    64, 64, Duration.seconds(0.4), 8, 11);
+
+            texture = new AnimatedTexture(animWalkRight);
+            texture.loop();
+        }
+        if (type.equals("mantis")) {
+            animWalkRight = new AnimationChannel(FXGL.image("MantisMove-scaled.png"), 4,
+                    64, 64, Duration.seconds(0.8), 4, 7);
+            animWalkLeft = new AnimationChannel(FXGL.image("MantisMove-scaled.png"), 4,
                     64, 64, Duration.seconds(0.8), 8, 11);
 
             texture = new AnimatedTexture(animWalkRight);
@@ -67,6 +76,13 @@ public class EnemyComponent extends Component {
             texture.setTranslateX(-10);
             texture.setTranslateY(-25);
         }
+        if (type.equals("mantis")) {
+            entity.getViewComponent().addChild(texture);
+
+            // ADJUST TO ALIGN WITH HITBOX
+            texture.setTranslateX(-10);
+            texture.setTranslateY(-13);
+        }
     }
 
     @Override
@@ -81,7 +97,7 @@ public class EnemyComponent extends Component {
         Point2D direction = playerPosition.subtract(enemyPosition).normalize().multiply(speed * tpf * 60);
 
         // UPDATE MOVEMENT BASED ON DIRECTION
-        if (type.equals("maggot") || type.equals("beetle")) {
+        if (type.equals("maggot") || type.equals("beetle") || type.equals("mantis")) {
             if (direction.getX() > 0) {
                 // MOVING RIGHT
                 if (texture.getAnimationChannel() != animWalkRight) {
@@ -127,7 +143,7 @@ public class EnemyComponent extends Component {
         health -= dmg;
 
         // FLASHES WHITE WHEN HIT
-        if (type.equals("maggot") || type.equals("beetle")) {
+        if (type.equals("maggot") || type.equals("beetle") || type.equals("mantis")) {
             texture.setEffect(new javafx.scene.effect.ColorAdjust(0, -1, 1, 0)); // WHITE
             FXGL.getGameTimer().runOnceAfter(() -> {
                 texture.setEffect(null);

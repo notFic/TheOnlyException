@@ -178,7 +178,7 @@ public class GameApp extends GameApplication {
         FXGL.getGameTimer().runAtInterval(() -> {
             if(isTimerRunning)
             spawnEnemyOutsideViewport("tankEnemy");
-        }, javafx.util.Duration.seconds(20));
+        }, javafx.util.Duration.seconds(3));
     }
 
     public void stopTimer(){
