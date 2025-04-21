@@ -19,7 +19,7 @@ public class GameEntityFactor implements EntityFactory {
     but when it comes to actually spawning them in game, refer to GameApp.java
      */
 
-    private static final boolean showHitbox = true; // SWITCH TO TRUE FOR DEBUGGING PURPOSES
+    private static final boolean showHitbox = false; // SWITCH TO TRUE FOR DEBUGGING PURPOSES
 
     @Spawns("background")
     public Entity newBackground(SpawnData data) {
@@ -34,11 +34,6 @@ public class GameEntityFactor implements EntityFactory {
         int worldWidth = data.get("worldWidth");
         int worldHeight = data.get("worldHeight");
 
-        var backgroundView = new javafx.scene.Group();
-
-        // TEMPORARY BACKGROUND || GENERIC AHH GRASS
-        var backgroundImage = FXGL.image("dasd.png");
-
         // TILE SIZE
         double tileWidth = 24;
         double tileHeight = 24;
@@ -46,28 +41,28 @@ public class GameEntityFactor implements EntityFactory {
         int tilesX = (int) Math.ceil((double) worldWidth / tileWidth);
         int tilesY = (int) Math.ceil((double) worldHeight / tileHeight);
 
-        // TILE PATTERN
+        // CREATE CANVAS WITH FULL WORLD SIZE
+        javafx.scene.canvas.Canvas canvas = new javafx.scene.canvas.Canvas(worldWidth, worldHeight);
+        javafx.scene.canvas.GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        // TEMPORARY BACKGROUND || GENERIC AHH GRASS
+        var backgroundImage = FXGL.image("dasd.png");
+
+        // DRAW THE TILE PATTERN
         for (int x = 0; x < tilesX; x++) {
             for (int y = 0; y < tilesY; y++) {
-                var tile = new javafx.scene.image.ImageView(backgroundImage);
-
-                tile.setFitWidth(tileWidth);
-                tile.setFitHeight(tileHeight);
-
-                tile.setTranslateX(x * tileWidth);
-                tile.setTranslateY(y * tileHeight);
-
-                // PRESERVE ASPECT RATIO IF NEEDED
-                // tile.setPreserveRatio(true);
-
-                backgroundView.getChildren().add(tile);
+                gc.drawImage(
+                        backgroundImage,
+                        0, 0, backgroundImage.getWidth(), backgroundImage.getHeight(),
+                        x * tileWidth, y * tileHeight, tileWidth, tileHeight
+                );
             }
         }
 
         return entityBuilder()
                 .type(EntityType.BACKGROUND)
                 .at(0, 0)
-                .view(backgroundView)
+                .view(canvas)
                 .zIndex(-100)
                 .build();
     }
@@ -158,12 +153,27 @@ public class GameEntityFactor implements EntityFactory {
     @Spawns("tankEnemy")
     public Entity newTankEnemy(SpawnData data) {
         Entity player = (Entity) data.getData().getOrDefault("player", null);
+        // HITBOX SIZE
+        double width = 45;
+        double height = 50;
+
+        Rectangle hitbox = new Rectangle(width, height);
+
+        if (showHitbox) {
+            // VISIBLE HITBOX FOR DEBUGGING
+            hitbox.setFill(Color.color(1, 0, 0, 0.3)); // // SEMI-TRANSPARENT RED
+            hitbox.setStroke(Color.GREEN);
+            hitbox.setStrokeWidth(2);
+        } else {
+            hitbox.setFill(Color.TRANSPARENT);
+            hitbox.setStroke(Color.TRANSPARENT);
+        }
 
         return entityBuilder()
                 .type(EntityType.ENEMY)
                 .from(data)
-                .viewWithBBox(new Rectangle(40, 40, Color.VIOLET))
-                .with(new EnemyComponent(player, 1.0, 300, 15, "none")) // SLOW nis
+                .viewWithBBox(hitbox)
+                .with(new EnemyComponent(player, 1.0, 300, 15, "mantis")) // SLOW nis
                 .collidable()
                 .build();
     }

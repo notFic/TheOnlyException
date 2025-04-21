@@ -136,7 +136,7 @@ public class GameApp extends GameApplication {
         // SHOOT EVERY 1s
         FXGL.getGameTimer().runAtInterval(() -> {
             player.getComponent(PlayerComponent.class).shootTripleBurst();
-        }, javafx.util.Duration.seconds(0.5));
+        }, javafx.util.Duration.seconds(0.3));
 
         // SPAWN ENEMY EVERY 2s
         FXGL.getGameTimer().runAtInterval(() -> {
@@ -151,7 +151,7 @@ public class GameApp extends GameApplication {
         // SPAWN nis EVERY 5s
         FXGL.getGameTimer().runAtInterval(() -> {
             spawnEnemyOutsideViewport("tankEnemy");
-        }, javafx.util.Duration.seconds(20));
+        }, javafx.util.Duration.seconds(3));
     }
 
     private void spawnEnemyOutsideViewport(String enemyType) {
