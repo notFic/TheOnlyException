@@ -19,7 +19,7 @@ public class GameEntityFactor implements EntityFactory {
     but when it comes to actually spawning them in game, refer to GameApp.java
      */
 
-    private static final boolean showHitbox = false; // SWITCH TO TRUE FOR DEBUGGING PURPOSES
+    private static final boolean showHitbox = true; // SWITCH TO TRUE FOR DEBUGGING PURPOSES
 
     @Spawns("background")
     public Entity newBackground(SpawnData data) {
@@ -130,12 +130,27 @@ public class GameEntityFactor implements EntityFactory {
     @Spawns("fastEnemy")
     public Entity newFastEnemy(SpawnData data) {
         Entity player = (Entity) data.getData().getOrDefault("player", null);
+        // HITBOX SIZE
+        double width = 45;
+        double height = 20;
+
+        Rectangle hitbox = new Rectangle(width, height);
+
+        if (showHitbox) {
+            // VISIBLE HITBOX FOR DEBUGGING
+            hitbox.setFill(Color.color(1, 0, 0, 0.3)); // // SEMI-TRANSPARENT RED
+            hitbox.setStroke(Color.GREEN);
+            hitbox.setStrokeWidth(2);
+        } else {
+            hitbox.setFill(Color.TRANSPARENT);
+            hitbox.setStroke(Color.TRANSPARENT);
+        }
 
         return entityBuilder()
                 .type(EntityType.ENEMY)
                 .from(data)
-                .viewWithBBox(new Rectangle(40, 40, Color.BLACK))
-                .with(new EnemyComponent(player, 3.0, 30, 10, "none")) // FAST nis
+                .viewWithBBox(hitbox)
+                .with(new EnemyComponent(player, 3.0, 30, 10, "beetle")) // FAST nis
                 .collidable()
                 .build();
     }
