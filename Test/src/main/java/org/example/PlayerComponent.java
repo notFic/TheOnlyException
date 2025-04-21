@@ -12,6 +12,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 public class PlayerComponent extends Component {
     private double speed = 1.5; // PLAYER SPEED
     int health = 100;
@@ -107,7 +111,7 @@ public class PlayerComponent extends Component {
     // UPDATE ANIMATION BASED ON MOVEMENT
     @Override
     public void onUpdate(double tpf) {
-        if(!isAlive) return;
+        if (!isAlive) return;
         Point2D currentPosition = entity.getPosition();
         isMoving = !currentPosition.equals(previousPosition);
 
@@ -121,29 +125,30 @@ public class PlayerComponent extends Component {
     }
 
     public void moveLeft() {
-        if(!isAlive) return;
+        if (!isAlive) return;
         entity.translateX(-speed);
         boundPlayerInWorld();
     }
 
     public void moveRight() {
-        if(!isAlive) return;
+        if (!isAlive) return;
         entity.translateX(speed);
         boundPlayerInWorld();
     }
 
     public void moveUp() {
-        if(!isAlive) return;
+        if (!isAlive) return;
         entity.translateY(-speed);
         boundPlayerInWorld();
     }
+
     public void moveDown() {
-        if(!isAlive) return;
+        if (!isAlive) return;
         entity.translateY(speed);
         boundPlayerInWorld();
     }
 
-    public int getHealth(){
+    public int getHealth() {
         return health;
     }
 
@@ -167,7 +172,7 @@ public class PlayerComponent extends Component {
     }
 
     public void shoot() {
-        if(!isAlive) return;
+        if (!isAlive) return;
         // GET MOUSE POS AND CONVERT TO WORLD POSITION
         Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
         double viewportX = FXGL.getGameScene().getViewport().getX();
@@ -192,7 +197,7 @@ public class PlayerComponent extends Component {
     }
 
     public void shootTripleBurst() {
-        if(!isAlive) return;
+        if (!isAlive) return;
         // GET MOUSE POS AND CONVERT TO WORLD POSITION
         Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
         double viewportX = FXGL.getGameScene().getViewport().getX();
@@ -238,17 +243,15 @@ public class PlayerComponent extends Component {
     }
 
     public void damage(int dmg) {
-        if(!isAlive) return;
+        if (!isAlive) return;
         health -= dmg;
-        if(health < 0) health = 0;
+        if (health < 0) health = 0;
         FXGL.getWorldProperties().setValue("health", health); // Sync with world property
 
-        // para dili mag clutter ang sa console
         if (isAlive) {
             System.out.println("DEBUG: player health = " + health);
         }
 
-        // FLASH RED WHEN HIT
         javafx.scene.effect.ColorAdjust colorAdjust = new javafx.scene.effect.ColorAdjust();
         colorAdjust.setHue(-0.1);
         colorAdjust.setSaturation(0.7);
@@ -262,15 +265,15 @@ public class PlayerComponent extends Component {
         if (health <= 0 && isAlive) {
             System.out.println("Player dead");
             isAlive = false;
-            if(gameApp != null){
+            if (gameApp != null) {
                 gameApp.stopTimer();
-            }else{
+            } else {
                 System.err.println("Warning: gameApp is null, cannot stop timer");
             }
 
             FXGL.getGameController().pauseEngine();
 
-            int survivalTime = FXGL.getWorldProperties().getInt("survivalTime");
+            int survivalTime = gameApp.getTime();
             VBox gameOverMenu = new VBox(10);
             gameOverMenu.setAlignment(javafx.geometry.Pos.CENTER);
             gameOverMenu.setPadding(new javafx.geometry.Insets(20));
@@ -286,12 +289,17 @@ public class PlayerComponent extends Component {
 
             Button menuButton = new Button("Back to Main Menu");
             menuButton.setStyle("-fx-font-size: 16; -fx-background-color: #444; -fx-text-fill: white;");
-            menuButton.setOnAction(e -> FXGL.getGameController().gotoMainMenu());
+            menuButton.setOnAction(e -> {
+                gameApp.resetGameState(); // Reset game state
+                resetPlayerState(); // Reset player state
+                FXGL.getGameController().gotoMainMenu();
+            });
 
             gameOverMenu.getChildren().addAll(gameOverText, survivalText, menuButton);
 
             FXGL.getDialogService().showBox("Game Over", gameOverMenu, menuButton);
 
+            saveProgress(); // Save the current session
         }
     }
 
@@ -320,5 +328,50 @@ public class PlayerComponent extends Component {
         FXGL.getGameTimer().runOnceAfter(() -> textEntity.removeFromWorld(), javafx.util.Duration.seconds(1));
     }
 
+    public boolean isAlive() {
+        return health > 0;
+    }
 
+    public void resetPlayerState() {
+        health = 100;
+        isAlive = true;
+        FXGL.getWorldProperties().setValue("health", health);
+        System.out.println("Player state reset");
+    }
+
+    private void saveProgress() {
+        String currentPlayer = getPlayerName();
+        int survivedTime = gameApp.getTime();
+
+        String url = "jdbc:mysql://localhost:3306/dbtheonlyexception";
+        String dbUser = "root";
+        String dbPass = "";
+
+        try (Connection connection = DriverManager.getConnection(url, dbUser, dbPass)) {
+            String selectPlayerQuery = "SELECT player_id FROM player WHERE username = ?";
+            int playerId;
+            try (var pstmt = connection.prepareStatement(selectPlayerQuery)) {
+                pstmt.setString(1, currentPlayer);
+                var rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    playerId = rs.getInt("player_id");
+                } else {
+                    System.err.println("Player not found: " + currentPlayer);
+                    return;
+                }
+            }
+
+            String insertSessionQuery = "INSERT INTO game_session (player_id, survival_time, session_date) VALUES (?, ?, ?)";
+            try (var pstmt = connection.prepareStatement(insertSessionQuery)) {
+                pstmt.setInt(1, playerId);
+                pstmt.setInt(2, survivedTime);
+                pstmt.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+                pstmt.executeUpdate();
+                System.out.println("Game session saved for player: " + currentPlayer);
+            }
+        } catch (SQLException e) {
+            System.err.println("Database error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }
