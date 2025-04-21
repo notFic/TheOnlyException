@@ -20,6 +20,7 @@ public class GameApp extends GameApplication {
     private Entity player;
     private static String storedPlayerName = "Unknown";
     private Random random = new Random();
+    private boolean isTimerRunning = true;
 
     // GAME SETTINGS
     @Override
@@ -47,7 +48,7 @@ public class GameApp extends GameApplication {
         vars.put("playerName", storedPlayerName);
         vars.put("score", 0);
         vars.put("health", 100); // Initialize health to match PlayerComponent
-
+        vars.put("survivalTime", 0);
         // Debug
         System.out.println("Game vars initialized with playerName: " + storedPlayerName);
     }
@@ -86,6 +87,15 @@ public class GameApp extends GameApplication {
         healthText.setFill(javafx.scene.paint.Color.RED); // Red for health
         healthText.setStyle("-fx-font-weight: bold;"); // Bold for emphasis
         addUINode(healthText, 20, 50);
+
+        // Timer display
+        Text timerText = getUIFactoryService().newText("", 24);
+        timerText.textProperty().bind(
+                getWorldProperties().intProperty("survivalTime").asString("Time: %d s")
+        );
+        timerText.setFill(javafx.scene.paint.Color.YELLOW);
+        timerText.setStyle("-fx-font-weight: bold;");
+        addUINode(timerText, 20, 80);
     }
 
     // MOVEMENT KEY
@@ -127,33 +137,53 @@ public class GameApp extends GameApplication {
         backgroundData.put("worldHeight", worldHeight);
         spawn("tiledBackground", backgroundData);
 
-        player = spawn("player", worldWidth / 2.0, worldHeight / 2.0);
+        // Pass GameApp reference to player
+        SpawnData playerData = new SpawnData(worldWidth / 2.0, worldHeight / 2.0);
+        playerData.put("gameApp", this);
+        player = spawn("player", playerData);
 
         // CAMERA FOLLOW PLAYER
         getGameScene().getViewport().bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
         getGameScene().getViewport().setBounds(0, 0, worldWidth, worldHeight);
 
+        //Timer start
+        isTimerRunning = true;
+        FXGL.getGameTimer().runAtInterval(() -> {
+            if (isTimerRunning) {
+                int currentTime = getWorldProperties().getInt("survivalTime");
+                getWorldProperties().setValue("survivalTime", currentTime + 1);
+            }
+        }, Duration.seconds(1));
+
         // SHOOT EVERY 1s
         FXGL.getGameTimer().runAtInterval(() -> {
-            player.getComponent(PlayerComponent.class).shootTripleBurst();
-        }, javafx.util.Duration.seconds(0.3));
+            if(isTimerRunning){
+                player.getComponent(PlayerComponent.class).shootTripleBurst();
+            }
+        }, javafx.util.Duration.seconds(0.5));
 
         // SPAWN ENEMY EVERY 2s
         FXGL.getGameTimer().runAtInterval(() -> {
+            if(isTimerRunning)
             spawnEnemyOutsideViewport("enemy");
         }, javafx.util.Duration.seconds(1));
 
         // SPAWN nis EVERY 5s
         FXGL.getGameTimer().runAtInterval(() -> {
+            if(isTimerRunning)
             spawnEnemyOutsideViewport("fastEnemy");
         }, javafx.util.Duration.seconds(2));
 
         // SPAWN nis EVERY 5s
         FXGL.getGameTimer().runAtInterval(() -> {
+            if(isTimerRunning)
             spawnEnemyOutsideViewport("tankEnemy");
         }, javafx.util.Duration.seconds(3));
     }
 
+    public void stopTimer(){
+        isTimerRunning = false;
+    }
     private void spawnEnemyOutsideViewport(String enemyType) {
         // GET VIEWPORT BOUNDS
         double viewMinX = getGameScene().getViewport().getX();
