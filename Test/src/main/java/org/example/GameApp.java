@@ -42,13 +42,15 @@ public class GameApp extends GameApplication {
         });
     }
 
-    // Add player's name to global variables
+    // Add player's name, EXP, and level to global variables
     @Override
     protected void initGameVars(Map<String, Object> vars) {
         vars.put("playerName", storedPlayerName);
         vars.put("score", 0);
         vars.put("health", 100); // Initialize health to match PlayerComponent
         vars.put("survivalTime", 0);
+        vars.put("level", 1); // Initialize level
+        vars.put("exp", 0); // Initialize EXP
         // Debug
         System.out.println("Game vars initialized with playerName: " + storedPlayerName);
     }
@@ -59,8 +61,6 @@ public class GameApp extends GameApplication {
         System.out.println("onPreInit called");
     }
 
-    // When starting the game from the menu
-    // Optional static method if you want to use it
     public static void startGameWithName(String name) {
         if (name != null && !name.trim().isEmpty()) {
             System.out.println("Static method called with name: " + name);
@@ -68,7 +68,6 @@ public class GameApp extends GameApplication {
         }
     }
 
-    // Add a UI element to display player name
     @Override
     protected void initUI() {
         // Player name display
@@ -76,16 +75,16 @@ public class GameApp extends GameApplication {
         nameText.textProperty().bind(
                 getWorldProperties().stringProperty("playerName").concat("'s Game")
         );
-        nameText.setFill(javafx.scene.paint.Color.WHITE); // Ensure visibility
+        nameText.setFill(javafx.scene.paint.Color.WHITE);
         addUINode(nameText, 20, 20);
 
         // Health display
-        Text healthText = getUIFactoryService().newText("", 24); // Slightly larger font
+        Text healthText = getUIFactoryService().newText("", 24);
         healthText.textProperty().bind(
                 getWorldProperties().intProperty("health").asString("Health: %d")
         );
-        healthText.setFill(javafx.scene.paint.Color.RED); // Red for health
-        healthText.setStyle("-fx-font-weight: bold;"); // Bold for emphasis
+        healthText.setFill(javafx.scene.paint.Color.RED);
+        healthText.setStyle("-fx-font-weight: bold;");
         addUINode(healthText, 20, 50);
 
         // Timer display
@@ -96,9 +95,26 @@ public class GameApp extends GameApplication {
         timerText.setFill(javafx.scene.paint.Color.YELLOW);
         timerText.setStyle("-fx-font-weight: bold;");
         addUINode(timerText, 20, 80);
+
+        // Level display
+        Text levelText = getUIFactoryService().newText("", 24);
+        levelText.textProperty().bind(
+                getWorldProperties().intProperty("level").asString("Level: %d")
+        );
+        levelText.setFill(javafx.scene.paint.Color.CYAN);
+        levelText.setStyle("-fx-font-weight: bold;");
+        addUINode(levelText, 20, 110);
+
+        // EXP display
+        Text expText = getUIFactoryService().newText("", 24);
+        expText.textProperty().bind(
+                getWorldProperties().intProperty("exp").asString("EXP: %d")
+        );
+        expText.setFill(javafx.scene.paint.Color.GREEN);
+        expText.setStyle("-fx-font-weight: bold;");
+        addUINode(expText, 20, 140);
     }
 
-    // MOVEMENT KEY
     @Override
     protected void initInput() {
         onKey(KeyCode.A, () -> player.getComponent(PlayerComponent.class).moveLeft());
@@ -165,25 +181,26 @@ public class GameApp extends GameApplication {
         // SPAWN ENEMY EVERY 2s
         FXGL.getGameTimer().runAtInterval(() -> {
             if(isTimerRunning)
-            spawnEnemyOutsideViewport("enemy");
+                spawnEnemyOutsideViewport("enemy");
         }, javafx.util.Duration.seconds(1));
 
         // SPAWN nis EVERY 5s
         FXGL.getGameTimer().runAtInterval(() -> {
             if(isTimerRunning)
-            spawnEnemyOutsideViewport("fastEnemy");
+                spawnEnemyOutsideViewport("fastEnemy");
         }, javafx.util.Duration.seconds(2));
 
         // SPAWN nis EVERY 5s
         FXGL.getGameTimer().runAtInterval(() -> {
             if(isTimerRunning)
-            spawnEnemyOutsideViewport("tankEnemy");
+                spawnEnemyOutsideViewport("tankEnemy");
         }, javafx.util.Duration.seconds(3));
     }
 
     public void stopTimer(){
         isTimerRunning = false;
     }
+
     private void spawnEnemyOutsideViewport(String enemyType) {
         // GET VIEWPORT BOUNDS
         double viewMinX = getGameScene().getViewport().getX();
@@ -230,7 +247,6 @@ public class GameApp extends GameApplication {
         FXGL.getGameWorld().spawn(enemyType, data);
     }
 
-    // COLLISION
     @Override
     protected void initPhysics() {
         // BULLET DAMAGE TO ENEMY

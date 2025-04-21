@@ -16,6 +16,10 @@ import javafx.util.Duration;
 public class PlayerComponent extends Component {
     private double speed = 1.5; // PLAYER SPEED
     int health = 100;
+    private int maxHealth = 100; // Track max health for level-up boosts
+    private int level = 1; // Start at level 1
+    private int exp = 0; // Current experience points
+    private int expToNextLevel = 100; // EXP needed for next level (increases per level)
 
     private Entity healthBar;
     private Rectangle healthBarBackground;
@@ -126,7 +130,7 @@ public class PlayerComponent extends Component {
             healthBar.setPosition(xPos, yPos);
 
             // CHANGE COLOR BASED ON HEALTH %
-            double healthPercentage = Math.max(0, health) / 100.0;
+            double healthPercentage = Math.max(0, health) / (double) maxHealth;
             healthBarFill.setWidth(HEALTH_BAR_WIDTH * healthPercentage);
             if (healthPercentage > 0.6) {
                 healthBarFill.setFill(Color.GREEN);
@@ -152,11 +156,10 @@ public class PlayerComponent extends Component {
 
         previousPosition = entity.getPosition();
         createHealthBar();
-      
+
         gameApp = entity.getObject("gameApp");
     }
 
-    // UPDATE ANIMATION BASED ON MOVEMENT
     @Override
     public void onUpdate(double tpf) {
         if(!isAlive) return;
@@ -200,7 +203,6 @@ public class PlayerComponent extends Component {
         return health;
     }
 
-    // KEEP FROM GOING OUT OF BOUNDS
     private void boundPlayerInWorld() {
         double worldWidth = FXGL.getAppWidth() * 2;
         double worldHeight = FXGL.getAppHeight() * 2;
@@ -239,7 +241,6 @@ public class PlayerComponent extends Component {
         // GET DIRECTION FROM PLAYER TO MOUSE
         Point2D direction = mouseWorldPos.subtract(bulletSpawnPoint).normalize();
 
-
         Entity bullet = FXGL.spawn("bullet", bulletSpawnPoint);
         bullet.getComponent(BulletComponent.class).setDirection(direction);
     }
@@ -254,7 +255,6 @@ public class PlayerComponent extends Component {
                 mouseScreenPos.getX() + viewportX,
                 mouseScreenPos.getY() + viewportY
         );
-
 
         // SPAWN BULLET AT PLAYER LOCATION
         Point2D bulletSpawnPoint = new Point2D(
@@ -271,14 +271,12 @@ public class PlayerComponent extends Component {
         spawnBulletWithAngle(bulletSpawnPoint, direction, 10);  // RIGHT
     }
 
-    // SPAWN BALA
     private void spawnBulletWithAngle(Point2D spawnPoint, Point2D direction, double angleDegrees) {
         Point2D rotatedDirection = rotate(direction, angleDegrees);
         Entity bullet = FXGL.spawn("bullet", spawnPoint);
         bullet.getComponent(BulletComponent.class).setDirection(rotatedDirection);
     }
 
-    // ROTATE FOR BURST SHOT
     private Point2D rotate(Point2D vector, double angleDegrees) {
         double angleRadians = Math.toRadians(angleDegrees);
         double cos = Math.cos(angleRadians);
@@ -338,17 +336,19 @@ public class PlayerComponent extends Component {
             survivalText.setFill(Color.WHITE);
             survivalText.setFont(javafx.scene.text.Font.font("Arial", 24));
 
+            Text levelText = new Text("Reached Level: " + level);
+            levelText.setFill(Color.WHITE);
+            levelText.setFont(javafx.scene.text.Font.font("Arial", 24));
+
             Button menuButton = new Button("Back to Main Menu");
             menuButton.setStyle("-fx-font-size: 16; -fx-background-color: #444; -fx-text-fill: white;");
             menuButton.setOnAction(e -> FXGL.getGameController().gotoMainMenu());
 
-            gameOverMenu.getChildren().addAll(gameOverText, survivalText, menuButton);
+            gameOverMenu.getChildren().addAll(gameOverText, survivalText, levelText, menuButton);
 
             FXGL.getDialogService().showBox("Game Over", gameOverMenu, menuButton);
-
         }
     }
-
 
     private void showDamageText(double dmg) {
         var damageText = FXGL.getUIFactoryService().newText(String.valueOf((int) dmg), Color.RED, 18);
@@ -361,7 +361,7 @@ public class PlayerComponent extends Component {
                 .duration(javafx.util.Duration.seconds(1))
                 .translate(textEntity)
                 .from(textEntity.getPosition())
-                .to(textEntity.getPosition().subtract(0, 30))  // MOVE TEXT UPWARDS | STILL NEED FIX
+                .to(textEntity.getPosition().subtract(0, 30))  // MOVE TEXT UPWARDS
                 .build()
                 .start();
 
@@ -374,11 +374,54 @@ public class PlayerComponent extends Component {
         FXGL.getGameTimer().runOnceAfter(() -> textEntity.removeFromWorld(), javafx.util.Duration.seconds(1));
     }
 
+    public void addExp(int expGained) {
+        if (!isAlive) return;
+        exp += expGained;
+        FXGL.getWorldProperties().setValue("exp", exp);
+        System.out.println("DEBUG: Player gained " + expGained + " EXP, total EXP = " + exp);
+
+        // Check for level up
+        while (exp >= expToNextLevel) {
+            levelUp();
+        }
+    }
+
+    private void levelUp() {
+        level++;
+        exp -= expToNextLevel;
+        expToNextLevel = (int) (expToNextLevel * 1.5); // Increase EXP requirement by 50% per level
+        FXGL.getWorldProperties().setValue("level", level);
+        FXGL.getWorldProperties().setValue("exp", exp);
+
+        // Stat boosts on level up
+        maxHealth += 20; // Increase max health
+        health = maxHealth; // Fully heal on level up
+        speed += 0.2; // Increase movement speed
+        FXGL.getWorldProperties().setValue("health", health);
+
+        // Show level-up notification
+        FXGL.getNotificationService().pushNotification("Level Up! Reached Level " + level);
+        System.out.println("DEBUG: Player leveled up to Level " + level + ", Max Health = " + maxHealth + ", Speed = " + speed);
+
+        updateHealthBar();
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getExp() {
+        return exp;
+    }
+
+    public int getExpToNextLevel() {
+        return expToNextLevel;
+    }
+
     @Override
     public void onRemoved() {
         if (healthBar != null) {
             healthBar.removeFromWorld();
         }
     }
-
 }
