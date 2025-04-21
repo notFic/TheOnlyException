@@ -23,6 +23,7 @@ public class DropComponent extends Component {
     private Entity player;
     private final double MAGNET_RANGE = 150.0; // para ni for when na mag start ug follow ang drop
     private final double MOVE_SPEED = 2.5; // attraction speed
+    private final int EXP_VALUE = 50; // EXP awarded when collected
 
     @Override
     public void onAdded() {
@@ -34,23 +35,20 @@ public class DropComponent extends Component {
         if (entity.getViewComponent().getChildren().get(0) instanceof Rectangle) {
             dropVisual = (Rectangle) entity.getViewComponent().getChildren().get(0);
 
-            // ang pulsing/"shining" animation. di ko ka implement tarong sa kato built in function sa
-            // fxgl so ako nalanag gi manually ug change and shift ang colors sa drop. i dont know unsa
-            // ang effects ani niya like what if demanding ni siya sa gpu or something. maybe expensive
-            // ba diay ni or maka slow siya sa program in general.
+            // ang pulsing/"shining" animation
             FXGL.getGameTimer().runAtInterval(() -> {
                 if (entity != null && entity.isActive()) {
                     currentColorIndex = (currentColorIndex + 1) % YELLOW_SHADES.length;
                     dropVisual.setFill(YELLOW_SHADES[currentColorIndex]);
                 }
-            }, Duration.seconds(0.2)); // animation change, the lower the value, the quicker the color shift happens
+            }, Duration.seconds(0.2)); // animation change
         }
 
         FXGL.getGameTimer().runOnceAfter(() -> {
             if (entity != null && entity.isActive()) {
                 entity.removeFromWorld();
             }
-        }, Duration.seconds(20)); // mu disappear ang drop in 20 seconds, change if needed
+        }, Duration.seconds(20)); // mu disappear ang drop in 20 seconds
     }
 
     @Override
@@ -59,9 +57,10 @@ public class DropComponent extends Component {
             return;
         }
 
-        // if mu collide ang duha ka hitboxes then ma disappear na ang entity.
-        // dinhi na siguro ta mag implement sa exp function
+        // if mu collide ang duha ka hitboxes then ma disappear na ang entity
         if (entity.isColliding(player)) {
+            PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+            playerComponent.addExp(EXP_VALUE); // Award EXP to player
             entity.removeFromWorld();
             return;
         }
