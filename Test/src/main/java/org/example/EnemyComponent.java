@@ -163,6 +163,9 @@ public class EnemyComponent extends Component {
             if(Math.random() < 0.5){
                 FXGL.spawn("drop", entity.getCenter());
             }
+            if(Math.random() < 0.3){
+                FXGL.spawn("powerUp", entity.getCenter());
+            }
 
             entity.removeFromWorld();
         }
