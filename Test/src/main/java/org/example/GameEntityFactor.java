@@ -200,4 +200,15 @@ public class GameEntityFactor implements EntityFactory {
                 .collidable()
                 .build();
     }
+
+    @Spawns("powerUp")
+    public Entity newPowerUp(SpawnData data) {
+        return entityBuilder()
+                .type(EntityType.POWER_UP)
+                .from(data)
+                .viewWithBBox(new Rectangle(15, 15, Color.PURPLE))
+                .with(new LightningStrike())
+                .collidable()
+                .build();
+    }
 }

@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Random;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
+import static javafx.util.Duration.*;
 
 // Main game application class managing game world, UI, and physics
 public class GameApp extends GameApplication {
@@ -130,7 +131,7 @@ public class GameApp extends GameApplication {
             String currentName = FXGL.getWorldProperties().getString("playerName");
             System.out.println("Showing welcome notification for: " + currentName);
             FXGL.getNotificationService().pushNotification("Welcome, " + currentName + "!");
-        }, Duration.seconds(0.2));
+        }, seconds(0.2));
 
         // Set game world dimensions
         int worldWidth = getAppWidth() * 2;
@@ -147,6 +148,8 @@ public class GameApp extends GameApplication {
         playerData.put("gameApp", this);
         player = spawn("player", playerData);
 
+
+
         // Center camera on player
         getGameScene().getViewport().bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
         getGameScene().getViewport().setBounds(0, 0, worldWidth, worldHeight);
@@ -158,27 +161,28 @@ public class GameApp extends GameApplication {
                 int currentTime = getWorldProperties().getInt("survivalTime");
                 getWorldProperties().setValue("survivalTime", currentTime + 1);
             }
-        }, Duration.seconds(1));
+        }, seconds(1));
 
         // Auto-shoot triple burst every 0.5 seconds
         FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) {
                 player.getComponent(PlayerComponent.class).shootTripleBurst();
             }
-        }, Duration.seconds(0.5));
+        }, seconds(0.5));
+
 
         // Spawn enemies at intervals
         FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) spawnEnemyOutsideViewport("enemy");
-        }, Duration.seconds(1));
+        }, seconds(1));
 
         FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) spawnEnemyOutsideViewport("fastEnemy");
-        }, Duration.seconds(2));
+        }, seconds(2));
 
         FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) spawnEnemyOutsideViewport("tankEnemy");
-        }, Duration.seconds(3));
+        }, seconds(3));
     }
 
     // Stop all game timers

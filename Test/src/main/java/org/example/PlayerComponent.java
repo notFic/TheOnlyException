@@ -3,16 +3,21 @@ package org.example;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
+import com.almasb.fxgl.time.TimerAction;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import java.sql.*;
+
+import static com.almasb.fxgl.dsl.FXGLForKtKt.onKeyDown;
 
 // Component controlling player movement, animations, health, and game progress
 public class PlayerComponent extends Component {
@@ -133,6 +138,8 @@ public class PlayerComponent extends Component {
         previousPosition = entity.getPosition();
         createHealthBar();
         gameApp = entity.getObject("gameApp");
+
+
     }
 
     // Update player state each frame
