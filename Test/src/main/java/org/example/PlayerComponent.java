@@ -41,6 +41,8 @@ public class PlayerComponent extends Component {
     private Point2D previousPosition; // Previous position for movement detection
     private boolean isAlive = true; // Tracks if player is alive
 
+    private UpgradeManager upgradeManager;
+
     // Player and hitbox dimensions
     private final double PLAYER_WIDTH = 96 * 0.75;
     private final double PLAYER_HEIGHT = 96 * 0.75;
@@ -104,7 +106,7 @@ public class PlayerComponent extends Component {
     }
 
     // Update health bar position and appearance
-    private void updateHealthBar() {
+     void updateHealthBar() {
         if (healthBar != null) {
             double xPos = entity.getX() + (HITBOX_WIDTH / 2) - (HEALTH_BAR_WIDTH / 2);
             double yPos = entity.getY() - HEALTH_BAR_Y_OFFSET;
@@ -125,6 +127,10 @@ public class PlayerComponent extends Component {
     // Initialize player on addition to game world
     @Override
     public void onAdded() {
+
+        upgradeManager = new UpgradeManager(this);
+
+
         texture.setScaleX(0.75);
         texture.setScaleY(0.75);
         entity.getViewComponent().addChild(texture);
@@ -132,6 +138,7 @@ public class PlayerComponent extends Component {
         texture.setTranslateY(-27);
         previousPosition = entity.getPosition();
         createHealthBar();
+
         gameApp = entity.getObject("gameApp");
     }
 
@@ -401,6 +408,9 @@ public class PlayerComponent extends Component {
         FXGL.getNotificationService().pushNotification("Level Up! Reached Level " + level);
         System.out.println("DEBUG: Player leveled up to Level " + level + ", Max Health = " + maxHealth + ", Speed = " + speed);
         updateHealthBar();
+
+        upgradeManager.showUpgradeChoices();
+
     }
 
     // Get player level
@@ -425,4 +435,18 @@ public class PlayerComponent extends Component {
             healthBar.removeFromWorld();
         }
     }
+
+    public void increaseMaxHealth(int amount) {
+        maxHealth += amount;
+        health = maxHealth;
+    }
+
+    public void increaseSpeed(double amount) {
+        speed += amount;
+    }
+
+    public void healPercent(double percent) {
+        health = Math.min(health + (int)(maxHealth * percent), maxHealth);
+    }
+
 }
