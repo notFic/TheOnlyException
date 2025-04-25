@@ -19,59 +19,13 @@ import java.util.stream.Collectors;
 
 public class LightningStrike extends Component {
 
-    private Rectangle powerUpVisual;
-    private Entity player;
-    private final double MAGNET_RANGE = 150.0;
-    private final double MOVE_SPEED = 2.5;
-    private boolean isActive = false;
+    // TODO add a method that will activate this method below every 10 seconds once ma toggle ang iyahang set keybind
+    // (KEYBIND IS ONLY FOR DEBUGGING PURPOSES ONLY. we want to pass on this implementation when the player wants
+    // to chose this specific powerup. Once implemented correctly, we can apply the same logic for other powerups in the future)
 
-    private TimerAction strikeTimer; // interval between next strike
+    // ACHIEVED ^^
 
-    @Override
-    public void onAdded() {
-        this.player = FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER)
-                .stream()
-                .findFirst()
-                .orElse(null);
-
-        if (entity.getViewComponent().getChildren().get(0) instanceof Rectangle) {
-            powerUpVisual = (Rectangle) entity.getViewComponent().getChildren().get(0);
-            powerUpVisual.setFill(Color.PURPLE); // Purple color for power-up
-        }
-
-        // Remove after 20 seconds if not collected
-        FXGL.getGameTimer().runOnceAfter(() -> {
-            if (entity != null && entity.isActive()) {
-                entity.removeFromWorld();
-            }
-        }, Duration.seconds(20));
-    }
-
-    @Override
-    public void onUpdate(double tpf) {
-        if (player == null || !player.isActive() || entity == null || !entity.isActive()) {
-            return;
-        }
-
-        // Check for collision with player
-        if (entity.isColliding(player)) {
-            activatePowerUp();
-            entity.removeFromWorld();
-            return;
-        }
-
-        // Magnet effect like drops
-        Point2D playerCenter = player.getCenter();
-        Point2D powerUpCenter = entity.getCenter();
-
-        if (playerCenter != null && powerUpCenter != null &&
-                powerUpCenter.distance(playerCenter) <= MAGNET_RANGE) {
-            Point2D direction = playerCenter.subtract(powerUpCenter).normalize();
-            entity.translate(direction.multiply(MOVE_SPEED * tpf * 60));
-        }
-    }
-
-    private void activatePowerUp() {
+    void activatePowerUp() {
         // Get all active enemies on screen
         List<Entity> enemies = FXGL.getGameWorld().getEntitiesByType(EntityType.ENEMY)
                 .stream()
@@ -96,12 +50,12 @@ public class LightningStrike extends Component {
 
     private void showLightningStrike(Point2D position) {
         Image image = FXGL.image("lightning_strike.png");
-        int frameWidth = (int) image.getWidth() / 5;
+        int frameWidth = (int) image.getWidth() / 5; // 5 frames
         int frameHeight = (int) image.getHeight();
 
         AnimationChannel channel = new AnimationChannel(image, 5, frameWidth, frameHeight, Duration.seconds(0.4), 0, 4);
         AnimatedTexture animatedTexture = new AnimatedTexture(channel);
-        animatedTexture.play();
+        animatedTexture.play(); // plays the loaded image
 
         double strikeX = position.getX() - (frameWidth / 2.0); // center horizontally
         double strikeY = 0; // from top of screen
@@ -113,9 +67,14 @@ public class LightningStrike extends Component {
                 .buildAndAttach();
 
         double strikeHeight = position.getY();
-
         lightning.setScaleY(strikeHeight / frameHeight);
+        cameraShake();
 
+        FXGL.getGameTimer().runOnceAfter(lightning::removeFromWorld, Duration.seconds(0.5));
+    }
+
+
+    void cameraShake(){
         Node root = FXGL.getGameScene().getRoot();
 
         TranslateTransition shake = new TranslateTransition(Duration.seconds(0.1), root);
@@ -125,14 +84,5 @@ public class LightningStrike extends Component {
         shake.setAutoReverse(true);
         shake.setOnFinished(e -> root.setTranslateY(0)); // reset just in case
         shake.play();
-
-
-        FXGL.getGameTimer().runOnceAfter(() -> {
-            lightning.removeFromWorld();
-        }, Duration.seconds(0.4));
-    }
-
-    public boolean isActivated() {
-        return isActive;
     }
 }

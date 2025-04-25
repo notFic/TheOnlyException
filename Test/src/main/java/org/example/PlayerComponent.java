@@ -14,6 +14,15 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import java.sql.*;
 
+/*                         !!    REGARDING POWER-UP IMPLEMENTATION    !!
+    note for future kurt: ang pag activate sa power-ups kay ma triggered within the onAdded sa dinhi nga file,
+    WALA SA ONUPDATE GIPLACE ANG ACTIVATION, NAA SA ONADDED!!
+    you have to set the variables first, then an interval timer, with the activation method inside the timer.
+    this is so that kada given na timer, it will activate that power up and the process happens naturally since
+    naa man sa onAdded nakabutang; this means na ma "initialize" siya once, and it will keep running until the
+    end of the game.
+ */
+
 // Component controlling player movement, animations, health, and game progress
 public class PlayerComponent extends Component {
     private double speed = 1.5; // Player movement speed
@@ -46,6 +55,9 @@ public class PlayerComponent extends Component {
     private final double PLAYER_HEIGHT = 96 * 0.75;
     private final double HITBOX_WIDTH = 24;
     private final double HITBOX_HEIGHT = 45;
+
+    // kurt's shit
+    private LightningStrike lightningstrike;
 
     // Initialize player animations
     public PlayerComponent() {
@@ -133,12 +145,22 @@ public class PlayerComponent extends Component {
         previousPosition = entity.getPosition();
         createHealthBar();
         gameApp = entity.getObject("gameApp");
+
+        // kurt's shit
+        // dinhi siguro iactivate ang tanan powerups once ang player maka unlock nila
+
+        lightningstrike = new LightningStrike();
+
+        FXGL.getGameTimer().runAtInterval(() -> {
+            lightningstrike.activatePowerUp();
+        }, Duration.seconds(5));
     }
 
     // Update player state each frame
     @Override
     public void onUpdate(double tpf) {
         if (!isAlive) return;
+
         Point2D currentPosition = entity.getPosition();
         isMoving = !currentPosition.equals(previousPosition);
         if (isMoving) {
