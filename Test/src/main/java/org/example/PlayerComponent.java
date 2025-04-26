@@ -13,6 +13,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /*                         !!    REGARDING POWER-UP IMPLEMENTATION    !!
     note for future kurt: ang pag activate sa power-ups kay ma triggered within the onAdded sa dinhi nga file,
@@ -56,7 +58,8 @@ public class PlayerComponent extends Component {
     private final double HITBOX_WIDTH = 24;
     private final double HITBOX_HEIGHT = 45;
 
-    // kurt's shit
+    // Weapon and powerup tracking
+    private Map<String, Integer> weaponLevels = new HashMap<>();
     private LightningStrike lightningstrike;
 
     // Initialize player animations
@@ -145,15 +148,33 @@ public class PlayerComponent extends Component {
         previousPosition = entity.getPosition();
         createHealthBar();
         gameApp = entity.getObject("gameApp");
-
-        // kurt's shit
-        // dinhi siguro iactivate ang tanan powerups once ang player maka unlock nila
-
-        lightningstrike = new LightningStrike();
-
-        FXGL.getGameTimer().runAtInterval(() -> {
-            lightningstrike.activatePowerUp();
-        }, Duration.seconds(5));
+        
+        // Initialize empty weapon levels map
+        weaponLevels = new HashMap<>();
+        
+        // Initialize available powerups based on acquired weapons
+        initializeAcquiredPowerups();
+    }
+    
+    // Initialize powerups based on acquired weapons
+    private void initializeAcquiredPowerups() {
+        // Initialize lightning strike if acquired
+        if (getWeaponLevel("lightning") > 0) {
+            initializeLightningStrike();
+        }
+    }
+    
+    // Initialize the lightning strike weapon
+    private void initializeLightningStrike() {
+        if (lightningstrike == null) {
+            lightningstrike = new LightningStrike();
+            // Activate lightning strike every 5 seconds
+            FXGL.getGameTimer().runAtInterval(() -> {
+                if (isAlive && getWeaponLevel("lightning") > 0) {
+                    lightningstrike.activatePowerUp();
+                }
+            }, Duration.seconds(5));
+        }
     }
 
     // Update player state each frame
@@ -341,6 +362,10 @@ public class PlayerComponent extends Component {
         expToNextLevel = 100;
         speed = 1.5;
         isAlive = true;
+        
+        // Clear weapon levels
+        weaponLevels.clear();
+        
         FXGL.getWorldProperties().setValue("health", health);
         FXGL.getWorldProperties().setValue("level", level);
         FXGL.getWorldProperties().setValue("exp", exp);
@@ -420,9 +445,23 @@ public class PlayerComponent extends Component {
         health = maxHealth;
         speed += 0.2;
         FXGL.getWorldProperties().setValue("health", health);
-        FXGL.getNotificationService().pushNotification("Level Up! Reached Level " + level);
-        System.out.println("DEBUG: Player leveled up to Level " + level + ", Max Health = " + maxHealth + ", Speed = " + speed);
+        
+        // Pause the game and show level up GUI
+        if (gameApp != null) {
+            gameApp.stopTimer();
+        }
+        FXGL.getGameController().pauseEngine();
+        
+        // Show level up menu with weapon choices
+        showLevelUpMenu();
+        
         updateHealthBar();
+    }
+    
+    // Show the level up menu
+    private void showLevelUpMenu() {
+        LevelUpMenu menu = new LevelUpMenu(this);
+        menu.show();
     }
 
     // Get player level
@@ -438,6 +477,32 @@ public class PlayerComponent extends Component {
     // Get EXP needed for next level
     public int getExpToNextLevel() {
         return expToNextLevel;
+    }
+    
+    // Get the level of a weapon or powerup
+    public int getWeaponLevel(String weaponId) {
+        return weaponLevels.getOrDefault(weaponId, 0);
+    }
+    
+    // Handle weapon selection from level-up menu
+    public void onWeaponSelected(String weaponId, int newLevel) {
+        // Update the weapon/powerup level
+        weaponLevels.put(weaponId, newLevel);
+        System.out.println("Selected weapon/powerup: " + weaponId + " at level " + newLevel);
+        
+        // Initialize specific powerups if selected for the first time
+        if (newLevel == 1) {
+            if ("lightning".equals(weaponId)) {
+                initializeLightningStrike();
+                FXGL.getNotificationService().pushNotification("Acquired Lightning Strike!");
+            }
+        }
+        
+        // Resume the game
+        if (gameApp != null) {
+            gameApp.startTimer();
+        }
+        FXGL.getGameController().resumeEngine();
     }
 
     // Clean up health bar on removal

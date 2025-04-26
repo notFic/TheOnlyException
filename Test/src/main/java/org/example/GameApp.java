@@ -186,6 +186,11 @@ public class GameApp extends GameApplication {
         isTimerRunning = false;
     }
 
+    // Start all game timers
+    public void startTimer() {
+        isTimerRunning = true;
+    }
+
     // Spawn enemies outside the viewport
     private void spawnEnemyOutsideViewport(String enemyType) {
         // Get viewport bounds
