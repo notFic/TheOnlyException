@@ -5,8 +5,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -14,11 +12,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 
 import java.util.*;
 
 /**
- * A dialog menu that appears when the player levels up, allowing them to select
+ * A menu that appears when the player levels up, allowing them to select
  * weapons or powerups to upgrade or acquire.
  */
 public class LevelUpMenu {
@@ -42,7 +41,7 @@ public class LevelUpMenu {
      * Show the level up menu with weapon options
      */
     public void show() {
-        // Create the main dialog container
+        // Create the main container
         VBox container = new VBox(15);
         container.setAlignment(Pos.CENTER);
         container.setPadding(new Insets(20));
@@ -81,7 +80,7 @@ public class LevelUpMenu {
         // Convert list to array for the dialog
         Button[] buttons = optionButtons.toArray(new Button[0]);
         
-        // Show the dialog with the buttons
+        // Show the dialog without pausing the engine
         FXGL.getDialogService().showBox("Level Up", container, buttons);
     }
     
@@ -126,8 +125,20 @@ public class LevelUpMenu {
         // Add click event
         card.setOnAction(e -> {
             int currentLevel = playerComponent.getWeaponLevel(option.getId());
-            playerComponent.onWeaponSelected(option.getId(), currentLevel + 1);
+            
+            // Update the weapon level
+            playerComponent.onWeaponSelectedNoResume(option.getId(), currentLevel + 1);
+            
+            // Resume game timers with slight delay to avoid speed-up
+            if (playerComponent.getGameApp() != null) {
+                FXGL.runOnce(() -> {
+                    playerComponent.getGameApp().startTimer();
+                }, Duration.seconds(0.1));
+            }
         });
+        
+        // Store the option with the button for reference
+        card.setUserData(option);
         
         // Create category badge
         HBox categoryBox = new HBox();

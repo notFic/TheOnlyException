@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.util.Duration;
 import java.sql.*;
 
 // Main menu scene for user login and registration
@@ -102,10 +103,13 @@ public class NameInputScene extends FXGLMenu {
                 if (resultSet.next()) {
                     String dbPassword = resultSet.getString("password");
                     if (dbPassword.equals(pass)) {
+                        // Store name and delay starting the game slightly to prevent speed issues
                         FXGL.getWorldProperties().setValue("playerName", user);
                         System.out.println("Login successful for user: " + user);
                         GameApp.startGameWithName(user);
-                        fireNewGame(); // Start the game
+                        
+                        // Start the game immediately
+                        fireNewGame();
                     } else {
                         errorLabel.setText("Incorrect password. Please try again.");
                         System.out.println("Login failed: Incorrect password for user: " + user);
