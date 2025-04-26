@@ -8,6 +8,7 @@ import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import java.util.List;
 
 public class EnemyComponent extends Component {
     private Entity player;
@@ -18,6 +19,10 @@ public class EnemyComponent extends Component {
 
     private long lastDamageTime = 0;
     private final long damageCooldown = 500_000_000; // 0.5 SEC INTERNAL COOLDOWN
+    
+    // Constants for collision avoidance
+    private static final double COLLISION_RADIUS = 30.0; // Radius to check for nearby enemies
+    private static final double AVOIDANCE_FORCE = 0.3; // Strength of avoidance (0-1)
 
     private AnimatedTexture texture;
     private AnimationChannel animWalkLeft;
@@ -95,6 +100,18 @@ public class EnemyComponent extends Component {
         Point2D playerPosition = player.getPosition();
         Point2D enemyPosition = entity.getPosition();
         Point2D direction = playerPosition.subtract(enemyPosition).normalize().multiply(speed * tpf * 60);
+        
+        // Apply collision avoidance with other enemies
+        Point2D avoidanceForce = calculateAvoidanceForce();
+        if (avoidanceForce.magnitude() > 0) {
+            // Combine the player-seeking force with the avoidance force
+            direction = direction.add(avoidanceForce.multiply(speed * tpf * 60 * AVOIDANCE_FORCE));
+            
+            // Re-normalize if the enemy is still moving
+            if (direction.magnitude() > 0) {
+                direction = direction.normalize().multiply(speed * tpf * 60);
+            }
+        }
 
         // UPDATE MOVEMENT BASED ON DIRECTION
         if (type.equals("maggot") || type.equals("beetle") || type.equals("mantis")) {
@@ -110,7 +127,6 @@ public class EnemyComponent extends Component {
                 }
             }
         }
-
 
         entity.translate(direction);
 
@@ -138,6 +154,40 @@ public class EnemyComponent extends Component {
             }
         }
     }
+    
+    // Calculate a force to avoid nearby enemies
+    private Point2D calculateAvoidanceForce() {
+        Point2D avoidanceVector = new Point2D(0, 0);
+        Point2D currentPosition = entity.getPosition();
+        
+        // Get all nearby enemies
+        List<Entity> enemies = FXGL.getGameWorld().getEntitiesByType(EntityType.ENEMY);
+        
+        for (Entity otherEntity : enemies) {
+            // Skip self
+            if (otherEntity == entity) continue;
+            
+            Point2D otherPosition = otherEntity.getPosition();
+            double distance = currentPosition.distance(otherPosition);
+            
+            // Only avoid if within collision radius
+            if (distance < COLLISION_RADIUS && distance > 0) {
+                // Calculate avoidance vector (move away from other enemy)
+                Point2D avoidanceDirection = currentPosition.subtract(otherPosition).normalize();
+                
+                // Avoidance force is stronger when closer
+                double avoidanceStrength = 1.0 - (distance / COLLISION_RADIUS);
+                avoidanceVector = avoidanceVector.add(avoidanceDirection.multiply(avoidanceStrength));
+            }
+        }
+        
+        // Return normalized vector if there's any avoidance
+        if (avoidanceVector.magnitude() > 0) {
+            return avoidanceVector.normalize();
+        }
+        
+        return avoidanceVector;
+    }
 
     public void damage(double dmg) {
         health -= dmg;
@@ -164,6 +214,11 @@ public class EnemyComponent extends Component {
                 FXGL.spawn("drop", entity.getCenter());
             }
 
+            // Add EXP when killing an enemy
+            if (player != null && player.isActive() && player.hasComponent(PlayerComponent.class)) {
+                player.getComponent(PlayerComponent.class).addExp(10);
+            }
+            
             entity.removeFromWorld();
         }
     }
