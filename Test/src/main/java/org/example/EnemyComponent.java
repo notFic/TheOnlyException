@@ -8,6 +8,7 @@ import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+
 import java.util.List;
 
 public class EnemyComponent extends Component {
@@ -19,15 +20,21 @@ public class EnemyComponent extends Component {
 
     private long lastDamageTime = 0;
     private final long damageCooldown = 500_000_000; // 0.5 SEC INTERNAL COOLDOWN
-    
-    // Constants for collision avoidance
-    private static final double COLLISION_RADIUS = 30.0; // Radius to check for nearby enemies
-    private static final double AVOIDANCE_FORCE = 0.3; // Strength of avoidance (0-1)
 
     private AnimatedTexture texture;
     private AnimationChannel animWalkLeft;
     private AnimationChannel animWalkRight;
     private String type;
+
+    // Constants for collision avoidance
+    private final double SEPARATION_DISTANCE = 35.0; // Minimum distance to maintain between enemies
+    private final double SEPARATION_FORCE = 0.7; // Strength of the separation force
+
+    // Animation smoothing variables
+    private boolean isMovingRight = true;
+    private double animationChangeThreshold = 0.2; // Minimum X velocity needed to change direction
+    private double totalDirectionX = 0;
+    private static final double DIRECTION_MEMORY_FACTOR = 0.8; // How much to remember previous directions
 
     public EnemyComponent(Entity player, double baseSpeed, int baseHealth, int damage, String type) {
         this.player = player;
@@ -100,33 +107,13 @@ public class EnemyComponent extends Component {
         Point2D playerPosition = player.getPosition();
         Point2D enemyPosition = entity.getPosition();
         Point2D direction = playerPosition.subtract(enemyPosition).normalize().multiply(speed * tpf * 60);
-        
-        // Apply collision avoidance with other enemies
-        Point2D avoidanceForce = calculateAvoidanceForce();
-        if (avoidanceForce.magnitude() > 0) {
-            // Combine the player-seeking force with the avoidance force
-            direction = direction.add(avoidanceForce.multiply(speed * tpf * 60 * AVOIDANCE_FORCE));
-            
-            // Re-normalize if the enemy is still moving
-            if (direction.magnitude() > 0) {
-                direction = direction.normalize().multiply(speed * tpf * 60);
-            }
-        }
 
-        // UPDATE MOVEMENT BASED ON DIRECTION
-        if (type.equals("maggot") || type.equals("beetle") || type.equals("mantis")) {
-            if (direction.getX() > 0) {
-                // MOVING RIGHT
-                if (texture.getAnimationChannel() != animWalkRight) {
-                    texture.loopAnimationChannel(animWalkRight);
-                }
-            } else if (direction.getX() < 0) {
-                // MOVING LEFT
-                if (texture.getAnimationChannel() != animWalkLeft) {
-                    texture.loopAnimationChannel(animWalkLeft);
-                }
-            }
-        }
+        // Apply separation force to avoid other enemies
+        Point2D separationForce = calculateSeparationForce(tpf);
+        direction = direction.add(separationForce);
+
+        // Update animation direction with smoothing to prevent jittering
+        updateAnimation(direction);
 
         entity.translate(direction);
 
@@ -154,39 +141,68 @@ public class EnemyComponent extends Component {
             }
         }
     }
-    
-    // Calculate a force to avoid nearby enemies
-    private Point2D calculateAvoidanceForce() {
-        Point2D avoidanceVector = new Point2D(0, 0);
-        Point2D currentPosition = entity.getPosition();
-        
-        // Get all nearby enemies
-        List<Entity> enemies = FXGL.getGameWorld().getEntitiesByType(EntityType.ENEMY);
-        
-        for (Entity otherEntity : enemies) {
-            // Skip self
-            if (otherEntity == entity) continue;
-            
-            Point2D otherPosition = otherEntity.getPosition();
-            double distance = currentPosition.distance(otherPosition);
-            
-            // Only avoid if within collision radius
-            if (distance < COLLISION_RADIUS && distance > 0) {
-                // Calculate avoidance vector (move away from other enemy)
-                Point2D avoidanceDirection = currentPosition.subtract(otherPosition).normalize();
-                
-                // Avoidance force is stronger when closer
-                double avoidanceStrength = 1.0 - (distance / COLLISION_RADIUS);
-                avoidanceVector = avoidanceVector.add(avoidanceDirection.multiply(avoidanceStrength));
+
+    /**
+     * Update animation with smoothing to prevent rapid changes
+     * when small forces affect movement direction
+     */
+    private void updateAnimation(Point2D direction) {
+        if (type.equals("maggot") || type.equals("beetle") || type.equals("mantis")) {
+            // Use running average to smooth direction changes
+            totalDirectionX = (totalDirectionX * DIRECTION_MEMORY_FACTOR) + (direction.getX() * (1 - DIRECTION_MEMORY_FACTOR));
+
+            // Only change animation if we exceed the threshold in either direction
+            if (totalDirectionX > animationChangeThreshold && !isMovingRight) {
+                isMovingRight = true;
+                texture.loopAnimationChannel(animWalkRight);
+            } else if (totalDirectionX < -animationChangeThreshold && isMovingRight) {
+                isMovingRight = false;
+                texture.loopAnimationChannel(animWalkLeft);
             }
         }
-        
-        // Return normalized vector if there's any avoidance
-        if (avoidanceVector.magnitude() > 0) {
-            return avoidanceVector.normalize();
+    }
+
+    /**
+     * Calculate a separation force to avoid crowding with other enemies
+     */
+    private Point2D calculateSeparationForce(double tpf) {
+        Point2D currentPosition = entity.getPosition();
+        Point2D separationForce = new Point2D(0, 0);
+        int neighborCount = 0;
+
+        // Get all enemies in the game world
+        List<Entity> enemies = FXGL.getGameWorld().getEntitiesByType(EntityType.ENEMY);
+
+        for (Entity otherEnemy : enemies) {
+            // Skip self
+            if (otherEnemy == entity) {
+                continue;
+            }
+
+            // Calculate distance to the other enemy
+            Point2D otherPosition = otherEnemy.getPosition();
+            double distance = currentPosition.distance(otherPosition);
+
+            // If the other enemy is too close, add a separation force
+            if (distance < SEPARATION_DISTANCE && distance > 0) {
+                // Calculate direction away from the other enemy
+                Point2D awayDirection = currentPosition.subtract(otherPosition).normalize();
+
+                // The separation force is stronger when enemies are closer
+                double forceMagnitude = SEPARATION_FORCE * (SEPARATION_DISTANCE - distance) / SEPARATION_DISTANCE;
+
+                // Add the weighted separation force
+                separationForce = separationForce.add(awayDirection.multiply(forceMagnitude));
+                neighborCount++;
+            }
         }
-        
-        return avoidanceVector;
+
+        // If there are neighbors, normalize the force
+        if (neighborCount > 0) {
+            separationForce = separationForce.normalize().multiply(SEPARATION_FORCE * speed * tpf * 60);
+        }
+
+        return separationForce;
     }
 
     public void damage(double dmg) {
