@@ -214,11 +214,6 @@ public class EnemyComponent extends Component {
                 FXGL.spawn("drop", entity.getCenter());
             }
 
-            // Add EXP when killing an enemy
-            if (player != null && player.isActive() && player.hasComponent(PlayerComponent.class)) {
-                player.getComponent(PlayerComponent.class).addExp(10);
-            }
-            
             entity.removeFromWorld();
         }
     }
