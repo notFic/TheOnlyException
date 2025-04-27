@@ -165,7 +165,7 @@ public class GameApp extends GameApplication {
             if (isTimerRunning) {
                 player.getComponent(PlayerComponent.class).shootTripleBurst();
             }
-        }, Duration.seconds(0.5));
+        }, Duration.seconds(0.2));
 
         // Spawn enemies at intervals
         FXGL.getGameTimer().runAtInterval(() -> {
@@ -184,6 +184,11 @@ public class GameApp extends GameApplication {
     // Stop all game timers
     public void stopTimer() {
         isTimerRunning = false;
+    }
+
+    // Start all game timers
+    public void startTimer() {
+        isTimerRunning = true;
     }
 
     // Spawn enemies outside the viewport

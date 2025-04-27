@@ -3,6 +3,7 @@ package org.example;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
@@ -13,6 +14,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /*                         !!    REGARDING POWER-UP IMPLEMENTATION    !!
     note for future kurt: ang pag activate sa power-ups kay ma triggered within the onAdded sa dinhi nga file,
@@ -56,7 +59,8 @@ public class PlayerComponent extends Component {
     private final double HITBOX_WIDTH = 24;
     private final double HITBOX_HEIGHT = 45;
 
-    // kurt's shit
+    // Weapon and powerup tracking
+    private Map<String, Integer> weaponLevels = new HashMap<>();
     private LightningStrike lightningstrike;
 
     // Initialize player animations
@@ -145,15 +149,33 @@ public class PlayerComponent extends Component {
         previousPosition = entity.getPosition();
         createHealthBar();
         gameApp = entity.getObject("gameApp");
-
-        // kurt's shit
-        // dinhi siguro iactivate ang tanan powerups once ang player maka unlock nila
-
-        lightningstrike = new LightningStrike();
-
-        FXGL.getGameTimer().runAtInterval(() -> {
-            lightningstrike.activatePowerUp();
-        }, Duration.seconds(5));
+        
+        // Initialize empty weapon levels map
+        weaponLevels = new HashMap<>();
+        
+        // Initialize available powerups based on acquired weapons
+        initializeAcquiredPowerups();
+    }
+    
+    // Initialize powerups based on acquired weapons
+    private void initializeAcquiredPowerups() {
+        // Initialize lightning strike if acquired
+        if (getWeaponLevel("lightning") > 0) {
+            initializeLightningStrike();
+        }
+    }
+    
+    // Initialize the lightning strike weapon
+    private void initializeLightningStrike() {
+        if (lightningstrike == null) {
+            lightningstrike = new LightningStrike();
+            // Activate lightning strike every 5 seconds
+            FXGL.getGameTimer().runAtInterval(() -> {
+                if (isAlive && getWeaponLevel("lightning") > 0) {
+                    lightningstrike.activatePowerUp();
+                }
+            }, Duration.seconds(5));
+        }
     }
 
     // Update player state each frame
@@ -268,39 +290,26 @@ public class PlayerComponent extends Component {
     // Apply damage to player
     public void damage(int dmg) {
         if (!isAlive) return;
+        
         health -= dmg;
+        FXGL.getWorldProperties().setValue("health", health);
+        
+        // Check if player died
         if (health <= 0) {
             health = 0;
             isAlive = false;
-        }
-        FXGL.getWorldProperties().setValue("health", health);
-        if (isAlive) {
-            System.out.println("DEBUG: player health = " + health);
-        }
-
-        // Apply damage effect
-        javafx.scene.effect.ColorAdjust colorAdjust = new javafx.scene.effect.ColorAdjust();
-        colorAdjust.setHue(-0.1);
-        colorAdjust.setSaturation(0.7);
-        colorAdjust.setBrightness(0.3);
-        colorAdjust.setContrast(0.2);
-        texture.setEffect(colorAdjust);
-        FXGL.getGameTimer().runOnceAfter(() -> texture.setEffect(null), Duration.millis(150));
-
-        showDamageText(dmg);
-        updateHealthBar();
-
-        // Handle player death
-        if (!isAlive) {
+            FXGL.getWorldProperties().setValue("health", health);
             System.out.println("Player dead");
+            
+            // Stop game timers
             if (gameApp != null) {
                 gameApp.stopTimer();
             } else {
                 System.err.println("Warning: gameApp is null, cannot stop timer");
             }
-            FXGL.getGameController().pauseEngine();
-
+            
             int survivalTime = FXGL.getWorldProperties().getInt("survivalTime");
+            
             VBox gameOverMenu = new VBox(10);
             gameOverMenu.setAlignment(javafx.geometry.Pos.CENTER);
             gameOverMenu.setPadding(new javafx.geometry.Insets(20));
@@ -319,17 +328,36 @@ public class PlayerComponent extends Component {
             Button menuButton = new Button("Back to Main Menu");
             menuButton.setStyle("-fx-font-size: 16; -fx-background-color: #444; -fx-text-fill: white;");
             menuButton.setOnAction(e -> {
+                // Reset states and go to main menu
                 resetPlayerState();
-                gameApp.resetGameState();
-                FXGL.getGameController().gotoMainMenu();
-                FXGL.getGameController().resumeEngine();
+                if (gameApp != null) {
+                    gameApp.resetGameState();
+                }
+                // Delay going to main menu slightly to avoid speed-up
+                FXGL.runOnce(() -> {
+                    FXGL.getGameController().gotoMainMenu();
+                }, Duration.seconds(0.1));
             });
 
             gameOverMenu.getChildren().addAll(gameOverText, survivalText, levelText, menuButton);
+            
+            // Use the dialog service but avoid pause/resume of the engine
             FXGL.getDialogService().showBox("Game Over", gameOverMenu, menuButton);
-
+            
             saveProgress();
         }
+
+        // Apply damage effect
+        javafx.scene.effect.ColorAdjust colorAdjust = new javafx.scene.effect.ColorAdjust();
+        colorAdjust.setHue(-0.1);
+        colorAdjust.setSaturation(0.7);
+        colorAdjust.setBrightness(0.3);
+        colorAdjust.setContrast(0.2);
+        texture.setEffect(colorAdjust);
+        FXGL.getGameTimer().runOnceAfter(() -> texture.setEffect(null), Duration.millis(150));
+
+        showDamageText(dmg);
+        updateHealthBar();
     }
 
     // Reset player state for a new game
@@ -341,6 +369,10 @@ public class PlayerComponent extends Component {
         expToNextLevel = 100;
         speed = 1.5;
         isAlive = true;
+        
+        // Clear weapon levels
+        weaponLevels.clear();
+        
         FXGL.getWorldProperties().setValue("health", health);
         FXGL.getWorldProperties().setValue("level", level);
         FXGL.getWorldProperties().setValue("exp", exp);
@@ -416,13 +448,23 @@ public class PlayerComponent extends Component {
         expToNextLevel = (int) (expToNextLevel * 1.5);
         FXGL.getWorldProperties().setValue("level", level);
         FXGL.getWorldProperties().setValue("exp", exp);
-        maxHealth += 20;
-        health = maxHealth;
-        speed += 0.2;
         FXGL.getWorldProperties().setValue("health", health);
-        FXGL.getNotificationService().pushNotification("Level Up! Reached Level " + level);
-        System.out.println("DEBUG: Player leveled up to Level " + level + ", Max Health = " + maxHealth + ", Speed = " + speed);
+        
+        // Stop game timer but don't pause the engine
+        if (gameApp != null) {
+            gameApp.stopTimer();
+        }
+        
+        // Show level up menu with weapon choices
+        showLevelUpMenu();
+        
         updateHealthBar();
+    }
+    
+    // Show the level up menu
+    private void showLevelUpMenu() {
+        LevelUpMenu menu = new LevelUpMenu(this);
+        menu.show();
     }
 
     // Get player level
@@ -438,6 +480,43 @@ public class PlayerComponent extends Component {
     // Get EXP needed for next level
     public int getExpToNextLevel() {
         return expToNextLevel;
+    }
+    
+    // Get the level of a weapon or powerup
+    public int getWeaponLevel(String weaponId) {
+        return weaponLevels.getOrDefault(weaponId, 0);
+    }
+    
+    // Get the reference to the game app
+    public GameApp getGameApp() {
+        return gameApp;
+    }
+    
+    // Handle weapon selection from level-up menu (without resuming the engine)
+    public void onWeaponSelectedNoResume(String weaponId, int newLevel) {
+        // Update the weapon/powerup level
+        weaponLevels.put(weaponId, newLevel);
+        System.out.println("Selected weapon/powerup: " + weaponId + " at level " + newLevel);
+        
+        // Initialize specific powerups if selected for the first time
+        if (newLevel == 1) {
+            if ("lightning".equals(weaponId)) {
+                initializeLightningStrike();
+                FXGL.getNotificationService().pushNotification("Acquired Lightning Strike!");
+            }
+        }
+    }
+    
+    // Handle weapon selection from level-up menu
+    public void onWeaponSelected(String weaponId, int newLevel) {
+        // Update the weapon/powerup level using the non-resuming method
+        onWeaponSelectedNoResume(weaponId, newLevel);
+        
+        // Resume the game
+        if (gameApp != null) {
+            gameApp.startTimer();
+        }
+        FXGL.getGameController().resumeEngine();
     }
 
     // Clean up health bar on removal

@@ -9,6 +9,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
+import java.util.List;
+
 public class EnemyComponent extends Component {
     private Entity player;
     private double speed;
@@ -23,6 +25,16 @@ public class EnemyComponent extends Component {
     private AnimationChannel animWalkLeft;
     private AnimationChannel animWalkRight;
     private String type;
+
+    // Constants for collision avoidance
+    private final double SEPARATION_DISTANCE = 35.0; // Minimum distance to maintain between enemies
+    private final double SEPARATION_FORCE = 0.7; // Strength of the separation force
+
+    // Animation smoothing variables
+    private boolean isMovingRight = true;
+    private double animationChangeThreshold = 0.2; // Minimum X velocity needed to change direction
+    private double totalDirectionX = 0;
+    private static final double DIRECTION_MEMORY_FACTOR = 0.8; // How much to remember previous directions
 
     public EnemyComponent(Entity player, double baseSpeed, int baseHealth, int damage, String type) {
         this.player = player;
@@ -96,21 +108,12 @@ public class EnemyComponent extends Component {
         Point2D enemyPosition = entity.getPosition();
         Point2D direction = playerPosition.subtract(enemyPosition).normalize().multiply(speed * tpf * 60);
 
-        // UPDATE MOVEMENT BASED ON DIRECTION
-        if (type.equals("maggot") || type.equals("beetle") || type.equals("mantis")) {
-            if (direction.getX() > 0) {
-                // MOVING RIGHT
-                if (texture.getAnimationChannel() != animWalkRight) {
-                    texture.loopAnimationChannel(animWalkRight);
-                }
-            } else if (direction.getX() < 0) {
-                // MOVING LEFT
-                if (texture.getAnimationChannel() != animWalkLeft) {
-                    texture.loopAnimationChannel(animWalkLeft);
-                }
-            }
-        }
+        // Apply separation force to avoid other enemies
+        Point2D separationForce = calculateSeparationForce(tpf);
+        direction = direction.add(separationForce);
 
+        // Update animation direction with smoothing to prevent jittering
+        updateAnimation(direction);
 
         entity.translate(direction);
 
@@ -137,6 +140,69 @@ public class EnemyComponent extends Component {
                 entity.removeFromWorld();
             }
         }
+    }
+
+    /**
+     * Update animation with smoothing to prevent rapid changes
+     * when small forces affect movement direction
+     */
+    private void updateAnimation(Point2D direction) {
+        if (type.equals("maggot") || type.equals("beetle") || type.equals("mantis")) {
+            // Use running average to smooth direction changes
+            totalDirectionX = (totalDirectionX * DIRECTION_MEMORY_FACTOR) + (direction.getX() * (1 - DIRECTION_MEMORY_FACTOR));
+
+            // Only change animation if we exceed the threshold in either direction
+            if (totalDirectionX > animationChangeThreshold && !isMovingRight) {
+                isMovingRight = true;
+                texture.loopAnimationChannel(animWalkRight);
+            } else if (totalDirectionX < -animationChangeThreshold && isMovingRight) {
+                isMovingRight = false;
+                texture.loopAnimationChannel(animWalkLeft);
+            }
+        }
+    }
+
+    /**
+     * Calculate a separation force to avoid crowding with other enemies
+     */
+    private Point2D calculateSeparationForce(double tpf) {
+        Point2D currentPosition = entity.getPosition();
+        Point2D separationForce = new Point2D(0, 0);
+        int neighborCount = 0;
+
+        // Get all enemies in the game world
+        List<Entity> enemies = FXGL.getGameWorld().getEntitiesByType(EntityType.ENEMY);
+
+        for (Entity otherEnemy : enemies) {
+            // Skip self
+            if (otherEnemy == entity) {
+                continue;
+            }
+
+            // Calculate distance to the other enemy
+            Point2D otherPosition = otherEnemy.getPosition();
+            double distance = currentPosition.distance(otherPosition);
+
+            // If the other enemy is too close, add a separation force
+            if (distance < SEPARATION_DISTANCE && distance > 0) {
+                // Calculate direction away from the other enemy
+                Point2D awayDirection = currentPosition.subtract(otherPosition).normalize();
+
+                // The separation force is stronger when enemies are closer
+                double forceMagnitude = SEPARATION_FORCE * (SEPARATION_DISTANCE - distance) / SEPARATION_DISTANCE;
+
+                // Add the weighted separation force
+                separationForce = separationForce.add(awayDirection.multiply(forceMagnitude));
+                neighborCount++;
+            }
+        }
+
+        // If there are neighbors, normalize the force
+        if (neighborCount > 0) {
+            separationForce = separationForce.normalize().multiply(SEPARATION_FORCE * speed * tpf * 60);
+        }
+
+        return separationForce;
     }
 
     public void damage(double dmg) {
