@@ -3,7 +3,6 @@ package org.example;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
@@ -13,6 +12,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.example.powerups.FireTrailComponent;
+import org.example.powerups.LightningStrikeComponent;
+import org.example.powerups.PoisonAuraComponent;
+
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +31,7 @@ import java.util.Map;
 
 // Component controlling player movement, animations, health, and game progress
 public class PlayerComponent extends Component {
-    private double speed = 1.5; // Player movement speed
+    private double speed = 5; // Player movement speed
     private int health = 100; // Current health
     private int maxHealth = 100; // Maximum health, increases on level-up
     private int level = 1; // Current level
@@ -61,7 +64,10 @@ public class PlayerComponent extends Component {
 
     // Weapon and powerup tracking
     private Map<String, Integer> weaponLevels = new HashMap<>();
-    private LightningStrike lightningstrike;
+    private LightningStrikeComponent lightningstrike;
+    private PoisonAuraComponent poisonaura;
+    private FireTrailComponent firetrail;
+
 
     // Initialize player animations
     public PlayerComponent() {
@@ -163,18 +169,11 @@ public class PlayerComponent extends Component {
         if (getWeaponLevel("lightning") > 0) {
             initializeLightningStrike();
         }
-    }
-    
-    // Initialize the lightning strike weapon
-    private void initializeLightningStrike() {
-        if (lightningstrike == null) {
-            lightningstrike = new LightningStrike();
-            // Activate lightning strike every 5 seconds
-            FXGL.getGameTimer().runAtInterval(() -> {
-                if (isAlive && getWeaponLevel("lightning") > 0) {
-                    lightningstrike.activatePowerUp();
-                }
-            }, Duration.seconds(5));
+        if (getWeaponLevel("poison") > 0) {
+            initializePoisonAura();
+        }
+        if (getWeaponLevel("fire_trail") > 0) {
+            initializeFireTrail();
         }
     }
 
@@ -192,6 +191,7 @@ public class PlayerComponent extends Component {
         }
         previousPosition = currentPosition;
         updateHealthBar();
+
     }
 
     // Move player left
@@ -500,14 +500,24 @@ public class PlayerComponent extends Component {
         // Update the weapon/powerup level
         weaponLevels.put(weaponId, newLevel);
         System.out.println("Selected weapon/powerup: " + weaponId + " at level " + newLevel);
-        
+
         // Initialize specific powerups if selected for the first time
         if (newLevel == 1) {
             if ("lightning".equals(weaponId)) {
                 initializeLightningStrike();
                 FXGL.getNotificationService().pushNotification("Acquired Lightning Strike!");
             }
+            if ("poison".equals(weaponId)) { // Assuming level 1 activates it
+                initializePoisonAura();
+                FXGL.getNotificationService().pushNotification("Acquired Poison Aura!");
+            }
+            if ("fire_trail".equals(weaponId)) {
+                initializeFireTrail();
+                firetrail.activatePowerUp();
+                FXGL.getNotificationService().pushNotification("Acquired Fire Trail!");
+            }
         }
+
     }
     
     // Handle weapon selection from level-up menu
@@ -528,5 +538,39 @@ public class PlayerComponent extends Component {
         if (healthBar != null) {
             healthBar.removeFromWorld();
         }
+    }
+
+
+
+    // Initialize the lightning strike weapon
+    private void initializeLightningStrike() {
+        if (lightningstrike == null) {
+            lightningstrike = new LightningStrikeComponent();
+            FXGL.getGameTimer().runAtInterval(() -> {
+                if (isAlive && getWeaponLevel("lightning") > 0) {
+                    lightningstrike.activatePowerUp();
+                }
+            }, Duration.seconds(5));
+        }
+    }
+
+    private void initializePoisonAura(){
+        if(poisonaura == null){
+            poisonaura = new PoisonAuraComponent();
+            entity.addComponent(poisonaura);
+            poisonaura.activatePowerUp();  // Activate the aura
+        }
+    }
+
+    private void initializeFireTrail() {
+        if (firetrail == null) {
+            firetrail = new FireTrailComponent();
+            entity.addComponent(firetrail);
+            firetrail.activatePowerUp();
+        }
+    }
+
+    public boolean isMoving() {
+        return isMoving;
     }
 }

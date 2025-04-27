@@ -19,9 +19,11 @@ public class UpgradeRegistry {
     private UpgradeRegistry() {
         allUpgrades = Arrays.asList(
             // Weapons
-            new UpgradeOption("lightning", "Lightning Strike", "Strikes random enemies with lightning", Color.PURPLE, OptionType.WEAPON),
-            new UpgradeOption("1", "WEAPON 2", "PLACEHOLDER DESCRIPTION", Color.RED, OptionType.WEAPON),
-            new UpgradeOption("2", "WEAPON 3", "PLACEHOLDER DESCRIPTION", Color.BLUE, OptionType.WEAPON),
+
+                // nganong weapon ni siya?
+            new UpgradeOption("lightning", "Lightning Strike", "Strikes random enemies with lightning", Color.BLUE, OptionType.WEAPON),
+            new UpgradeOption("poison", "Poison Aura", "damages enemies within range", Color.GREENYELLOW, OptionType.WEAPON),
+            new UpgradeOption("fire_trail", "Fire Trail", "damages enemies standing on trail", Color.RED, OptionType.WEAPON),
             new UpgradeOption("3", "WEAPON 4", "PLACEHOLDER DESCRIPTION", Color.LIGHTGRAY, OptionType.WEAPON),
             //new UpgradeOption("4", "WEAPON 5", "PLACEHOLDER DESCRIPTION", Color.LIME, OptionType.WEAPON),
             //new UpgradeOption("5", "WEAPON 6", "PLACEHOLDER DESCRIPTION", Color.GREEN, OptionType.WEAPON),
