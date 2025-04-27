@@ -132,13 +132,19 @@ public class LevelUpMenu {
             
             // Resume game timers with slight delay to avoid speed-up
             if (playerComponent.getGameApp() != null) {
+                GameApp gameApp = playerComponent.getGameApp();
+                
                 // Stop timers first to ensure proper state
-                playerComponent.getGameApp().stopTimer();
+                gameApp.stopTimer();
 
                 // Use a slightly longer delay to ensure clean slate
                 FXGL.runOnce(() -> {
+                    // Force an immediate UI update to reset exp bar to the correct value
+                    FXGL.getWorldProperties().setValue("exp", playerComponent.getExp());
+                    gameApp.updateExpBar();
+                    
                     // Reset all game timers to prevent speed-up bug
-                    playerComponent.getGameApp().resetTimers();
+                    gameApp.resetTimers();
                 }, Duration.seconds(0.2));
             }
         });

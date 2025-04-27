@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import java.util.Map;
 import java.util.Random;
+import javafx.scene.shape.Rectangle;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -23,6 +24,10 @@ public class GameApp extends GameApplication {
     private static String storedPlayerName = "Unknown"; // Player's username
     private Random random = new Random(); // For enemy spawning
     private boolean isTimerRunning = true; // Controls game timers
+    
+    // EXP progress bar UI elements
+    private Rectangle expBarFill;
+    private Text expProgressText;
 
     // Configure game window and main menu
     @Override
@@ -93,6 +98,40 @@ public class GameApp extends GameApplication {
         expText.setFill(Color.YELLOWGREEN);
         expText.setStyle("-fx-font-weight: bold;");
         addUINode(expText, 20, 140);
+        
+        // Add EXP progress bar at the bottom of the screen
+        Rectangle expBarBackground = new Rectangle(getAppWidth(), 20);
+        expBarBackground.setFill(Color.rgb(30, 30, 30, 0.8));
+        addUINode(expBarBackground, 0, getAppHeight() - 20);
+        
+        expBarFill = new Rectangle(0, 20);
+        expBarFill.setFill(Color.YELLOWGREEN);
+        addUINode(expBarFill, 0, getAppHeight() - 20);
+        
+        // Add EXP text on the progress bar
+        expProgressText = getUIFactoryService().newText("", 16);
+        expProgressText.setFill(Color.WHITE);
+        expProgressText.setStyle("-fx-font-weight: bold;");
+        addUINode(expProgressText, getAppWidth() / 2 - 50, getAppHeight() - 5);
+        
+        // Initialize the EXP bar once
+        updateExpBar();
+    }
+    
+    // Update experience bar based on player's current exp
+    public void updateExpBar() {
+        if (player != null && player.hasComponent(PlayerComponent.class)) {
+            PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+            int currentExp = playerComponent.getExp();
+            int expToNext = playerComponent.getExpToNextLevel();
+            
+            // Calculate percentage and update bar width
+            double percentage = Math.min(1.0, (double) currentExp / expToNext);
+            expBarFill.setWidth(getAppWidth() * percentage);
+            
+            // Update text
+            expProgressText.setText("EXP: " + currentExp + " / " + expToNext);
+        }
     }
 
     // Bind movement keys (WASD) to player actions
@@ -181,9 +220,6 @@ public class GameApp extends GameApplication {
         }, Duration.seconds(3));
     }
 
-
-
-
     // Stop all game timers
     public void stopTimer() {
         isTimerRunning = false;
@@ -231,6 +267,8 @@ public class GameApp extends GameApplication {
         FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) spawnEnemyOutsideViewport("tankEnemy");
         }, Duration.seconds(3));
+        
+        // No need for constant EXP bar updates - removed for optimization
 
         // Reinitialize player powerup timers
         if (player != null && player.hasComponent(PlayerComponent.class)) {

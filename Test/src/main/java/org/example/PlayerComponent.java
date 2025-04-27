@@ -458,6 +458,12 @@ public class PlayerComponent extends Component {
         exp += expGained;
         FXGL.getWorldProperties().setValue("exp", exp);
         System.out.println("DEBUG: Player gained " + expGained + " EXP, total EXP = " + exp);
+        
+        // If not leveling up, update the EXP bar directly
+        if (exp < expToNextLevel && gameApp != null) {
+            gameApp.updateExpBar();
+        }
+        
         while (exp >= expToNextLevel) {
             levelUp();
         }
@@ -466,11 +472,22 @@ public class PlayerComponent extends Component {
     // Level up player and apply stat boosts
     private void levelUp() {
         level++;
-        exp -= expToNextLevel;
-        expToNextLevel = (int) (expToNextLevel * 1.5);
-        FXGL.getWorldProperties().setValue("level", level);
+        
+        // Store original exp value (will be negative after subtracting expToNextLevel)
+        int originalExp = exp - expToNextLevel;
+        
+        // Temporarily set exp to full for UI display purposes
+        exp = expToNextLevel;
         FXGL.getWorldProperties().setValue("exp", exp);
+        
+        // Update game world properties
+        FXGL.getWorldProperties().setValue("level", level);
         FXGL.getWorldProperties().setValue("health", health);
+        
+        // Force UI update if game app is available
+        if (gameApp != null) {
+            gameApp.updateExpBar();
+        }
         
         // Stop game timer but don't pause the engine
         if (gameApp != null) {
@@ -479,6 +496,11 @@ public class PlayerComponent extends Component {
         
         // Show level up menu with weapon choices
         showLevelUpMenu();
+        
+        // After menu is shown, reset exp to correct value
+        exp = originalExp;
+        expToNextLevel = (int) (expToNextLevel * 1.5);
+        FXGL.getWorldProperties().setValue("exp", exp);
         
         updateHealthBar();
     }
