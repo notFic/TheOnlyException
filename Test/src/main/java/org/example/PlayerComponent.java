@@ -448,9 +448,6 @@ public class PlayerComponent extends Component {
         expToNextLevel = (int) (expToNextLevel * 1.5);
         FXGL.getWorldProperties().setValue("level", level);
         FXGL.getWorldProperties().setValue("exp", exp);
-        maxHealth += 20;
-        health = maxHealth;
-        speed += 0.2;
         FXGL.getWorldProperties().setValue("health", health);
         
         // Stop game timer but don't pause the engine
