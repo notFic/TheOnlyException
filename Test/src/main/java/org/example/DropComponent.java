@@ -61,6 +61,12 @@ public class DropComponent extends Component {
         if (entity.isColliding(player)) {
             PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
             playerComponent.addExp(EXP_VALUE); // Award EXP to player
+            
+            // Update EXP bar UI immediately
+            if (playerComponent.getGameApp() != null) {
+                playerComponent.getGameApp().updateExpBar();
+            }
+            
             entity.removeFromWorld();
             return;
         }
