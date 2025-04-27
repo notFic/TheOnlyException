@@ -514,7 +514,7 @@ public class PlayerComponent extends Component {
         
         // Resume the game
         if (gameApp != null) {
-            gameApp.startTimer();
+            gameApp.resetTimers(); // Reset timers to prevent speed-up bug
         }
         FXGL.getGameController().resumeEngine();
     }

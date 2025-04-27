@@ -205,7 +205,7 @@ public class EnemyComponent extends Component {
         return separationForce;
     }
 
-    public void damage(double dmg) {
+    public void damage(double dmg, Point2D hitPosition) {
         health -= dmg;
 
         // FLASHES WHITE WHEN HIT
@@ -223,7 +223,7 @@ public class EnemyComponent extends Component {
             }, javafx.util.Duration.millis(25));
         }
 
-        showDamageText(dmg);
+        showDamageText(dmg, hitPosition);
 
         if (health <= 0) {
             if(Math.random() < 0.5){
@@ -234,28 +234,68 @@ public class EnemyComponent extends Component {
         }
     }
 
-    private void showDamageText(double dmg) {
-        var damageText = FXGL.getUIFactoryService().newText(String.valueOf((int) dmg), Color.WHITE, 18);
+    private void showDamageText(double dmg, Point2D hitPosition) {
+        // Create the damage text with original styling
+        var damageText = FXGL.getUIFactoryService().newText(String.valueOf((int) dmg), Color.WHITE, 22);
+        
+        // Add directly to game world at the hit position
         var textEntity = FXGL.entityBuilder()
-                .at(entity.getPosition().subtract(0, 30))
+                .at(hitPosition)
                 .view(damageText)
+                .zIndex(100)
                 .buildAndAttach();
-
-        FXGL.animationBuilder()
-                .duration(javafx.util.Duration.seconds(1))
-                .translate(textEntity)
-                .from(textEntity.getPosition())
-                .to(textEntity.getPosition().subtract(0, 30))  // MOVE TEXT UPWARDS | STILL NEED FIX
-                .build()
-                .start();
-
-        FXGL.animationBuilder()
-                .duration(javafx.util.Duration.seconds(1))
-                .fadeOut(textEntity)
-                .build()
-                .start();
-
-        FXGL.getGameTimer().runOnceAfter(() -> textEntity.removeFromWorld(), javafx.util.Duration.seconds(1));
+        
+        // Determine jump direction based on enemy position relative to player
+        boolean jumpRight = true; // Default to right
+        
+        if (player != null) {
+            double enemyX = entity.getX();
+            double playerX = player.getX();
+            
+            // If enemy is to the left of player, jump left
+            // If enemy is to the right of player or at same position, jump right
+            jumpRight = enemyX >= playerX;
+        }
+        
+        // Distance and height for the jump
+        int xDistance = 30;
+        int yPeak = 25;
+        
+        // Set the direction based on enemy position
+        if (!jumpRight) {
+            xDistance = -xDistance;
+        }
+        
+        // Create a path for the arc movement
+        javafx.scene.shape.Path path = new javafx.scene.shape.Path();
+        path.getElements().add(new javafx.scene.shape.MoveTo(0, 0));
+        path.getElements().add(new javafx.scene.shape.QuadCurveTo(
+                xDistance / 2.0, -yPeak,  // Control point
+                xDistance, 0             // End point
+        ));
+        
+        // Create a compound animation that combines path and fade
+        javafx.animation.PathTransition pathTransition = new javafx.animation.PathTransition(
+                javafx.util.Duration.seconds(0.6), path, damageText);
+        pathTransition.setInterpolator(javafx.animation.Interpolator.EASE_OUT);
+        
+        // Create the fade transition
+        javafx.animation.FadeTransition fadeTransition = new javafx.animation.FadeTransition(
+                javafx.util.Duration.seconds(0.25), damageText);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        
+        // Create a timeline for managing the timing of both animations
+        javafx.animation.Timeline timeline = new javafx.animation.Timeline(
+            new javafx.animation.KeyFrame(javafx.util.Duration.ZERO, e -> pathTransition.play()),
+            new javafx.animation.KeyFrame(javafx.util.Duration.seconds(0.4), e -> fadeTransition.play())
+        );
+        
+        // Remove entity when animations are done
+        fadeTransition.setOnFinished(e -> textEntity.removeFromWorld());
+        
+        // Start the timeline
+        timeline.play();
     }
 
     public int getDamage() {

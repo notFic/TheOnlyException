@@ -191,6 +191,48 @@ public class GameApp extends GameApplication {
         isTimerRunning = true;
     }
 
+    // Clear and recreate all game timers to prevent speed-up bug
+    public void resetTimers() {
+        System.out.println("Resetting game timers to prevent speed-up");
+        
+        // First stop all timers
+        isTimerRunning = false;
+        
+        // Clear all existing timers
+        FXGL.getGameTimer().clear();
+        
+        // Recreate the survival timer
+        FXGL.getGameTimer().runAtInterval(() -> {
+            if (isTimerRunning) {
+                int currentTime = getWorldProperties().getInt("survivalTime");
+                getWorldProperties().setValue("survivalTime", currentTime + 1);
+            }
+        }, Duration.seconds(1));
+
+        // Recreate auto-shoot timer
+        FXGL.getGameTimer().runAtInterval(() -> {
+            if (isTimerRunning) {
+                player.getComponent(PlayerComponent.class).shootTripleBurst();
+            }
+        }, Duration.seconds(0.2));
+
+        // Recreate enemy spawn timers
+        FXGL.getGameTimer().runAtInterval(() -> {
+            if (isTimerRunning) spawnEnemyOutsideViewport("enemy");
+        }, Duration.seconds(1));
+
+        FXGL.getGameTimer().runAtInterval(() -> {
+            if (isTimerRunning) spawnEnemyOutsideViewport("fastEnemy");
+        }, Duration.seconds(2));
+
+        FXGL.getGameTimer().runAtInterval(() -> {
+            if (isTimerRunning) spawnEnemyOutsideViewport("tankEnemy");
+        }, Duration.seconds(3));
+        
+        // Restart timers
+        isTimerRunning = true;
+    }
+
     // Spawn enemies outside the viewport
     private void spawnEnemyOutsideViewport(String enemyType) {
         // Get viewport bounds
@@ -247,7 +289,7 @@ public class GameApp extends GameApplication {
             PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
 
             int damage = bulletComponent.getDamage();
-            enemyComponent.damage(damage);
+            enemyComponent.damage(damage, bullet.getPosition());
             FXGL.getWorldProperties().increment("totalDamage", damage); // Track damage
             if (enemyComponent.getHealth() <= 0) {
                 FXGL.getWorldProperties().increment("kills", 1); // Track kills

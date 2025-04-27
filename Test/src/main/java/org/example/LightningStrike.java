@@ -40,7 +40,7 @@ public class LightningStrike extends Component {
             EnemyComponent enemyComponent = enemy.getComponent(EnemyComponent.class);
 
             showLightningStrike(enemy.getCenter());
-            enemyComponent.damage(50);
+            enemyComponent.damage(50, enemy.getCenter());
 
             // Remove from list to avoid damaging same enemy twice
             enemies.remove(randomIndex);
