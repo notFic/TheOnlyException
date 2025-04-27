@@ -169,6 +169,20 @@ public class PlayerComponent extends Component {
     private void initializeLightningStrike() {
         if (lightningstrike == null) {
             lightningstrike = new LightningStrike();
+        }
+
+        // Always recreate the timer to avoid stacking
+        reinitializePowerupTimers();
+    }
+
+
+    // Recreate all powerup timers to prevent stacking after pauses
+    public void reinitializePowerupTimers() {
+        // First clear any existing powerup timers
+        // We must recreate them instead of just activating them to avoid stacking
+
+        // Create a new lightning strike timer if weapon is acquired
+        if (getWeaponLevel("lightning") > 0 && lightningstrike != null) {
             // Activate lightning strike every 5 seconds
             FXGL.getGameTimer().runAtInterval(() -> {
                 if (isAlive && getWeaponLevel("lightning") > 0) {
@@ -176,6 +190,14 @@ public class PlayerComponent extends Component {
                 }
             }, Duration.seconds(5));
         }
+
+        // Add other powerup timers here as they are implemented
+    }
+
+    // Handle powerup timers after pause
+    public void reinitializeAfterPause() {
+        // Recreate all powerup timers
+        reinitializePowerupTimers();
     }
 
     // Update player state each frame

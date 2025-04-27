@@ -132,10 +132,14 @@ public class LevelUpMenu {
             
             // Resume game timers with slight delay to avoid speed-up
             if (playerComponent.getGameApp() != null) {
+                // Stop timers first to ensure proper state
+                playerComponent.getGameApp().stopTimer();
+
+                // Use a slightly longer delay to ensure clean slate
                 FXGL.runOnce(() -> {
                     // Reset all game timers to prevent speed-up bug
                     playerComponent.getGameApp().resetTimers();
-                }, Duration.seconds(0.1));
+                }, Duration.seconds(0.2));
             }
         });
         

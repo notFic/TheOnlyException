@@ -181,6 +181,9 @@ public class GameApp extends GameApplication {
         }, Duration.seconds(3));
     }
 
+
+
+
     // Stop all game timers
     public void stopTimer() {
         isTimerRunning = false;
@@ -228,9 +231,16 @@ public class GameApp extends GameApplication {
         FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) spawnEnemyOutsideViewport("tankEnemy");
         }, Duration.seconds(3));
-        
+
+        // Reinitialize player powerup timers
+        if (player != null && player.hasComponent(PlayerComponent.class)) {
+            player.getComponent(PlayerComponent.class).reinitializeAfterPause();
+        }
+
         // Restart timers
         isTimerRunning = true;
+
+        System.out.println("All game timers reset successfully");
     }
 
     // Spawn enemies outside the viewport
