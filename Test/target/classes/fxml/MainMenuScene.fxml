@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+
+<StackPane fx:id="root" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.MainMenuController">
+    <!-- Video Background -->
+    <MediaView fx:id="backgroundMediaView" fitHeight="720.0" fitWidth="1280.0" preserveRatio="true" />
+
+    <!-- Semi-transparent Overlay -->
+    <Rectangle fx:id="overlay" height="720.0" width="1280.0" fill="#00000080" />
+
+    <!-- Menu Box (Title and Buttons) -->
+    <VBox fx:id="menuBox" alignment="CENTER" spacing="20" style="-fx-padding: 20;">
+        <Text fx:id="title" fill="WHITE" style="-fx-font-size: 48; -fx-font-weight: bold;" text="Main Menu" />
+        <Button fx:id="startButton" onAction="#startGame" style="-fx-font-size: 24; -fx-background-color: #177bdf; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;" text="Start" />
+        <Button fx:id="settingsButton" onAction="#showSettings" style="-fx-font-size: 24; -fx-background-color: #177bdf; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;" text="Settings" />
+        <Button fx:id="leaderboardButton" onAction="#showLeaderboard" style="-fx-font-size: 24; -fx-background-color: #177bdf; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;" text="Leaderboard" />
+        <Button fx:id="exitButton" onAction="#exitGame" style="-fx-font-size: 24; -fx-background-color: #177bdf; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;" text="Exit" />
+        <Button fx:id="logoutButton" onAction="#logout" style="-fx-font-size: 24; -fx-background-color: #177bdf; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;" text="Logout" />
+    </VBox>
+</StackPane>
