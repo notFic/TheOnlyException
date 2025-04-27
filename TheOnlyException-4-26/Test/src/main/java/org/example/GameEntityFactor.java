@@ -12,6 +12,7 @@ import com.almasb.fxgl.physics.HitBox;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -197,13 +198,29 @@ public class GameEntityFactor implements EntityFactory {
                 .build();
     }
 
+    @Spawns("laser")
+    public Entity newLaser(SpawnData data) {
+        Point2D direction = data.get("direction");
+        double angle = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
+
+        return entityBuilder()
+                .type(EntityType.LASER)
+                .from(data)
+                .viewWithBBox(new Rectangle(10, 100, Color.LIGHTBLUE))
+                .rotate(angle - 90) // Rotate the laser so the tip faces the mouse
+                .with(new LaserComponent())
+                .with(new OffscreenCleanComponent())
+                .collidable()
+                .build();
+    }
+
     @Spawns("slash")
     public Entity newSword(SpawnData data) {
         Point2D dir = data.get("direction");
         Point2D playerCenter = data.get("playerCenter");
 
         // Spawn position below
-        Point2D spawnPos = playerCenter.add(dir.multiply(0));  // 20 default
+        Point2D spawnPos = playerCenter.add(dir.multiply(20));  // 20 default
 
         // Arc creation (flat part at the player, curve at the mouse)
         Arc arc = new Arc();
@@ -220,7 +237,9 @@ public class GameEntityFactor implements EntityFactory {
         Entity slash = entityBuilder()
                 .type(EntityType.SLASH)
                 .from(data)
-                .view(arc)
+                //.view(new Rectangle(90, 110))
+//                .viewWithBBox(new Rectangle(90, 110))
+                .viewWithBBox(new Rectangle(90, 110, 90, 0))
                 .with(new SwordComponent(dir))
                 .collidable()  // Enable collision for the slash
                 .at(spawnPos)

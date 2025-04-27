@@ -277,7 +277,7 @@ public class PlayerComponent extends Component {
         Point2D playerCenter = entity.getCenter();
         Point2D direction = mousePos.subtract(playerCenter).normalize();
 
-        // Cone size below vvvvv
+        // spawn pos
         Point2D spawnPos = playerCenter.add(direction.multiply(25)).subtract(30, 25);
 
         SpawnData data = new SpawnData(spawnPos)
@@ -286,6 +286,32 @@ public class PlayerComponent extends Component {
 
         Entity sword = FXGL.spawn("slash", data);
         sword.getComponent(SwordComponent.class);
+    }
+
+    // Shoot lasers
+    public void shootLaser() {
+        if (!isAlive) return;
+
+        Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
+        double viewportX = FXGL.getGameScene().getViewport().getX();
+        double viewportY = FXGL.getGameScene().getViewport().getY();
+        Point2D mouseWorldPos = new Point2D(
+                mouseScreenPos.getX() + viewportX,
+                mouseScreenPos.getY() + viewportY - 45 // shift upward by 20 pixels
+        );
+        Point2D laserSpawnPoint = new Point2D(entity.getX() - 10, entity.getY() - 40);
+        Point2D direction = mouseWorldPos.subtract(laserSpawnPoint).normalize();
+        spawnLaserWithAngle(laserSpawnPoint, direction, 0);
+    }
+
+    // Spawn a laser with the given direction
+    private void spawnLaserWithAngle(Point2D spawnPoint, Point2D direction, double angleDegrees) {
+        Point2D rotatedDirection = rotate(direction, angleDegrees);
+        SpawnData spawnData = new SpawnData(spawnPoint.getX(), spawnPoint.getY())
+                .put("direction", rotatedDirection);
+        Entity laser = FXGL.spawn("laser", spawnData);
+
+        laser.getComponent(LaserComponent.class).setDirection(rotatedDirection);
     }
 
     // Rotate a vector by an angle

@@ -90,7 +90,6 @@ public class EnemyComponent extends Component {
         if (player == null || !player.isActive()) {
             return;
         }
-
         // GET PLAYER DIRECTION AND MOVE TOWARDS IT
         Point2D playerPosition = player.getPosition();
         Point2D enemyPosition = entity.getPosition();

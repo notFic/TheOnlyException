@@ -23,7 +23,7 @@ public class GameApp extends GameApplication {
     private static String storedPlayerName = "Unknown"; // Player's username
     private Random random = new Random(); // For enemy spawning
     private boolean isTimerRunning = true; // Controls game timers
-    private String userType = "Gun";
+    private String userType = "Laser"; // <------------------- Change weapons here
 
     // Configure game window and main menu
     @Override
@@ -161,18 +161,25 @@ public class GameApp extends GameApplication {
             }
         }, Duration.seconds(1));
 
-        if(userType.equals("Sword")){
+        if(userType.equals("Gun")){
             FXGL.getGameTimer().runAtInterval(() -> {
                 if (isTimerRunning) {
                     player.getComponent(PlayerComponent.class).shootTripleBurst();
                 }
             }, Duration.seconds(0.5));
-        } else {
+        } else if(userType.equals("Sword")){
             FXGL.getGameTimer().runAtInterval(() -> {
                 if (isTimerRunning) {
                     player.getComponent(PlayerComponent.class).swordSlash();
                 }
             }, Duration.seconds(0.5));
+        } else {
+            player.getComponent(PlayerComponent.class).shootLaser();
+            FXGL.getGameTimer().runAtInterval(() -> {
+                if (isTimerRunning) {
+                    player.getComponent(PlayerComponent.class).shootLaser();
+                }
+            }, Duration.seconds(.5));
         }
 
         // Spawn enemies at intervals
@@ -283,9 +290,22 @@ public class GameApp extends GameApplication {
             if (enemyComponent.getHealth() <= 0) {
                 FXGL.getWorldProperties().increment("kills", 1); // Track kills
             }
-            slash.removeFromWorld();
         });
 
+        onCollisionBegin(EntityType.LASER, EntityType.ENEMY, (laser, enemy) -> {
+            LaserComponent laserComponent = laser.getComponent(LaserComponent.class);
+            EnemyComponent enemyComponent = enemy.getComponent(EnemyComponent.class);
+            PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+
+            int damage = laserComponent.getDamage();
+            int seconds = 5;
+//            enemyComponent.DOTburn(seconds);
+            enemyComponent.damage(damage);
+            FXGL.getWorldProperties().increment("totalDamage", damage); // Track damage
+            if (enemyComponent.getHealth() <= 0) {
+                FXGL.getWorldProperties().increment("kills", 1); // Track kills
+            }
+        });
     }
 
     // Reset game state for a new session
