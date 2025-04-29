@@ -240,6 +240,11 @@ public class GameApp extends GameApplication {
         // Clear all existing timers
         FXGL.getGameTimer().clear();
         
+        // If player exists, reinitialize powerup timers first
+        if (player != null && player.hasComponent(PlayerComponent.class)) {
+            player.getComponent(PlayerComponent.class).reinitializePowerupTimers();
+        }
+        
         // Recreate the survival timer
         FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) {
@@ -270,10 +275,6 @@ public class GameApp extends GameApplication {
         
         // No need for constant EXP bar updates - removed for optimization
 
-        // Reinitialize player powerup timers
-        if (player != null && player.hasComponent(PlayerComponent.class)) {
-            player.getComponent(PlayerComponent.class).reinitializeAfterPause();
-        }
 
         // Restart timers
         isTimerRunning = true;
