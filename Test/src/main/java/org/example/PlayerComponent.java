@@ -3,6 +3,7 @@ package org.example;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
@@ -31,7 +32,7 @@ import java.util.Map;
 
 // Component controlling player movement, animations, health, and game progress
 public class PlayerComponent extends Component {
-    private double speed = 5; // Player movement speed
+    private double speed = 1.5; // Player movement speed
     private int health = 100; // Current health
     private int maxHealth = 100; // Maximum health, increases on level-up
     private int level = 1; // Current level
@@ -177,6 +178,24 @@ public class PlayerComponent extends Component {
         }
     }
 
+    // Recreate all powerup timers to prevent stacking after pauses
+    public void reinitializePowerupTimers() {
+        // First clear any existing powerup timers
+        // We must recreate them instead of just activating them to avoid stacking
+
+        // Create a new lightning strike timer if weapon is acquired
+        if (getWeaponLevel("lightning") > 0 && lightningstrike != null) {
+            // Activate lightning strike every 5 seconds
+            FXGL.getGameTimer().runAtInterval(() -> {
+                if (isAlive && getWeaponLevel("lightning") > 0) {
+                    lightningstrike.activatePowerUp();
+                }
+            }, Duration.seconds(5));
+        }
+
+        // Add other powerup timers here as they are implemented
+    }
+
     // Update player state each frame
     @Override
     public void onUpdate(double tpf) {
@@ -191,7 +210,6 @@ public class PlayerComponent extends Component {
         }
         previousPosition = currentPosition;
         updateHealthBar();
-
     }
 
     // Move player left
@@ -444,15 +462,23 @@ public class PlayerComponent extends Component {
     // Level up player and apply stat boosts
     private void levelUp() {
         level++;
-        exp -= expToNextLevel;
-        expToNextLevel = (int) (expToNextLevel * 1.5);
-        FXGL.getWorldProperties().setValue("level", level);
+
+        // Store original exp value (will be negative after subtracting expToNextLevel)
+        int originalExp = exp - expToNextLevel;
+
+        // Temporarily set exp to full for UI display purposes
+        exp = expToNextLevel;
         FXGL.getWorldProperties().setValue("exp", exp);
-        maxHealth += 20;
-        health = maxHealth;
-        speed += 0.2;
+
+        // Update game world properties
+        FXGL.getWorldProperties().setValue("level", level);
         FXGL.getWorldProperties().setValue("health", health);
         
+        // Force UI update if game app is available
+        if (gameApp != null) {
+            gameApp.updateExpBar();
+        }
+
         // Stop game timer but don't pause the engine
         if (gameApp != null) {
             gameApp.stopTimer();
@@ -461,6 +487,11 @@ public class PlayerComponent extends Component {
         // Show level up menu with weapon choices
         showLevelUpMenu();
         
+        // After menu is shown, reset exp to correct value
+        exp = originalExp;
+        expToNextLevel = (int) (expToNextLevel * 1.5);
+        FXGL.getWorldProperties().setValue("exp", exp);
+
         updateHealthBar();
     }
     
@@ -517,7 +548,6 @@ public class PlayerComponent extends Component {
                 FXGL.getNotificationService().pushNotification("Acquired Fire Trail!");
             }
         }
-
     }
     
     // Handle weapon selection from level-up menu
@@ -527,7 +557,7 @@ public class PlayerComponent extends Component {
         
         // Resume the game
         if (gameApp != null) {
-            gameApp.startTimer();
+            gameApp.resetTimers(); // Reset timers to prevent speed-up bug
         }
         FXGL.getGameController().resumeEngine();
     }

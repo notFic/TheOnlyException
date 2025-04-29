@@ -3,6 +3,7 @@ package org.example;
 import com.almasb.fxgl.dsl.FXGL;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
@@ -131,9 +132,20 @@ public class LevelUpMenu {
             
             // Resume game timers with slight delay to avoid speed-up
             if (playerComponent.getGameApp() != null) {
+                GameApp gameApp = playerComponent.getGameApp();
+                
+                // Stop timers first to ensure proper state
+                gameApp.stopTimer();
+
+                // Use a slightly longer delay to ensure clean slate
                 FXGL.runOnce(() -> {
-                    playerComponent.getGameApp().startTimer();
-                }, Duration.seconds(0.1));
+                    // Force an immediate UI update to reset exp bar to the correct value
+                    FXGL.getWorldProperties().setValue("exp", playerComponent.getExp());
+                    gameApp.updateExpBar();
+                    
+                    // Reset all game timers to prevent speed-up bug
+                    gameApp.resetTimers();
+                }, Duration.seconds(0.2));
             }
         });
         
@@ -210,5 +222,29 @@ public class LevelUpMenu {
         cardContent.getChildren().addAll(categoryBox, upgradeName, levelText, iconWrapper, descriptionText);
         
         return card;
+    }
+
+    private void showDamageText(double dmg, Point2D hitPosition) {
+        var damageText = FXGL.getUIFactoryService().newText(String.valueOf((int) dmg), Color.WHITE, 24);
+        var textEntity = FXGL.entityBuilder()
+                .at(hitPosition.subtract(10, 30))
+                .view(damageText)
+                .zIndex(1000)
+                .buildAndAttach();
+
+        // Animate the damageText node directly
+        javafx.animation.TranslateTransition tt = new javafx.animation.TranslateTransition(javafx.util.Duration.seconds(1), damageText);
+        tt.setByX(-60); // move left
+        tt.setByY(-80); // move up
+        tt.setInterpolator(javafx.animation.Interpolator.EASE_OUT);
+
+        javafx.animation.FadeTransition ft = new javafx.animation.FadeTransition(javafx.util.Duration.seconds(1), damageText);
+        ft.setFromValue(1.0);
+        ft.setToValue(0.0);
+
+        tt.play();
+        ft.play();
+
+        FXGL.getGameTimer().runOnceAfter(() -> textEntity.removeFromWorld(), javafx.util.Duration.seconds(1));
     }
 } 

@@ -1,0 +1,515 @@
+// Generated Java code from PlantUML class diagram
+
+/**
+ * Component class
+ */
+public class Component {
+    /**
+     * Default constructor for Component
+     */
+    public Component() {
+
+        // TODO: Implement constructor
+    }
+
+}
+
+/**
+ * DropComponent class
+ */
+public class DropComponent extends Component {
+    private int currentColorIndex;
+    private Rectangle dropVisual;
+    private Entity player;
+
+    /**
+     * Default constructor for DropComponent
+     */
+    public DropComponent() {
+        super();
+        // TODO: Implement constructor
+    }
+
+    /**
+     */
+    public void onAdded() {
+        // TODO: Implement method
+    }
+
+    /**
+     * @param tpf double parameter
+     */
+    public void onUpdate(double tpf) {
+        // TODO: Implement method
+    }
+
+}
+
+/**
+ * PlayerComponent class
+ */
+public class PlayerComponent extends Component {
+    private double speed;
+    private int health;
+    private int level;
+    private int exp;
+    private int expToNextLevel;
+    private GameApp gameApp;
+    private boolean isAlive;
+    private Map<Object, Object> weaponLevels;
+    private LightningStrike lightningstrike;
+
+    /**
+     * Constructor for PlayerComponent
+     */
+    public PlayerComponent() {
+        super();
+        // TODO: Implement constructor
+    }
+
+    /**
+     */
+    public void onAdded() {
+        // TODO: Implement method
+    }
+
+    /**
+     * @param tpf double parameter
+     */
+    public void onUpdate(double tpf) {
+        // TODO: Implement method
+    }
+
+    /**
+     */
+    public void moveLeft() {
+        // TODO: Implement method
+    }
+
+    /**
+     */
+    public void moveRight() {
+        // TODO: Implement method
+    }
+
+    /**
+     */
+    public void moveUp() {
+        // TODO: Implement method
+    }
+
+    /**
+     */
+    public void moveDown() {
+        // TODO: Implement method
+    }
+
+    /**
+     */
+    public void shootTripleBurst() {
+        // TODO: Implement method
+    }
+
+    /**
+     * @param dmg int parameter
+     */
+    public void damage(int dmg) {
+        // TODO: Implement method
+    }
+
+    /**
+     * @param expGained int parameter
+     */
+    public void addExp(int expGained) {
+        // TODO: Implement method
+    }
+
+    /**
+     * @return int
+     */
+    public int getLevel() {
+        // TODO: Implement method
+        return 0;
+    }
+
+    /**
+     * @return int
+     */
+    public int getExp() {
+        // TODO: Implement method
+        return 0;
+    }
+
+    /**
+     * @return int
+     */
+    public int getExpToNextLevel() {
+        // TODO: Implement method
+        return 0;
+    }
+
+    /**
+     * @param weaponId String parameter
+     * @return int
+     */
+    public int getWeaponLevel(String weaponId) {
+        // TODO: Implement method
+        return 0;
+    }
+
+    /**
+     * @return GameApp
+     */
+    public GameApp getGameApp() {
+        // TODO: Implement method
+        return null;
+    }
+
+}
+
+/**
+ * LightningStrike class
+ */
+public class LightningStrike {
+    /**
+     * Default constructor for LightningStrike
+     */
+    public LightningStrike() {
+
+        // TODO: Implement constructor
+    }
+
+    /**
+     */
+    private void activatePowerUp() {
+        // TODO: Implement method
+    }
+
+    /**
+     * @param position Point2D parameter
+     */
+    private void showLightningStrike(Point2D position) {
+        // TODO: Implement method
+    }
+
+}
+
+/**
+ * GameEntityFactory class
+ */
+public class GameEntityFactory {
+    /**
+     * Default constructor for GameEntityFactory
+     */
+    public GameEntityFactory() {
+
+        // TODO: Implement constructor
+    }
+
+    /**
+     * @param data SpawnData parameter
+     * @return Entity
+     */
+    public Entity newPlayer(SpawnData data) {
+        // TODO: Implement method
+        return null;
+    }
+
+    /**
+     * @param data SpawnData parameter
+     * @return Entity
+     */
+    public Entity newEnemy(SpawnData data) {
+        // TODO: Implement method
+        return null;
+    }
+
+    /**
+     * @param data SpawnData parameter
+     * @return Entity
+     */
+    public Entity newFastEnemy(SpawnData data) {
+        // TODO: Implement method
+        return null;
+    }
+
+    /**
+     * @param data SpawnData parameter
+     * @return Entity
+     */
+    public Entity newTankEnemy(SpawnData data) {
+        // TODO: Implement method
+        return null;
+    }
+
+    /**
+     * @param data SpawnData parameter
+     * @return Entity
+     */
+    public Entity newBullet(SpawnData data) {
+        // TODO: Implement method
+        return null;
+    }
+
+    /**
+     * @param data SpawnData parameter
+     * @return Entity
+     */
+    public Entity newDrop(SpawnData data) {
+        // TODO: Implement method
+        return null;
+    }
+
+}
+
+/**
+ * EnemyComponent class
+ */
+public class EnemyComponent extends Component {
+    private Entity player;
+    private double speed;
+    private int health;
+    private int damage;
+    private String type;
+    private AnimatedTexture texture;
+
+    /**
+     * Constructor for EnemyComponent
+     */
+    public EnemyComponent(Entity player, double baseSpeed, int baseHealth, int damage, String type) {
+        super();
+        // TODO: Implement constructor
+    }
+
+    /**
+     */
+    public void onAdded() {
+        // TODO: Implement method
+    }
+
+    /**
+     * @param tpf double parameter
+     */
+    public void onUpdate(double tpf) {
+        // TODO: Implement method
+    }
+
+    /**
+     * @param dmg double parameter
+     * @param hitPosition Point2D parameter
+     */
+    public void damage(double dmg, Point2D hitPosition) {
+        // TODO: Implement method
+    }
+
+    /**
+     * @return int
+     */
+    public int getDamage() {
+        // TODO: Implement method
+        return 0;
+    }
+
+    /**
+     * @return int
+     */
+    public int getHealth() {
+        // TODO: Implement method
+        return 0;
+    }
+
+}
+
+/**
+ * BulletComponent class
+ */
+public class BulletComponent extends Component {
+    private Point2D direction;
+    private double speed;
+    private int damage;
+
+    /**
+     * Constructor for BulletComponent
+     */
+    public BulletComponent() {
+        super();
+        // TODO: Implement constructor
+    }
+
+    /**
+     * @param direction Point2D parameter
+     */
+    public void setDirection(Point2D direction) {
+        // TODO: Implement method
+    }
+
+    /**
+     * @param tpf double parameter
+     */
+    public void onUpdate(double tpf) {
+        // TODO: Implement method
+    }
+
+    /**
+     * @return int
+     */
+    public int getDamage() {
+        // TODO: Implement method
+        return 0;
+    }
+
+}
+
+/**
+ * GameApp class
+ */
+public class GameApp {
+    private Entity player;
+    private boolean isTimerRunning;
+    private boolean isLoggedIn;
+
+    /**
+     * Default constructor for GameApp
+     */
+    public GameApp() {
+
+        // TODO: Implement constructor
+    }
+
+    /**
+     */
+    public void initGame() {
+        // TODO: Implement method
+    }
+
+    /**
+     */
+    public void updateExpBar() {
+        // TODO: Implement method
+    }
+
+    /**
+     */
+    public void initPhysics() {
+        // TODO: Implement method
+    }
+
+    /**
+     */
+    public void resetGameState() {
+        // TODO: Implement method
+    }
+
+}
+
+/**
+ * LevelUpMenu class
+ */
+public class LevelUpMenu {
+    private PlayerComponent playerComponent;
+
+    /**
+     * Constructor for LevelUpMenu
+     */
+    public LevelUpMenu(PlayerComponent playerComponent) {
+
+        // TODO: Implement constructor
+    }
+
+    /**
+     */
+    public void show() {
+        // TODO: Implement method
+    }
+
+}
+
+/**
+ * UpgradeRegistry class
+ */
+public class UpgradeRegistry {
+    private List<Object> allUpgrades;
+
+    /**
+     * Default constructor for UpgradeRegistry
+     */
+    public UpgradeRegistry() {
+
+        // TODO: Implement constructor
+    }
+
+    /**
+     * @return UpgradeRegistry
+     */
+    public UpgradeRegistry getInstance() {
+        // TODO: Implement method
+        return null;
+    }
+
+    /**
+     * @param playerComponent PlayerComponent parameter
+     * @param count int parameter
+     * @return List<Object> (original type: List<UpgradeOption>)
+     */
+    public List<Object> getRandomUpgradeOptions(PlayerComponent playerComponent, int count) {
+        // TODO: Implement method
+        return null;
+    }
+
+}
+
+/**
+ * UpgradeOption class
+ */
+public class UpgradeOption {
+    private String id;
+    private String name;
+    private String description;
+    private Color color;
+    private OptionType type;
+
+    /**
+     * Constructor for UpgradeOption
+     */
+    public UpgradeOption(String id, String name, String description, Color color, OptionType type) {
+
+        // TODO: Implement constructor
+    }
+
+    /**
+     * @return String
+     */
+    public String getId() {
+        // TODO: Implement method
+        return "";
+    }
+
+    /**
+     * @return String
+     */
+    public String getName() {
+        // TODO: Implement method
+        return "";
+    }
+
+    /**
+     * @return OptionType
+     */
+    public OptionType getType() {
+        // TODO: Implement method
+        return null;
+    }
+
+}
+
+/**
+ * EntityType enum
+ */
+public enum EntityType {
+    PLAYER,
+    BULLET,
+    ENEMY,
+    DROP;
+}
+
+
