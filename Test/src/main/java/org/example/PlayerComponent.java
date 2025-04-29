@@ -157,8 +157,10 @@ public class PlayerComponent extends Component {
         createHealthBar();
         gameApp = entity.getObject("gameApp");
         
-        // Initialize empty weapon levels map
-        weaponLevels = new HashMap<>();
+        // Only initialize weapon levels map if it doesn't exist
+        if (weaponLevels == null) {
+            weaponLevels = new HashMap<>();
+        }
         
         // Initialize available powerups based on acquired weapons
         initializeAcquiredPowerups();
@@ -184,10 +186,13 @@ public class PlayerComponent extends Component {
         // We must recreate them instead of just activating them to avoid stacking
 
         // Create a new lightning strike timer if weapon is acquired
-        if (getWeaponLevel("lightning") > 0 && lightningstrike != null) {
+        if (getWeaponLevel("lightning") > 0) {
+            System.out.println("Creating lightning strike timer");
+            
             // Activate lightning strike every 5 seconds
             FXGL.getGameTimer().runAtInterval(() -> {
-                if (isAlive && getWeaponLevel("lightning") > 0) {
+                if (isAlive && getWeaponLevel("lightning") > 0 && lightningstrike != null) {
+                    System.out.println("Lightning strike activated");
                     lightningstrike.activatePowerUp();
                 }
             }, Duration.seconds(5));
@@ -535,11 +540,13 @@ public class PlayerComponent extends Component {
         // Initialize specific powerups if selected for the first time
         if (newLevel == 1) {
             if ("lightning".equals(weaponId)) {
+                System.out.println("Setting up Lightning Strike for first time");
                 initializeLightningStrike();
                 FXGL.getNotificationService().pushNotification("Acquired Lightning Strike!");
             }
-            if ("poison".equals(weaponId)) { // Assuming level 1 activates it
+            if ("poison".equals(weaponId)) {
                 initializePoisonAura();
+                poisonaura.activatePowerUp();
                 FXGL.getNotificationService().pushNotification("Acquired Poison Aura!");
             }
             if ("fire_trail".equals(weaponId)) {
@@ -570,19 +577,17 @@ public class PlayerComponent extends Component {
         }
     }
 
-
-
     // Initialize the lightning strike weapon
     private void initializeLightningStrike() {
-        if (lightningstrike == null) {
-            lightningstrike = new LightningStrikeComponent();
-            FXGL.getGameTimer().runAtInterval(() -> {
-                if (isAlive && getWeaponLevel("lightning") > 0) {
-                    lightningstrike.activatePowerUp();
-                }
-            }, Duration.seconds(5));
-        }
+        System.out.println("Initializing lightning strike component");
+        // Always create a new component to avoid stale references
+        lightningstrike = new LightningStrikeComponent();
+        entity.addComponent(lightningstrike);
+
+        // Always recreate the timer to avoid stacking
+        reinitializePowerupTimers();
     }
+
 
     private void initializePoisonAura(){
         if(poisonaura == null){

@@ -117,7 +117,7 @@ public class FireTrailComponent extends Component {
 
         touchingEnemies.forEach(enemy -> {
             enemy.getComponentOptional(EnemyComponent.class)
-                    .ifPresent(ec -> ec.damage(DAMAGE_AMOUNT));
+                    .ifPresent(ec -> ec.damage(DAMAGE_AMOUNT, enemy.getCenter()));
             burningEnemies.put(enemy, BURN_DURATION);
         });
 
@@ -131,7 +131,7 @@ public class FireTrailComponent extends Component {
 
             if (!touchingEnemies.contains(enemy)) {
                 enemy.getComponentOptional(EnemyComponent.class)
-                        .ifPresent(ec -> ec.damage(BURN_DAMAGE));
+                        .ifPresent(ec -> ec.damage(BURN_DAMAGE, enemy.getCenter()));
             }
 
             burningEnemies.put(enemy, remaining);

@@ -63,7 +63,7 @@ public class PoisonAuraComponent extends Component {
                 if (distance <= RADIUS) {
                     EnemyComponent enemyComponent = enemy.getComponent(EnemyComponent.class);
                     showPoisonAura(enemy.getCenter());
-                    enemyComponent.damage(DAMAGE_PER_SECOND); // Deal damage based on interval
+                    enemyComponent.damage(DAMAGE_PER_SECOND, enemy.getCenter()); // Deal damage based on interval
                 }
             }
         }
