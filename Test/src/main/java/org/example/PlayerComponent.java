@@ -369,6 +369,12 @@ public class PlayerComponent extends Component {
         updateHealthBar();
     }
 
+    // Handle powerup timers after pause
+    public void reinitializeAfterPause() {
+        // Recreate all powerup timers
+        reinitializePowerupTimers();
+    }
+
     // Save game progress to database
     private void saveProgress() {
         String currentPlayer = getPlayerName();
@@ -381,15 +387,15 @@ public class PlayerComponent extends Component {
         String dbPass = "";
 
         try (Connection connection = DriverManager.getConnection(url, dbUser, dbPass)) {
-            String selectPlayerQuery = "SELECT id FROM users WHERE username = ?";
+            String selectPlayerQuery = "SELECT player_id FROM player WHERE username = ?";
             int playerId;
             try (var pstmt = connection.prepareStatement(selectPlayerQuery)) {
                 pstmt.setString(1, currentPlayer);
                 var rs = pstmt.executeQuery();
                 if (rs.next()) {
-                    playerId = rs.getInt("id");
+                    playerId = rs.getInt("player_id");
                 } else {
-                    System.err.println("User not found: " + currentPlayer);
+                    System.err.println("Player not found: " + currentPlayer);
                     return;
                 }
             }
@@ -449,11 +455,7 @@ public class PlayerComponent extends Component {
         if (gameApp != null) {
             gameApp.updateExpBar();
         }
-        
-        // Stop game timer but don't pause the engine
-        if (gameApp != null) {
-            gameApp.stopTimer();
-        }
+
         
         // Show level up menu with weapon choices
         showLevelUpMenu();
