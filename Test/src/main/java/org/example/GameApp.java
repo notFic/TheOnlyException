@@ -565,8 +565,10 @@ public class GameApp extends GameApplication {
             if (isTimerRunning) spawnEnemyOutsideViewport("tankEnemy");
         }, Duration.seconds(3));
 
-        // No need for constant EXP bar updates - removed for optimization
-
+        // Reinitialize player powerup timers
+        if (player != null && player.hasComponent(PlayerComponent.class)) {
+            player.getComponent(PlayerComponent.class).reinitializeAfterPause();
+        }
 
         // Restart timers
         isTimerRunning = true;
