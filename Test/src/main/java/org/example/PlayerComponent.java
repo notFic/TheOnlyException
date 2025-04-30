@@ -13,6 +13,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.example.powerups.FireTrailComponent;
+import org.example.powerups.LightningStrikeComponent;
+import org.example.powerups.PoisonAuraComponent;
+
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +65,10 @@ public class PlayerComponent extends Component {
 
     // Weapon and powerup tracking
     private Map<String, Integer> weaponLevels = new HashMap<>();
-    private LightningStrike lightningstrike;
+    private LightningStrikeComponent lightningstrike;
+    private PoisonAuraComponent poisonaura;
+    private FireTrailComponent firetrail;
+
 
     // Initialize player animations
     public PlayerComponent() {
@@ -150,8 +157,10 @@ public class PlayerComponent extends Component {
         createHealthBar();
         gameApp = entity.getObject("gameApp");
         
-        // Initialize empty weapon levels map
-        weaponLevels = new HashMap<>();
+        // Only initialize weapon levels map if it doesn't exist
+        if (weaponLevels == null) {
+            weaponLevels = new HashMap<>();
+        }
         
         // Initialize available powerups based on acquired weapons
         initializeAcquiredPowerups();
@@ -163,16 +172,12 @@ public class PlayerComponent extends Component {
         if (getWeaponLevel("lightning") > 0) {
             initializeLightningStrike();
         }
-    }
-    
-    // Initialize the lightning strike weapon
-    private void initializeLightningStrike() {
-        if (lightningstrike == null) {
-            lightningstrike = new LightningStrike();
+        if (getWeaponLevel("poison") > 0) {
+            initializePoisonAura();
         }
-
-        // Always recreate the timer to avoid stacking
-        reinitializePowerupTimers();
+        if (getWeaponLevel("fire_trail") > 0) {
+            initializeFireTrail();
+        }
     }
 
 
@@ -182,22 +187,19 @@ public class PlayerComponent extends Component {
         // We must recreate them instead of just activating them to avoid stacking
 
         // Create a new lightning strike timer if weapon is acquired
-        if (getWeaponLevel("lightning") > 0 && lightningstrike != null) {
+        if (getWeaponLevel("lightning") > 0) {
+            System.out.println("Creating lightning strike timer");
+
             // Activate lightning strike every 5 seconds
             FXGL.getGameTimer().runAtInterval(() -> {
-                if (isAlive && getWeaponLevel("lightning") > 0) {
+                if (isAlive && getWeaponLevel("lightning") > 0 && lightningstrike != null) {
+                    System.out.println("Lightning strike activated");
                     lightningstrike.activatePowerUp();
                 }
             }, Duration.seconds(5));
         }
 
         // Add other powerup timers here as they are implemented
-    }
-
-    // Handle powerup timers after pause
-    public void reinitializeAfterPause() {
-        // Recreate all powerup timers
-        reinitializePowerupTimers();
     }
 
     // Update player state each frame
@@ -423,12 +425,6 @@ public class PlayerComponent extends Component {
         exp += expGained;
         FXGL.getWorldProperties().setValue("exp", exp);
         System.out.println("DEBUG: Player gained " + expGained + " EXP, total EXP = " + exp);
-        
-        // If not leveling up, update the EXP bar directly
-        if (exp < expToNextLevel && gameApp != null) {
-            gameApp.updateExpBar();
-        }
-        
         while (exp >= expToNextLevel) {
             levelUp();
         }
@@ -437,14 +433,14 @@ public class PlayerComponent extends Component {
     // Level up player and apply stat boosts
     private void levelUp() {
         level++;
-        
+
         // Store original exp value (will be negative after subtracting expToNextLevel)
         int originalExp = exp - expToNextLevel;
-        
+
         // Temporarily set exp to full for UI display purposes
         exp = expToNextLevel;
         FXGL.getWorldProperties().setValue("exp", exp);
-        
+
         // Update game world properties
         FXGL.getWorldProperties().setValue("level", level);
         FXGL.getWorldProperties().setValue("health", health);
@@ -453,6 +449,12 @@ public class PlayerComponent extends Component {
         if (gameApp != null) {
             gameApp.updateExpBar();
         }
+        
+        // Stop game timer but don't pause the engine
+        if (gameApp != null) {
+            gameApp.stopTimer();
+        }
+        
         // Show level up menu with weapon choices
         showLevelUpMenu();
         
@@ -460,7 +462,7 @@ public class PlayerComponent extends Component {
         exp = originalExp;
         expToNextLevel = (int) (expToNextLevel * 1.5);
         FXGL.getWorldProperties().setValue("exp", exp);
-        
+
         updateHealthBar();
     }
     
@@ -500,12 +502,23 @@ public class PlayerComponent extends Component {
         // Update the weapon/powerup level
         weaponLevels.put(weaponId, newLevel);
         System.out.println("Selected weapon/powerup: " + weaponId + " at level " + newLevel);
-        
+
         // Initialize specific powerups if selected for the first time
         if (newLevel == 1) {
             if ("lightning".equals(weaponId)) {
+                System.out.println("Setting up Lightning Strike for first time");
                 initializeLightningStrike();
                 FXGL.getNotificationService().pushNotification("Acquired Lightning Strike!");
+            }
+            if ("poison".equals(weaponId)) {
+                initializePoisonAura();
+                poisonaura.activatePowerUp();
+                FXGL.getNotificationService().pushNotification("Acquired Poison Aura!");
+            }
+            if ("fire_trail".equals(weaponId)) {
+                initializeFireTrail();
+                firetrail.activatePowerUp();
+                FXGL.getNotificationService().pushNotification("Acquired Fire Trail!");
             }
         }
     }
@@ -528,5 +541,37 @@ public class PlayerComponent extends Component {
         if (healthBar != null) {
             healthBar.removeFromWorld();
         }
+    }
+
+    // Initialize the lightning strike weapon
+    private void initializeLightningStrike() {
+        System.out.println("Initializing lightning strike component");
+        // Always create a new component to avoid stale references
+        lightningstrike = new LightningStrikeComponent();
+        entity.addComponent(lightningstrike);
+
+        // Always recreate the timer to avoid stacking
+        reinitializePowerupTimers();
+    }
+
+
+    private void initializePoisonAura(){
+        if(poisonaura == null){
+            poisonaura = new PoisonAuraComponent();
+            entity.addComponent(poisonaura);
+            poisonaura.activatePowerUp();  // Activate the aura
+        }
+    }
+
+    private void initializeFireTrail() {
+        if (firetrail == null) {
+            firetrail = new FireTrailComponent();
+            entity.addComponent(firetrail);
+            firetrail.activatePowerUp();
+        }
+    }
+
+    public boolean isMoving() {
+        return isMoving;
     }
 }

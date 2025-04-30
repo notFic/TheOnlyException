@@ -1,4 +1,4 @@
-package org.example;
+package org.example.powerups;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -13,11 +13,13 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import org.example.EnemyComponent;
+import org.example.EntityType;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class LightningStrike extends Component {
+public class LightningStrikeComponent extends Component {
 
     // TODO add a method that will activate this method below every 10 seconds once ma toggle ang iyahang set keybind
     // (KEYBIND IS ONLY FOR DEBUGGING PURPOSES ONLY. we want to pass on this implementation when the player wants
@@ -25,7 +27,7 @@ public class LightningStrike extends Component {
 
     // ACHIEVED ^^
 
-    void activatePowerUp() {
+    public void activatePowerUp() {
         // Get all active enemies on screen
         List<Entity> enemies = FXGL.getGameWorld().getEntitiesByType(EntityType.ENEMY)
                 .stream()
