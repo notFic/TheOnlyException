@@ -180,6 +180,7 @@ public class PlayerComponent extends Component {
         }
     }
 
+
     // Recreate all powerup timers to prevent stacking after pauses
     public void reinitializePowerupTimers() {
         // First clear any existing powerup timers
@@ -188,7 +189,7 @@ public class PlayerComponent extends Component {
         // Create a new lightning strike timer if weapon is acquired
         if (getWeaponLevel("lightning") > 0) {
             System.out.println("Creating lightning strike timer");
-            
+
             // Activate lightning strike every 5 seconds
             FXGL.getGameTimer().runAtInterval(() -> {
                 if (isAlive && getWeaponLevel("lightning") > 0 && lightningstrike != null) {
@@ -330,43 +331,8 @@ public class PlayerComponent extends Component {
             } else {
                 System.err.println("Warning: gameApp is null, cannot stop timer");
             }
-            
             int survivalTime = FXGL.getWorldProperties().getInt("survivalTime");
-            
-            VBox gameOverMenu = new VBox(10);
-            gameOverMenu.setAlignment(javafx.geometry.Pos.CENTER);
-            gameOverMenu.setPadding(new javafx.geometry.Insets(20));
-            gameOverMenu.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-border-color: white; -fx-border-width: 2;");
 
-            Text gameOverText = new Text("Game Over!");
-            gameOverText.setFill(Color.RED);
-            gameOverText.setFont(javafx.scene.text.Font.font("Arial", javafx.scene.text.FontWeight.BOLD, 36));
-            Text survivalText = new Text("You survived for " + survivalTime + " seconds");
-            survivalText.setFill(Color.WHITE);
-            survivalText.setFont(javafx.scene.text.Font.font("Arial", 24));
-            Text levelText = new Text("Reached Level: " + level);
-            levelText.setFill(Color.WHITE);
-            levelText.setFont(javafx.scene.text.Font.font("Arial", 24));
-
-            Button menuButton = new Button("Back to Main Menu");
-            menuButton.setStyle("-fx-font-size: 16; -fx-background-color: #444; -fx-text-fill: white;");
-            menuButton.setOnAction(e -> {
-                // Reset states and go to main menu
-                resetPlayerState();
-                if (gameApp != null) {
-                    gameApp.resetGameState();
-                }
-                // Delay going to main menu slightly to avoid speed-up
-                FXGL.runOnce(() -> {
-                    FXGL.getGameController().gotoMainMenu();
-                }, Duration.seconds(0.1));
-            });
-
-            gameOverMenu.getChildren().addAll(gameOverText, survivalText, levelText, menuButton);
-            
-            // Use the dialog service but avoid pause/resume of the engine
-            FXGL.getDialogService().showBox("Game Over", gameOverMenu, menuButton);
-            
             saveProgress();
         }
 
@@ -403,6 +369,12 @@ public class PlayerComponent extends Component {
         updateHealthBar();
     }
 
+    // Handle powerup timers after pause
+    public void reinitializeAfterPause() {
+        // Recreate all powerup timers
+        reinitializePowerupTimers();
+    }
+
     // Save game progress to database
     private void saveProgress() {
         String currentPlayer = getPlayerName();
@@ -415,15 +387,15 @@ public class PlayerComponent extends Component {
         String dbPass = "";
 
         try (Connection connection = DriverManager.getConnection(url, dbUser, dbPass)) {
-            String selectPlayerQuery = "SELECT id FROM users WHERE username = ?";
+            String selectPlayerQuery = "SELECT player_id FROM player WHERE username = ?";
             int playerId;
             try (var pstmt = connection.prepareStatement(selectPlayerQuery)) {
                 pstmt.setString(1, currentPlayer);
                 var rs = pstmt.executeQuery();
                 if (rs.next()) {
-                    playerId = rs.getInt("id");
+                    playerId = rs.getInt("player_id");
                 } else {
-                    System.err.println("User not found: " + currentPlayer);
+                    System.err.println("Player not found: " + currentPlayer);
                     return;
                 }
             }
@@ -484,10 +456,6 @@ public class PlayerComponent extends Component {
             gameApp.updateExpBar();
         }
 
-        // Stop game timer but don't pause the engine
-        if (gameApp != null) {
-            gameApp.stopTimer();
-        }
         
         // Show level up menu with weapon choices
         showLevelUpMenu();
