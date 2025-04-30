@@ -12,21 +12,20 @@ import java.util.stream.Collectors;
 public class UpgradeRegistry {
     // Singleton instance
     private static UpgradeRegistry instance;
-    
+
     // List of all available upgrades
     private final List<UpgradeOption> allUpgrades;
 
     private UpgradeRegistry() {
         allUpgrades = Arrays.asList(
-            // Weapons
 
-                // nganong weapon ni siya?
+            // Weapons
             new UpgradeOption("lightning", "Lightning Strike", "Strikes random enemies with lightning", Color.BLUE, OptionType.WEAPON),
             new UpgradeOption("poison", "Poison Aura", "damages enemies within range", Color.GREENYELLOW, OptionType.WEAPON),
             new UpgradeOption("fire_trail", "Fire Trail", "damages enemies standing on trail", Color.RED, OptionType.WEAPON),
             new UpgradeOption("3", "WEAPON 4", "PLACEHOLDER DESCRIPTION", Color.LIGHTGRAY, OptionType.WEAPON),
-            //new UpgradeOption("4", "WEAPON 5", "PLACEHOLDER DESCRIPTION", Color.LIME, OptionType.WEAPON),
-            //new UpgradeOption("5", "WEAPON 6", "PLACEHOLDER DESCRIPTION", Color.GREEN, OptionType.WEAPON),
+            new UpgradeOption("explosive_mines", "Data Wipe", "Spawns memory leak zones with a countdown that explodes", Color.ORANGE, OptionType.WEAPON),
+            new UpgradeOption("auto_heal", "System Restore", "Periodically repairs the player's system", Color.LIMEGREEN, OptionType.POWERUP),
             //new UpgradeOption("6", "WEAPON 7", "PLACEHOLDER DESCRIPTION", Color.ORANGE, OptionType.WEAPON),
             //new UpgradeOption("7", "WEAPON 8", "PLACEHOLDER DESCRIPTION", Color.DARKBLUE, OptionType.WEAPON),
 
@@ -54,7 +53,7 @@ public class UpgradeRegistry {
     public List<UpgradeOption> getAllUpgrades() {
         return Collections.unmodifiableList(allUpgrades);
     }
-    
+
     // Get upgrades of specific type
     public List<UpgradeOption> getUpgradesByType(OptionType type) {
         return allUpgrades.stream()
@@ -73,12 +72,12 @@ public class UpgradeRegistry {
     // Get random selection of upgrade options
     public List<UpgradeOption> getRandomUpgradeOptions(PlayerComponent playerComponent, int count) {
         List<UpgradeOption> allOptions = new ArrayList<>(allUpgrades);
-        
+
         // Prioritize upgrades the player already has
         List<UpgradeOption> playerUpgrades = new ArrayList<>();
         List<UpgradeOption> weaponOptions = new ArrayList<>();
         List<UpgradeOption> powerupOptions = new ArrayList<>();
-        
+
         for (UpgradeOption option : allOptions) {
             int upgradeLevel = playerComponent.getWeaponLevel(option.getId());
             if (upgradeLevel > 0) {
@@ -91,49 +90,49 @@ public class UpgradeRegistry {
                 }
             }
         }
-        
+
         // Shuffle all lists
         Collections.shuffle(playerUpgrades, new Random());
         Collections.shuffle(weaponOptions, new Random());
         Collections.shuffle(powerupOptions, new Random());
-        
+
         // Create the result list, starting with at least one upgrade the player already has (if possible)
         List<UpgradeOption> result = new ArrayList<>();
-        
+
         // Add one upgrade the player already has (if any)
         if (!playerUpgrades.isEmpty()) {
             result.add(playerUpgrades.remove(0));
         }
-        
+
         // Ensure at least one weapon option
         if (result.isEmpty() || result.stream().noneMatch(o -> o.getType() == OptionType.WEAPON)) {
             if (!weaponOptions.isEmpty()) {
                 result.add(weaponOptions.remove(0));
             }
         }
-        
+
         // Ensure at least one powerup option
         if (result.stream().noneMatch(o -> o.getType() == OptionType.POWERUP)) {
             if (!powerupOptions.isEmpty()) {
                 result.add(powerupOptions.remove(0));
             }
         }
-        
+
         // Combine remaining options
         List<UpgradeOption> remainingOptions = new ArrayList<>();
         remainingOptions.addAll(playerUpgrades);
         remainingOptions.addAll(weaponOptions);
         remainingOptions.addAll(powerupOptions);
         Collections.shuffle(remainingOptions, new Random());
-        
+
         // Fill the remaining slots
         while (result.size() < count && !remainingOptions.isEmpty()) {
             result.add(remainingOptions.remove(0));
         }
-        
+
         // Shuffle the final selection
         Collections.shuffle(result, new Random());
-        
+
         return result;
     }
-} 
+}
