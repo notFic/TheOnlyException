@@ -277,15 +277,12 @@ public class PlayerComponent extends Component {
         Point2D playerCenter = entity.getCenter();
         Point2D direction = mousePos.subtract(playerCenter).normalize();
 
-        // spawn pos
-        Point2D spawnPos = playerCenter.add(direction.multiply(25)).subtract(30, 25);
-
-        SpawnData data = new SpawnData(spawnPos)
+        // pass dta
+        SpawnData data = new SpawnData()
                 .put("direction", direction)
                 .put("playerCenter", playerCenter);
 
         Entity sword = FXGL.spawn("slash", data);
-        sword.getComponent(SwordComponent.class);
     }
 
     // Shoot lasers
@@ -313,6 +310,17 @@ public class PlayerComponent extends Component {
 
         laser.getComponent(LaserComponent.class).setDirection(rotatedDirection);
     }
+
+    // Spawn volt chain
+    public void shootVoltChain() {
+        Point2D mousePosition = FXGL.getInput().getMousePositionWorld();
+        Point2D playerCenter = FXGL.getGameWorld().getSingleton(EntityType.PLAYER).getCenter();
+
+        Point2D direction = mousePosition.subtract(playerCenter).normalize();
+
+        FXGL.spawn("voltChain", new SpawnData(playerCenter).put("direction", direction).put("chainCount", 10)); // <--- Change here amount of chaining/bounces
+    }
+
 
     // Rotate a vector by an angle
     private Point2D rotate(Point2D vector, double angleDegrees) {
