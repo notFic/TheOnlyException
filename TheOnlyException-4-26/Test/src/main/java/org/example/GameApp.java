@@ -7,6 +7,7 @@ import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.physics.CollisionHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -23,7 +24,7 @@ public class GameApp extends GameApplication {
     private static String storedPlayerName = "Unknown"; // Player's username
     private Random random = new Random(); // For enemy spawning
     private boolean isTimerRunning = true; // Controls game timers
-    private String userType = "Laser"; // <------------------- Change weapons here
+    private String userType = "volt"; // <------------------- Change weapons here
 
     // Configure game window and main menu
     @Override
@@ -173,11 +174,17 @@ public class GameApp extends GameApplication {
                     player.getComponent(PlayerComponent.class).swordSlash();
                 }
             }, Duration.seconds(0.5));
-        } else {
+        } else if(userType.equals("Laser")){
             player.getComponent(PlayerComponent.class).shootLaser();
             FXGL.getGameTimer().runAtInterval(() -> {
                 if (isTimerRunning) {
                     player.getComponent(PlayerComponent.class).shootLaser();
+                }
+            }, Duration.seconds(.5));
+        } else {
+            FXGL.getGameTimer().runAtInterval(() -> {
+                if (isTimerRunning) {
+                    player.getComponent(PlayerComponent.class).shootVoltChain();
                 }
             }, Duration.seconds(.5));
         }
@@ -292,19 +299,32 @@ public class GameApp extends GameApplication {
             }
         });
 
+
+        // Laser hits enemy
         onCollisionBegin(EntityType.LASER, EntityType.ENEMY, (laser, enemy) -> {
             LaserComponent laserComponent = laser.getComponent(LaserComponent.class);
             EnemyComponent enemyComponent = enemy.getComponent(EnemyComponent.class);
             PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
 
             int damage = laserComponent.getDamage();
-            int seconds = 5;
+ //           int seconds = 5;
 //            enemyComponent.DOTburn(seconds);
+            laserComponent.setEnemiesHit();
             enemyComponent.damage(damage);
             FXGL.getWorldProperties().increment("totalDamage", damage); // Track damage
             if (enemyComponent.getHealth() <= 0) {
                 FXGL.getWorldProperties().increment("kills", 1); // Track kills
             }
+        });
+
+        // add collision volt chain here
+        onCollisionBegin(EntityType.VOLT_CHAIN, EntityType.ENEMY, (chain, enemy) -> {
+            VoltChainComponent chainComp = chain.getComponent(VoltChainComponent.class);
+            EnemyComponent enemyComp = enemy.getComponent(EnemyComponent.class);
+
+            enemyComp.damage(10); // or any damage amount
+            chainComp.onHitEnemy(enemy);
+            chain.removeFromWorld();
         });
     }
 
