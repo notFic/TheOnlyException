@@ -218,44 +218,55 @@ public class GameEntityFactor implements EntityFactory {
     public Entity newSword(SpawnData data) {
         Point2D dir = data.get("direction");
         Point2D playerCenter = data.get("playerCenter");
+        double radius = 50;
+        double offsetDistance = radius * 0.5;
 
-        // Spawn position below
-        Point2D spawnPos = playerCenter.add(dir.multiply(20));  // 20 default
+        Point2D offsetVector = dir.multiply(offsetDistance);
+        Point2D circleCenter = playerCenter.add(offsetVector);
 
-        // Arc creation (flat part at the player, curve at the mouse)
-        Arc arc = new Arc();
-        arc.setCenterX(-5);  // Center the arc at origin
-        arc.setCenterY(-5);
-        arc.setRadiusX(75);  // Arc radius size
-        arc.setRadiusY(125);
-        arc.setStartAngle(180);  // Start angle
-        arc.setLength(180);  // Length of the arc (half circle)
-        arc.setFill(Color.YELLOW);  // Color for the arc fill
-        arc.setStroke(Color.BLACK);  // Stroke for the arc outline
+        Circle circle = new Circle();
+        circle.setCenterX(radius); // Center the circle in its entity
+        circle.setCenterY(radius);
+        circle.setRadius(radius);
+        circle.setFill(Color.YELLOW);
+        circle.setStroke(Color.BLACK);
 
-        // Create the slash entity using entityBuilder
+        Point2D entityPos = circleCenter.subtract(radius, radius);
+
         Entity slash = entityBuilder()
                 .type(EntityType.SLASH)
                 .from(data)
-                //.view(new Rectangle(90, 110))
-//                .viewWithBBox(new Rectangle(90, 110))
-                .viewWithBBox(new Rectangle(90, 110, 90, 0))
+                .viewWithBBox(circle)
                 .with(new SwordComponent(dir))
-                .collidable()  // Enable collision for the slash
-                .at(spawnPos)
+                .collidable()
+                .at(entityPos)
                 .build();
 
         double angleToMouse = Math.toDegrees(Math.atan2(dir.getY(), dir.getX()));
-        slash.setRotation(angleToMouse - 90);
+        slash.setRotation(angleToMouse);
 
         getGameTimer().runOnceAfter(() -> {
-            slash.removeFromWorld();  // Slash gone after duration (below)
-        }, Duration.millis(100));  // Slash live for 100 milisec
+            slash.removeFromWorld();
+        }, Duration.millis(100));
 
         return slash;
     }
 
+    @Spawns("voltChain")
+    public Entity newVoltChain(SpawnData data) {
+        Point2D direction = data.get("direction");
+        int chainCount = data.get("chainCount");
 
+        return FXGL.entityBuilder(data)
+                .type(EntityType.VOLT_CHAIN)
+                .bbox(new HitBox(BoundingShape.box(10, 10)))
+                .viewWithBBox(new Rectangle(10, 10, Color.YELLOW))
+                .with(new ProjectileComponent(direction, 1000)) // <---- Here change speed
+                .with(new VoltChainComponent(chainCount))
+                .collidable()
+                .build();
+    }
+    
     @Spawns("drop")
     public Entity newDrop(SpawnData data) {
         return entityBuilder()
