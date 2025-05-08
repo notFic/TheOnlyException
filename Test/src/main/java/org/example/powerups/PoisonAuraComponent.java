@@ -6,8 +6,8 @@ import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import org.example.EnemyComponent;
-import org.example.EntityType;
+import org.example.components.EnemyComponent;
+import org.example.core.EntityType;
 
 import java.util.List;
 import java.util.stream.Collectors;
