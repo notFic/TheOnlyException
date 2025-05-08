@@ -318,7 +318,8 @@ public class PlayerComponent extends Component {
 
         Point2D direction = mousePosition.subtract(playerCenter).normalize();
 
-        FXGL.spawn("voltChain", new SpawnData(playerCenter).put("direction", direction).put("chainCount", 10)); // <--- Change here amount of chaining/bounces
+        FXGL.spawn("voltChain", new SpawnData(playerCenter)
+                .put("direction", direction).put("chainCount", 10)); // <--- Change here amount of chaining/bounces
     }
 
 
