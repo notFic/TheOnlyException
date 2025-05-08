@@ -70,6 +70,36 @@ public class EnemyComponent extends Component {
             texture = new AnimatedTexture(animWalkRight);
             texture.loop();
         }
+        if (type.equals("bee")) {
+            animWalkLeft = new AnimationChannel(FXGL.image("BeeMove-scaled.png"), 4,
+                    64, 64, Duration.seconds(0.4), 4, 7);
+            animWalkRight = new AnimationChannel(FXGL.image("BeeMove-scaled.png"), 4,
+                    64, 64, Duration.seconds(0.4), 8, 11);
+
+            texture = new AnimatedTexture(animWalkRight);
+            texture.loop();
+        }
+        if (type.equals("giantfly")) {
+            animWalkLeft = new AnimationChannel(FXGL.image("GiantFly.png"), 4,
+                    64, 64, Duration.seconds(0.6), 4, 7);  // left-facing (row 2)
+            animWalkRight = new AnimationChannel(FXGL.image("GiantFly.png"), 4,
+                    64, 64, Duration.seconds(0.6), 8, 11); // right-facing (row 3)
+
+            texture = new AnimatedTexture(animWalkRight);
+            texture.loop();
+        }
+        if (type.equals("dragonfly")) {
+            animWalkLeft = new AnimationChannel(FXGL.image("DragonFly.png"), 4,
+                    64, 64, Duration.seconds(0.6), 4, 7);  // left-facing (row 2)
+            animWalkRight = new AnimationChannel(FXGL.image("DragonFly.png"), 4,
+                    64, 64, Duration.seconds(0.6), 8, 11); // right-facing (row 3)
+
+            texture = new AnimatedTexture(animWalkRight);
+            texture.loop();
+        }
+
+
+
     }
 
     @Override
@@ -95,6 +125,33 @@ public class EnemyComponent extends Component {
             texture.setTranslateX(-10);
             texture.setTranslateY(-13);
         }
+        if (type.equals("bee")) {
+            entity.getViewComponent().addChild(texture);
+            texture.setScaleX(1.5);// para mas modako
+            texture.setScaleY(1.5);// para mas modako
+            texture.setTranslateX(-10);
+            texture.setTranslateY(-25);
+        }
+        if (type.equals("giantfly")) {
+            entity.getViewComponent().addChild(texture);
+            texture.setTranslateX(-15);
+            texture.setTranslateY(-30);
+
+            texture.setScaleX(2.0); // para mas modako
+            texture.setScaleY(2.0);// para mas modako
+        }
+        if (type.equals("dragonfly")) {
+            entity.getViewComponent().addChild(texture);
+            texture.setTranslateX(-10);
+            texture.setTranslateY(-25);
+
+            texture.setScaleX(1.3); // para mas modako
+            texture.setScaleY(1.3);// para mas modako
+        }
+
+
+
+
     }
 
     @Override
@@ -147,7 +204,7 @@ public class EnemyComponent extends Component {
      * when small forces affect movement direction
      */
     private void updateAnimation(Point2D direction) {
-        if (type.equals("maggot") || type.equals("beetle") || type.equals("mantis")) {
+        if (type.equals("maggot") || type.equals("beetle") || type.equals("mantis") || type.equals("bee") || type.equals("giantfly") || type.equals("dragonfly")) {
             // Use running average to smooth direction changes
             totalDirectionX = (totalDirectionX * DIRECTION_MEMORY_FACTOR) + (direction.getX() * (1 - DIRECTION_MEMORY_FACTOR));
 
@@ -209,7 +266,7 @@ public class EnemyComponent extends Component {
         health -= dmg;
 
         // FLASHES WHITE WHEN HIT
-        if (type.equals("maggot") || type.equals("beetle") || type.equals("mantis")) {
+        if (type.equals("maggot") || type.equals("beetle") || type.equals("mantis") || type.equals("bee") || type.equals("giantfly") || type.equals("dragonfly")) {
             texture.setEffect(new javafx.scene.effect.ColorAdjust(0, -1, 1, 0)); // WHITE
             FXGL.getGameTimer().runOnceAfter(() -> {
                 texture.setEffect(null);
