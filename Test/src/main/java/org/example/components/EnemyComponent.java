@@ -2,16 +2,13 @@ package org.example.components;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
-import javafx.animation.Interpolator;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.example.core.EntityType;
-import org.example.core.EnemyFlyweightFactory;
 
 import java.util.List;
 
@@ -47,19 +44,115 @@ public class EnemyComponent extends Component {
         this.damage = damage;
         this.type = type;
 
-        // Use the flyweight factory to get shared animation resources
-        EnemyFlyweightFactory factory = EnemyFlyweightFactory.getInstance();
-        this.animWalkLeft = factory.getAnimWalkLeft(type);
-        this.animWalkRight = factory.getAnimWalkRight(type);
-        this.texture = factory.createAnimatedTexture(type);
+        if (type.equals("maggot")) {
+            animWalkLeft = new AnimationChannel(FXGL.image("MaggotWalk-scaled.png"), 4,
+                    64, 64, Duration.seconds(0.8), 4, 7);
+            animWalkRight = new AnimationChannel(FXGL.image("MaggotWalk-scaled.png"), 4,
+                    64, 64, Duration.seconds(0.8), 8, 11);
+
+            texture = new AnimatedTexture(animWalkRight);
+            texture.loop();
+        }
+        if (type.equals("beetle")) {
+            animWalkLeft = new AnimationChannel(FXGL.image("BeetleMove-scaled.png"), 4,
+                    64, 64, Duration.seconds(0.4), 4, 7);
+            animWalkRight = new AnimationChannel(FXGL.image("BeetleMove-scaled.png"), 4,
+                    64, 64, Duration.seconds(0.4), 8, 11);
+
+            texture = new AnimatedTexture(animWalkRight);
+            texture.loop();
+        }
+        if (type.equals("mantis")) {
+            animWalkRight = new AnimationChannel(FXGL.image("MantisMove-scaled.png"), 4,
+                    64, 64, Duration.seconds(0.8), 4, 7);
+            animWalkLeft = new AnimationChannel(FXGL.image("MantisMove-scaled.png"), 4,
+                    64, 64, Duration.seconds(0.8), 8, 11);
+
+            texture = new AnimatedTexture(animWalkRight);
+            texture.loop();
+        }
+        if (type.equals("bee")) {
+            animWalkLeft = new AnimationChannel(FXGL.image("BeeMove-scaled.png"), 4,
+                    64, 64, Duration.seconds(0.4), 4, 7);
+            animWalkRight = new AnimationChannel(FXGL.image("BeeMove-scaled.png"), 4,
+                    64, 64, Duration.seconds(0.4), 8, 11);
+
+            texture = new AnimatedTexture(animWalkRight);
+            texture.loop();
+        }
+        if (type.equals("giantfly")) {
+            animWalkLeft = new AnimationChannel(FXGL.image("GiantFly.png"), 4,
+                    64, 64, Duration.seconds(0.6), 4, 7);  // left-facing (row 2)
+            animWalkRight = new AnimationChannel(FXGL.image("GiantFly.png"), 4,
+                    64, 64, Duration.seconds(0.6), 8, 11); // right-facing (row 3)
+
+            texture = new AnimatedTexture(animWalkRight);
+            texture.loop();
+        }
+        if (type.equals("dragonfly")) {
+            animWalkLeft = new AnimationChannel(FXGL.image("DragonFly.png"), 4,
+                    64, 64, Duration.seconds(0.6), 4, 7);  // left-facing (row 2)
+            animWalkRight = new AnimationChannel(FXGL.image("DragonFly.png"), 4,
+                    64, 64, Duration.seconds(0.6), 8, 11); // right-facing (row 3)
+
+            texture = new AnimatedTexture(animWalkRight);
+            texture.loop();
+        }
+
+
+
     }
 
     @Override
     public void onAdded() {
-        entity.getViewComponent().addChild(texture);
-        
-        // Apply view adjustments using the flyweight factory
-        EnemyFlyweightFactory.getInstance().applyViewAdjustments(type, texture);
+        if (type.equals("maggot")) {
+            entity.getViewComponent().addChild(texture);
+
+            // ADJUST TO ALIGN WITH HITBOX
+            texture.setTranslateX(-10);
+            texture.setTranslateY(-40);
+        }
+        if (type.equals("beetle")) {
+            entity.getViewComponent().addChild(texture);
+
+            // ADJUST TO ALIGN WITH HITBOX
+            texture.setTranslateX(-10);
+            texture.setTranslateY(-25);
+        }
+        if (type.equals("mantis")) {
+            entity.getViewComponent().addChild(texture);
+
+            // ADJUST TO ALIGN WITH HITBOX
+            texture.setTranslateX(-10);
+            texture.setTranslateY(-13);
+        }
+        if (type.equals("bee")) {
+            entity.getViewComponent().addChild(texture);
+            texture.setScaleX(2.0);// para mas modako
+            texture.setScaleY(2.0);// para mas modako
+            texture.setTranslateX(-15);
+            texture.setTranslateY(-25);
+        }
+        if (type.equals("giantfly")) {
+            entity.getViewComponent().addChild(texture);
+            texture.setTranslateX(0);
+            texture.setTranslateY(5);
+
+            texture.setScaleX(2.0); // para mas modako
+            texture.setScaleY(2.0);// para mas modako
+        }
+        if (type.equals("dragonfly")) {
+            entity.getViewComponent().addChild(texture);
+            texture.setTranslateX(-10);
+            texture.setTranslateY(-28);
+
+            texture.setScaleX(1.3); // para mas modako
+            texture.setScaleY(1.3);// para mas modako
+        }
+
+
+
+
     }
 
     @Override
@@ -112,16 +205,18 @@ public class EnemyComponent extends Component {
      * when small forces affect movement direction
      */
     private void updateAnimation(Point2D direction) {
-        // Use running average to smooth direction changes
-        totalDirectionX = (totalDirectionX * DIRECTION_MEMORY_FACTOR) + (direction.getX() * (1 - DIRECTION_MEMORY_FACTOR));
+        if (type.equals("maggot") || type.equals("beetle") || type.equals("mantis") || type.equals("bee") || type.equals("giantfly") || type.equals("dragonfly")) {
+            // Use running average to smooth direction changes
+            totalDirectionX = (totalDirectionX * DIRECTION_MEMORY_FACTOR) + (direction.getX() * (1 - DIRECTION_MEMORY_FACTOR));
 
-        // Only change animation if we exceed the threshold in either direction
-        if (totalDirectionX > animationChangeThreshold && !isMovingRight) {
-            isMovingRight = true;
-            texture.loopAnimationChannel(animWalkRight);
-        } else if (totalDirectionX < -animationChangeThreshold && isMovingRight) {
-            isMovingRight = false;
-            texture.loopAnimationChannel(animWalkLeft);
+            // Only change animation if we exceed the threshold in either direction
+            if (totalDirectionX > animationChangeThreshold && !isMovingRight) {
+                isMovingRight = true;
+                texture.loopAnimationChannel(animWalkRight);
+            } else if (totalDirectionX < -animationChangeThreshold && isMovingRight) {
+                isMovingRight = false;
+                texture.loopAnimationChannel(animWalkLeft);
+            }
         }
     }
 
@@ -152,15 +247,17 @@ public class EnemyComponent extends Component {
                 Point2D awayDirection = currentPosition.subtract(otherPosition).normalize();
 
                 // The separation force is stronger when enemies are closer
-                double forceMagnitude = SEPARATION_FORCE * (1.0 - distance / SEPARATION_DISTANCE);
+                double forceMagnitude = SEPARATION_FORCE * (SEPARATION_DISTANCE - distance) / SEPARATION_DISTANCE;
+
+                // Add the weighted separation force
                 separationForce = separationForce.add(awayDirection.multiply(forceMagnitude));
                 neighborCount++;
             }
         }
 
-        // Average the separation force
+        // If there are neighbors, normalize the force
         if (neighborCount > 0) {
-            separationForce = separationForce.multiply(1.0 / neighborCount);
+            separationForce = separationForce.normalize().multiply(SEPARATION_FORCE * speed * tpf * 60);
         }
 
         return separationForce;
@@ -192,36 +289,6 @@ public class EnemyComponent extends Component {
             }
 
             entity.removeFromWorld();
-            
-            // GRANT EXP to player based on enemy type
-            if (player != null && player.hasComponent(PlayerComponent.class)) {
-                
-                int expValue = 10; // BASE VALUE
-                
-                // ADJUST EXP BASED ON ENEMY TYPE
-                switch(type) {
-                    case "maggot":
-                        expValue = 10;
-                        break;
-                    case "beetle":
-                        expValue = 15;
-                        break;
-                    case "mantis":
-                        expValue = 30;
-                        break;
-                    case "bee":
-                        expValue = 20;
-                        break;
-                    case "giantfly":
-                        expValue = 100;
-                        break;
-                    case "dragonfly":
-                        expValue = 40;
-                        break;
-                }
-                
-                player.getComponent(PlayerComponent.class).addExp(expValue);
-            }
         }
     }
 
@@ -302,6 +369,6 @@ public class EnemyComponent extends Component {
     }
 
     public void setLastDamageTime(long time) {
-        this.lastDamageTime = time;
+        lastDamageTime = time;
     }
 }
