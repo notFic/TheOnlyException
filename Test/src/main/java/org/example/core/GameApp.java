@@ -374,12 +374,14 @@ public class GameApp extends GameApplication {
             System.out.println("Game music already loaded, skipping replay");
         }
 
+        // Start survival timer and other timers - all timers are now handled in resetTimers()
+        isTimerRunning = true;
+
         // Initialize the wave manager and start it
         waveManager = WaveManager.getInstance();
         waveManager.start(player);
         System.out.println("Wave manager initialized and started");
 
-        // Initialize timers
         resetTimers();
     }
 
@@ -545,9 +547,6 @@ public class GameApp extends GameApplication {
 
     // Clear and recreate all game timers to prevent speed-up bug
     public void resetTimers() {
-        // First clear all existing timers to prevent duplication
-        FXGL.getGameTimer().clear();
-        
         // Recreate time and score timers
         FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) {
