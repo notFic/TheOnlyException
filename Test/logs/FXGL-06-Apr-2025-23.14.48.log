@@ -33,7 +33,7 @@ Scene Factory: class com.almasb.fxgl.app.scene.SceneFactory
 23:14:34.043 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scene size: 800.0 x 600.0
 23:14:34.043 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Stage size: 816.0 x 639.0
 23:14:34.048 [FXGL Background Thread 1 ] DEBUG Engine               - Initializing environment variables
-23:14:34.079 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - User app class for loading assets: class org.example.GameApp
+23:14:34.079 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - User app class for loading assets: class org.example.core.GameApp
 23:14:34.079 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Applying CSS: fxgl_dark.css
 23:14:34.080 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/primzcm/.m2/repository/com/github/almasb/fxgl/fxgl/17.2/fxgl-17.2.jar!/fxglassets/ui/css/fxgl_dark.css
 23:14:34.113 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Initializing application scenes
@@ -171,7 +171,7 @@ Scene Factory: class com.almasb.fxgl.app.scene.SceneFactory
 23:14:37.310 [FXGL Background Thread 3 ] DEBUG Engine               - urlGithub: https://github.com/AlmasB/FXGL
 23:14:37.310 [FXGL Background Thread 3 ] DEBUG Engine               - urlLeaderboard: http://fxgl-top.herokuapp.com/
 23:14:37.310 [FXGL Background Thread 3 ] DEBUG Engine               - urlPOM: https://raw.githubusercontent.com/AlmasB/FXGL/release/README.md
-23:14:37.310 [FXGL Background Thread 3 ] DEBUG Engine               - userAppClass: class org.example.GameApp
+23:14:37.310 [FXGL Background Thread 3 ] DEBUG Engine               - userAppClass: class org.example.core.GameApp
 23:14:37.310 [FXGL Background Thread 3 ] DEBUG Engine               - version: 0.1
 23:14:37.310 [FXGL Background Thread 3 ] DEBUG Engine               - versionCheckDays: 7
 23:14:37.310 [FXGL Background Thread 3 ] DEBUG Engine               - width: 800

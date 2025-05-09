@@ -5,16 +5,13 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
-import com.almasb.fxgl.time.TimerAction;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import org.example.EnemyComponent;
-import org.example.EntityType;
+import org.example.components.EnemyComponent;
+import org.example.core.EntityType;
 
 import java.util.List;
 import java.util.stream.Collectors;
