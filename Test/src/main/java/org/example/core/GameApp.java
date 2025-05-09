@@ -396,6 +396,17 @@ public class GameApp extends GameApplication {
         FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) spawnEnemyOutsideViewport("tankEnemy");
         }, Duration.seconds(3));
+        FXGL.getGameTimer().runAtInterval(() -> {
+            if (isTimerRunning) spawnEnemyOutsideViewport("beeEnemy");
+        }, Duration.seconds(2.5));
+        FXGL.getGameTimer().runAtInterval(() -> {
+            if (isTimerRunning) spawnEnemyOutsideViewport("giantFlyEnemy");
+        }, Duration.seconds(6));
+        FXGL.getGameTimer().runAtInterval(() -> {
+            if (isTimerRunning) spawnEnemyOutsideViewport("dragonflyEnemy");
+        }, Duration.seconds(2));
+
+
 
         resetTimers();
     }
@@ -590,6 +601,16 @@ public class GameApp extends GameApplication {
         FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) spawnEnemyOutsideViewport("tankEnemy");
         }, Duration.seconds(3));
+        FXGL.getGameTimer().runAtInterval(() -> {
+            if (isTimerRunning) spawnEnemyOutsideViewport("beeEnemy");
+        }, Duration.seconds(2.5));
+        FXGL.getGameTimer().runAtInterval(() -> {
+            if (isTimerRunning) spawnEnemyOutsideViewport("giantFlyEnemy");
+        }, Duration.seconds(6));
+        FXGL.getGameTimer().runAtInterval(() -> {
+            if (isTimerRunning) spawnEnemyOutsideViewport("dragonflyEnemy");
+        }, Duration.seconds(2));
+
 
         // Reinitialize player powerup timers
         if (player != null && player.hasComponent(PlayerComponent.class)) {

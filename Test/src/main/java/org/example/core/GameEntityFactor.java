@@ -101,6 +101,31 @@ public class GameEntityFactor implements EntityFactory {
                 .build();
     }
 
+    @Spawns("beeEnemy")
+    public Entity newBeeEnemy(SpawnData data) {
+        Entity player = (Entity) data.get("player");
+
+        Rectangle hitbox = new Rectangle(40, 20); // adjust to sprite
+
+        if (showHitbox) {
+            hitbox.setFill(Color.color(1, 1, 0, 0.3)); // yellow tint
+            hitbox.setStroke(Color.BLACK);
+            hitbox.setStrokeWidth(2);
+        } else {
+            hitbox.setFill(Color.TRANSPARENT);
+            hitbox.setStroke(Color.TRANSPARENT);
+        }
+
+        return entityBuilder()
+                .type(EntityType.ENEMY)
+                .from(data)
+                .viewWithBBox(hitbox)
+                .with(new EnemyComponent(player, 3.5, 25, 3, "bee"))
+                .collidable()
+                .build();
+    }
+
+
     @Spawns("enemy")
     public Entity newEnemy(SpawnData data) {
         Entity player = (Entity) data.getData().getOrDefault("player", null);
@@ -156,6 +181,55 @@ public class GameEntityFactor implements EntityFactory {
                 .collidable()
                 .build();
     }
+
+    @Spawns("giantFlyEnemy")
+    public Entity newGiantFlyEnemy(SpawnData data) {
+        Entity player = (Entity) data.get("player");
+
+        Rectangle hitbox = new Rectangle(64, 64); // big hitbox
+
+        if (showHitbox) {
+            hitbox.setFill(Color.color(0.6, 0.6, 0.6, 0.3));
+            hitbox.setStroke(Color.BLACK);
+            hitbox.setStrokeWidth(2);
+        } else {
+            hitbox.setFill(Color.TRANSPARENT);
+            hitbox.setStroke(Color.TRANSPARENT);
+        }
+
+        return entityBuilder()
+                .type(EntityType.ENEMY)
+                .from(data)
+                .viewWithBBox(hitbox)
+                .with(new EnemyComponent(player, 0.9, 500, 20, "giantfly")) // slow, tanky, strong
+                .collidable()
+                .build();
+    }
+
+    @Spawns("dragonflyEnemy")
+    public Entity newDragonflyEnemy(SpawnData data) {
+        Entity player = (Entity) data.get("player");
+
+        Rectangle hitbox = new Rectangle(48, 48); // match size
+
+        if (showHitbox) {
+            hitbox.setFill(Color.color(0.4, 1.0, 1.0, 0.3));
+            hitbox.setStroke(Color.BLACK);
+            hitbox.setStrokeWidth(2);
+        } else {
+            hitbox.setFill(Color.TRANSPARENT);
+            hitbox.setStroke(Color.TRANSPARENT);
+        }
+
+        return entityBuilder()
+                .type(EntityType.ENEMY)
+                .from(data)
+                .viewWithBBox(hitbox)
+                .with(new EnemyComponent(player, 2.8, 80, 12, "dragonfly")) // moderate stats
+                .collidable()
+                .build();
+    }
+
 
     @Spawns("tankEnemy")
     public Entity newTankEnemy(SpawnData data) {
