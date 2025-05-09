@@ -33,7 +33,7 @@ public class GameEntityFactor implements EntityFactory {
     but when it comes to actually spawning them in game, refer to GameApp.java
      */
 
-    private static final boolean showHitbox = false; // SWITCH TO TRUE FOR DEBUGGING PURPOSES
+    private static final boolean showHitbox = true; // SWITCH TO TRUE FOR DEBUGGING PURPOSES
 
     @Spawns("background")
     public Entity newBackground(SpawnData data) {

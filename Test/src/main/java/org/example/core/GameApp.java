@@ -7,6 +7,7 @@ import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.time.TimerAction;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -47,7 +48,10 @@ public class GameApp extends GameApplication {
     private boolean isTimerRunning = true; // Controls game timers
     private boolean isLoggedIn = false; // Track login state
     private AudioClip gameMusic;
-    private String userType = "Gun"; // <-------- Chnge user type her for ebug
+    private String userType = "Volt"; // <-------- Chnge user type her for ebug
+    private String[] weapons = { "Gun", "Laser", "Sword", "VoltChain" };
+    private int weaponInd = 1;
+    private TimerAction currentWeaponTask;
 
     // EXP progress bar UI elements
     private Rectangle expBarFill;
@@ -59,8 +63,6 @@ public class GameApp extends GameApplication {
     private static final String DB_PASS = "";
 
     private boolean isLeaderboardOpen = false;
-
-    private WaveManager waveManager;
 
     public void showdLeaderboard() {
         if (isLeaderboardOpen) {
@@ -295,8 +297,75 @@ public class GameApp extends GameApplication {
                 System.out.println("Player is null - cannot move down");
             }
         });
+        onKeyDown(KeyCode.Q, () -> {
+            weaponInd--;
+            if(weaponInd < 0){
+                weaponInd = 3;
+            }
+            System.out.println("Q pressed");
+            System.out.println("index: " +weaponInd);
+            updateWeaponTimer();
+        });
+        onKeyDown(KeyCode.E, () -> {
+            weaponInd++;
+            if(weaponInd > 3){
+                weaponInd = 0;
+            }
+            System.out.println("E pressed");
+            System.out.println("index: " +weaponInd);
+            updateWeaponTimer();
+        });
         System.out.println("initInput completed");
     }
+
+    private void updateWeaponTimer() {
+        if (currentWeaponTask != null) {
+            currentWeaponTask.expire(); // stops the previous task
+        }
+
+        String weaponType = weapons[weaponInd];
+        Duration interval;
+
+        switch (weaponType) {
+            case "Gun":
+                interval = Duration.seconds(0.2);
+                currentWeaponTask = FXGL.getGameTimer().runAtInterval(() -> {
+                    if (isTimerRunning) {
+                        player.getComponent(PlayerComponent.class).shootTripleBurst();
+                    }
+                }, interval);
+                break;
+
+            case "Sword":
+                interval = Duration.seconds(0.5);
+                currentWeaponTask = FXGL.getGameTimer().runAtInterval(() -> {
+                    if (isTimerRunning) {
+                        player.getComponent(PlayerComponent.class).swordSlash();
+                    }
+                }, interval);
+                break;
+
+            case "Laser":
+                interval = Duration.seconds(0.5);
+                currentWeaponTask = FXGL.getGameTimer().runAtInterval(() -> {
+                    if (isTimerRunning) {
+                        player.getComponent(PlayerComponent.class).shootLaser();
+                    }
+                }, interval);
+                break;
+
+            case "VoltChain":
+            default:
+                interval = Duration.seconds(0.5);
+                currentWeaponTask = FXGL.getGameTimer().runAtInterval(() -> {
+                    if (isTimerRunning) {
+                        player.getComponent(PlayerComponent.class).shootVoltChain();
+                    }
+                }, interval);
+                break;
+        }
+    }
+
 
     // Initialize game world, spawn entities, and setup timers
     @Override
@@ -383,40 +452,13 @@ public class GameApp extends GameApplication {
             }
         }, Duration.seconds(1));
 
-        if(userType.equals("Gun")){
-            FXGL.getGameTimer().runAtInterval(() -> {
-                if (isTimerRunning) {
-                    player.getComponent(PlayerComponent.class).shootTripleBurst();
-                }
-            }, Duration.seconds(0.2));
-        } else if(userType.equals("Sword")){
-            FXGL.getGameTimer().runAtInterval(() -> {
-                if (isTimerRunning) {
-                    player.getComponent(PlayerComponent.class).swordSlash();
-                }
-            }, Duration.seconds(0.5));
-        } else if(userType.equals("Laser")){
-            FXGL.runOnce(() -> {
-                player.getComponent(PlayerComponent.class).shootLaser();
-            }, Duration.seconds(0.2));
-
-            FXGL.getGameTimer().runAtInterval(() -> {
-                if (isTimerRunning) {
-                    player.getComponent(PlayerComponent.class).shootLaser();
-                }
-            }, Duration.seconds(.5));
-        } else {
-            FXGL.getGameTimer().runAtInterval(() -> {
-                if (isTimerRunning) {
-                    player.getComponent(PlayerComponent.class).shootVoltChain();
-                }
-            }, Duration.seconds(.5));
-        }
+        updateWeaponTimer(); // <---------- CHange wepon here
 
         // Initialize the wave manager and start it
         waveManager = WaveManager.getInstance();
         waveManager.start(player);
         System.out.println("Wave manager initialized and started");
+
 
         resetTimers();
     }
@@ -424,13 +466,13 @@ public class GameApp extends GameApplication {
     // Stop all game timers
     public void stopTimer() {
         isTimerRunning = false;
-        
+
         // Stop the wave manager
         if (waveManager != null) {
             waveManager.stop();
             System.out.println("Wave manager stopped");
         }
-        
+
         // Stop the game music before showing the game over screen
         if (gameMusic != null) {
             gameMusic.stop();
@@ -583,13 +625,16 @@ public class GameApp extends GameApplication {
 
     // Clear and recreate all game timers to prevent speed-up bug
     public void resetTimers() {
-        // Recreate time and score timers
+        // Recreate the survival timer
         FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) {
                 int currentTime = getWorldProperties().getInt("survivalTime");
                 getWorldProperties().setValue("survivalTime", currentTime + 1);
             }
         }, Duration.seconds(1));
+
+        // Recreate auto-shoot timer
+        updateWeaponTimer(); // <------- Updte weapon
 
         // Recreate weapon timers
         if(userType.equals("Gun")){
@@ -608,7 +653,6 @@ public class GameApp extends GameApplication {
             FXGL.runOnce(() -> {
                 player.getComponent(PlayerComponent.class).shootLaser();
             }, Duration.seconds(0.2));
-
             FXGL.getGameTimer().runAtInterval(() -> {
                 if (isTimerRunning) {
                     player.getComponent(PlayerComponent.class).shootLaser();
@@ -626,7 +670,7 @@ public class GameApp extends GameApplication {
         if (waveManager == null) {
             waveManager = WaveManager.getInstance();
         }
-        
+
         if (!waveManager.isActive() && player != null) {
             waveManager.start(player);
             System.out.println("Wave manager restarted");
@@ -670,6 +714,9 @@ public class GameApp extends GameApplication {
                 y = viewMaxY + margin;
                 break;
             case 3: // Left
+                x = viewMinX - margin;
+                y = viewMinY + random.nextDouble() * getAppHeight();
+                break;
             default:
                 x = viewMinX - margin;
                 y = viewMinY + random.nextDouble() * getAppHeight();
@@ -771,33 +818,13 @@ public class GameApp extends GameApplication {
         getWorldProperties().setValue("exp", 0);
         getWorldProperties().setValue("totalDamage", 0);
         getWorldProperties().setValue("kills", 0);
-        
         // Reset the wave manager
         if (waveManager != null) {
             waveManager.reset();
             System.out.println("Wave manager reset");
         }
-        
+
         System.out.println("Game state reset complete");
-    }
-
-    public class MainMenuController {
-        private boolean isLeaderboardOpen = false;
-
-        public void showLeaderboard() {
-            if (isLeaderboardOpen) {
-                System.out.println("Leaderboard dialog already open - ignoring request");
-                return;
-            }
-            System.out.println("showLeaderboard called");
-            LeaderboardUI leaderboardUI = new LeaderboardUI();
-            isLeaderboardOpen = true;
-            FXGL.getDialogService().showBox("Leaderboard", leaderboardUI.getContainer(), leaderboardUI.getCloseButton());
-            leaderboardUI.getCloseButton().setOnAction(e -> {
-                isLeaderboardOpen = false;
-                System.out.println("Leaderboard dialog closed");
-            });
-        }
     }
 
     // Pause game timers without ending the game
@@ -819,6 +846,8 @@ public class GameApp extends GameApplication {
             System.out.println("Wave manager resumed");
         }
     }
+
+
 
     public static String getStoredPlayerName() {
         return storedPlayerName;
