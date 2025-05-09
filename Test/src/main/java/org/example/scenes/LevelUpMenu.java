@@ -170,9 +170,10 @@ public class LevelUpMenu {
         upgradeName.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
         upgradeName.setFill(Color.WHITE);
 
-        // Show the current level (or "New!" if not acquired)
+        // Show the next level instead of current level
         int currentLevel = playerComponent.getWeaponLevel(option.getId());
-        Text levelText = new Text(currentLevel == 0 ? "NEW!" : "Level " + currentLevel);
+        int nextLevel = currentLevel + 1;
+        Text levelText = new Text(currentLevel == 0 ? "NEW!" : "Level " + nextLevel);
         levelText.setFont(Font.font("Verdana", 14));
         levelText.setFill(currentLevel == 0 ? Color.GOLD : Color.LIGHTGREEN);
 
@@ -201,8 +202,19 @@ public class LevelUpMenu {
         shadow.setColor(Color.BLACK);
         iconWrapper.setEffect(shadow);
 
-        // Create upgrade description
-        Text descriptionText = new Text(option.getDescription());
+        // Create upgrade description with only the next level info for Lightning Strike
+        String description = option.getDescription();
+        if ("lightning".equals(option.getId())) {
+            // If at max level, show maxed out message
+            if (currentLevel >= 7) {
+                description = "MAXED OUT";
+            } else {
+                // Show only the next level description
+                description = org.example.powerups.LightningStrikeComponent.getLevelDescription(currentLevel, true);
+            }
+        }
+        
+        Text descriptionText = new Text(description);
         descriptionText.setFont(Font.font("Verdana", 14));
         descriptionText.setFill(Color.LIGHTGRAY);
         descriptionText.setWrappingWidth(CARD_WIDTH - 30);
