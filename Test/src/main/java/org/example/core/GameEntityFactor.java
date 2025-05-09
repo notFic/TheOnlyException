@@ -33,7 +33,7 @@ public class GameEntityFactor implements EntityFactory {
     but when it comes to actually spawning them in game, refer to GameApp.java
      */
 
-    private static final boolean showHitbox = false; // SWITCH TO TRUE FOR DEBUGGING PURPOSES
+    private static final boolean showHitbox = true; // SWITCH TO TRUE FOR DEBUGGING PURPOSES
 
     @Spawns("background")
     public Entity newBackground(SpawnData data) {
@@ -217,7 +217,7 @@ public class GameEntityFactor implements EntityFactory {
     public Entity newDragonflyEnemy(SpawnData data) {
         Entity player = (Entity) data.get("player");
 
-        Rectangle hitbox = new Rectangle(48, 48); // match size
+        Rectangle hitbox = new Rectangle(45, 20); // match size
 
         if (showHitbox) {
             hitbox.setFill(Color.color(0.4, 1.0, 1.0, 0.3));
@@ -236,6 +236,7 @@ public class GameEntityFactor implements EntityFactory {
                 .collidable()
                 .build();
     }
+
 
 
     @Spawns("tankEnemy")

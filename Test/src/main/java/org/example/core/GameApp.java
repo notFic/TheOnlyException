@@ -60,7 +60,7 @@ public class GameApp extends GameApplication {
 
     private boolean isLeaderboardOpen = false;
 
-    public void showLeaderboard() {
+    public void showdLeaderboard() {
         if (isLeaderboardOpen) {
             System.out.println("Leaderboard dialog already open - ignoring request");
             return;
