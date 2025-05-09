@@ -9,7 +9,7 @@ import com.almasb.fxgl.particle.ParticleEmitters;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import org.example.PlayerComponent;
+import org.example.components.PlayerComponent;
 
 public class AutoHealComponent extends Component {
     private static final double HEAL_INTERVAL = 5.0; // Seconds between heals

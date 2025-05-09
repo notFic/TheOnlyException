@@ -14,9 +14,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import org.example.EnemyComponent;
-import org.example.EntityType;
-import org.example.PlayerComponent;
+import org.example.components.EnemyComponent;
+import org.example.core.EntityType;
+import org.example.components.PlayerComponent;
 
 public class ExplosiveMinesComponent extends Component {
     private static final double SPAWN_INTERVAL = 2.0; // Seconds between mine spawns
