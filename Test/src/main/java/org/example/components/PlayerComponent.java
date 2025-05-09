@@ -515,11 +515,66 @@ public class PlayerComponent extends Component {
 
     // Show floating damage text
     private void showDamageText(double dmg) {
-        var damageText = FXGL.getUIFactoryService().newText(String.valueOf((int) dmg), Color.RED, 18);
-        var textEntity = FXGL.entityBuilder().at(entity.getPosition().subtract(0, 30)).view(damageText).buildAndAttach();
-        FXGL.animationBuilder().duration(Duration.seconds(1)).translate(textEntity).from(textEntity.getPosition()).to(textEntity.getPosition().subtract(0, 30)).build().start();
-        FXGL.animationBuilder().duration(Duration.seconds(1)).fadeOut(textEntity).build().start();
-        FXGL.getGameTimer().runOnceAfter(() -> textEntity.removeFromWorld(), Duration.seconds(1));
+        // Create the damage text with original styling
+        var damageText = FXGL.getUIFactoryService().newText(String.valueOf((int) dmg), Color.RED, 22);
+        
+        // Add directly to game world at the hit position
+        Point2D hitPosition = entity.getPosition().subtract(0, 30);
+        var textEntity = FXGL.entityBuilder()
+                .at(hitPosition)
+                .view(damageText)
+                .zIndex(100)
+                .buildAndAttach();
+        
+        // Determine jump direction based on mouse position
+        boolean jumpRight = true; // Default to right
+        
+        Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
+        double screenWidth = FXGL.getGameScene().getAppWidth();
+        
+        // If mouse is to the left of screen center, jump left
+        // If mouse is to the right or at center, jump right
+        jumpRight = mouseScreenPos.getX() >= screenWidth / 2;
+        
+        // Distance and height for the jump
+        int xDistance = 30;
+        int yPeak = 25;
+        
+        // Set the direction based on mouse position
+        if (!jumpRight) {
+            xDistance = -xDistance;
+        }
+        
+        // Create a path for the arc movement
+        javafx.scene.shape.Path path = new javafx.scene.shape.Path();
+        path.getElements().add(new javafx.scene.shape.MoveTo(0, 0));
+        path.getElements().add(new javafx.scene.shape.QuadCurveTo(
+                xDistance / 2.0, -yPeak,  // Control point
+                xDistance, 0             // End point
+        ));
+        
+        // Create a compound animation that combines path and fade
+        javafx.animation.PathTransition pathTransition = new javafx.animation.PathTransition(
+                javafx.util.Duration.seconds(0.6), path, damageText);
+        pathTransition.setInterpolator(javafx.animation.Interpolator.EASE_OUT);
+        
+        // Create the fade transition
+        javafx.animation.FadeTransition fadeTransition = new javafx.animation.FadeTransition(
+                javafx.util.Duration.seconds(0.25), damageText);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        
+        // Create a timeline for managing the timing of both animations
+        javafx.animation.Timeline timeline = new javafx.animation.Timeline(
+            new javafx.animation.KeyFrame(javafx.util.Duration.ZERO, e -> pathTransition.play()),
+            new javafx.animation.KeyFrame(javafx.util.Duration.seconds(0.4), e -> fadeTransition.play())
+        );
+        
+        // Remove entity when animations are done
+        fadeTransition.setOnFinished(e -> textEntity.removeFromWorld());
+        
+        // Start the timeline
+        timeline.play();
     }
 
     // Add experience points and check for level-up
@@ -528,6 +583,12 @@ public class PlayerComponent extends Component {
         exp += expGained;
         FXGL.getWorldProperties().setValue("exp", exp);
         System.out.println("DEBUG: Player gained " + expGained + " EXP, total EXP = " + exp);
+        
+        // Update the EXP bar when gaining experience
+        if (gameApp != null) {
+            gameApp.updateExpBar();
+        }
+        
         while (exp >= expToNextLevel) {
             levelUp();
         }
