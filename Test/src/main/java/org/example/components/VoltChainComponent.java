@@ -1,4 +1,4 @@
-package org.example;
+package org.example.components;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
