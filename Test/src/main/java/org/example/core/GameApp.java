@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import javafx.scene.shape.Rectangle;
+import org.example.components.LaserComponent;
+import org.example.components.SwordComponent;
+import org.example.components.VoltChainComponent;
 import org.example.data.LeaderboardDatabase;
 import org.example.scenes.LeaderboardUI;
 import org.example.scenes.MainMenuScene;
@@ -44,6 +47,7 @@ public class GameApp extends GameApplication {
     private boolean isTimerRunning = true; // Controls game timers
     private boolean isLoggedIn = false; // Track login state
     private AudioClip gameMusic;
+    private String userType = "Gun"; // <-------- Chnge user type her for ebug
 
     // EXP progress bar UI elements
     private Rectangle expBarFill;
@@ -79,15 +83,15 @@ public class GameApp extends GameApplication {
         settings.setHeight(720);
         settings.setTitle("Prototype Game");
         settings.setVersion("0.1.5");
-        settings.setMainMenuEnabled(true);
+//        settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true); // Enable the game menu
-        settings.setSceneFactory(new SceneFactory() {
-            @Override
-            public FXGLMenu newMainMenu() {
-                System.out.println("Creating new NameInputScene as MainMenu");
-                return new NameInputScene();
-            }
-        });
+//        settings.setSceneFactory(new SceneFactory() {
+//            @Override
+//            public FXGLMenu newMainMenu() {
+//                System.out.println("Creating new NameInputScene as MainMenu");
+//                return new NameInputScene();
+//            }
+//        });
         System.out.println("initSettings completed - main menu and game menu enabled, expecting NameInputScene at startup");
     }
 
@@ -377,12 +381,32 @@ public class GameApp extends GameApplication {
             }
         }, Duration.seconds(1));
 
-        // Auto-shoot triple burst every 0.5 seconds
-        FXGL.getGameTimer().runAtInterval(() -> {
-            if (isTimerRunning && player != null) {
-                player.getComponent(PlayerComponent.class).shootTripleBurst();
-            }
-        }, Duration.seconds(0.2));
+        if(userType.equals("Gun")){
+            FXGL.getGameTimer().runAtInterval(() -> {
+                if (isTimerRunning) {
+                    player.getComponent(PlayerComponent.class).shootTripleBurst();
+                }
+            }, Duration.seconds(0.2));
+        } else if(userType.equals("Sword")){
+            FXGL.getGameTimer().runAtInterval(() -> {
+                if (isTimerRunning) {
+                    player.getComponent(PlayerComponent.class).swordSlash();
+                }
+            }, Duration.seconds(0.5));
+        } else if(userType.equals("Laser")){
+            player.getComponent(PlayerComponent.class).shootLaser();
+            FXGL.getGameTimer().runAtInterval(() -> {
+                if (isTimerRunning) {
+                    player.getComponent(PlayerComponent.class).shootLaser();
+                }
+            }, Duration.seconds(.5));
+        } else {
+            FXGL.getGameTimer().runAtInterval(() -> {
+                if (isTimerRunning) {
+                    player.getComponent(PlayerComponent.class).shootVoltChain();
+                }
+            }, Duration.seconds(.5));
+        }
 
         // Spawn enemies at intervals
         FXGL.getGameTimer().runAtInterval(() -> {
@@ -698,6 +722,46 @@ public class GameApp extends GameApplication {
                 playerComponent.damage(damage);
                 enemyComponent.setLastDamageTime(now);
             }
+        });
+
+        onCollisionBegin(EntityType.SLASH, EntityType.ENEMY, (slash, enemy) -> {
+            // Assuming sword has a component like BulletComponent for damage info
+            SwordComponent swordComponent = slash.getComponent(SwordComponent.class);
+            EnemyComponent enemyComponent = enemy.getComponent(EnemyComponent.class);
+
+            int damage = swordComponent.getDamage();
+            enemyComponent.damage(damage, slash.getPosition());
+            FXGL.getWorldProperties().increment("totalDamage", damage); // Track damage
+            if (enemyComponent.getHealth() <= 0) {
+                FXGL.getWorldProperties().increment("kills", 1); // Track kills
+            }
+        });
+
+        // Laser hits enemy
+        onCollisionBegin(EntityType.LASER, EntityType.ENEMY, (laser, enemy) -> {
+            LaserComponent laserComponent = laser.getComponent(LaserComponent.class);
+            EnemyComponent enemyComponent = enemy.getComponent(EnemyComponent.class);
+            PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+
+            int damage = laserComponent.getDamage();
+            //           int seconds = 5;
+            //enemyComponent.DOTburn(seconds);
+            laserComponent.setEnemiesHit();
+            enemyComponent.damage(damage, laser.getPosition());
+            FXGL.getWorldProperties().increment("totalDamage", damage); // Track damage
+            if (enemyComponent.getHealth() <= 0) {
+                FXGL.getWorldProperties().increment("kills", 1); // Track kills
+            }
+        });
+
+        // add collision volt chain here
+        onCollisionBegin(EntityType.VOLT_CHAIN, EntityType.ENEMY, (chain, enemy) -> {
+            VoltChainComponent chainComp = chain.getComponent(VoltChainComponent.class);
+            EnemyComponent enemyComp = enemy.getComponent(EnemyComponent.class);
+
+            enemyComp.damage(10, chain.getPosition()); // or any damage amount
+            chainComp.onHitEnemy(enemy);
+            chain.removeFromWorld();
         });
 
         System.out.println("initPhysics completed");
