@@ -202,7 +202,7 @@ public class LevelUpMenu {
         shadow.setColor(Color.BLACK);
         iconWrapper.setEffect(shadow);
 
-        // Create upgrade description with only the next level info for Lightning Strike
+        // Create upgrade description with only the next level info
         String description = option.getDescription();
         if ("lightning".equals(option.getId())) {
             // If at max level, show maxed out message
@@ -212,9 +212,7 @@ public class LevelUpMenu {
                 // Show only the next level description
                 description = org.example.powerups.LightningStrikeComponent.getLevelDescription(currentLevel, true);
             }
-        }
-        // Add Poison Aura next level description
-        else if ("poison".equals(option.getId())) {
+        } else if ("poison".equals(option.getId())) {
             // If at max level, show maxed out message
             if (currentLevel >= 7) {
                 description = "MAXED OUT";
@@ -223,7 +221,7 @@ public class LevelUpMenu {
                 description = org.example.powerups.PoisonAuraComponent.getLevelDescription(currentLevel, true);
             }
         }
-        
+
         Text descriptionText = new Text(description);
         descriptionText.setFont(Font.font("Verdana", 14));
         descriptionText.setFill(Color.LIGHTGRAY);
@@ -246,7 +244,7 @@ public class LevelUpMenu {
 
         // Animate the damageText node directly
         javafx.animation.TranslateTransition tt = new javafx.animation.TranslateTransition(javafx.util.Duration.seconds(1), damageText);
-        tt.setByX(-60); // move語言
+        tt.setByX(-60); // move left
         tt.setByY(-80); // move up
         tt.setInterpolator(javafx.animation.Interpolator.EASE_OUT);
 

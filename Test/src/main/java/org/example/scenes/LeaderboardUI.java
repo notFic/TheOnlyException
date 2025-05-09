@@ -27,8 +27,11 @@ public class LeaderboardUI {
     private StackPane rootPane;
     private Label title;
     private VBox contentBox;
+    private String currentPlayerUsername; // Store the current player's username
 
-    public LeaderboardUI() {
+    public LeaderboardUI(String currentPlayerUsername) {
+        this.currentPlayerUsername = currentPlayerUsername;
+
         // Create the main title with neon effect
         title = new Label("Top 10 Players");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 28));
@@ -38,13 +41,13 @@ public class LeaderboardUI {
         // Set up the table
         tableView = new TableView<>();
         tableView.setPrefSize(600, 400);
-        tableView.setStyle("-fx-background-color: transparent; -fx-border-color: #177bdf; -fx-border-width: 2;");
+        tableView.setStyle("-fx-background-color: transparent; -fx-border-color: #177bdf; -fx-border-width: 1;");
         tableView.getStylesheets().add(getClass().getResource("/css/leaderboard.css").toExternalForm());
 
         // Create table columns
         TableColumn<Player, Number> rankColumn = new TableColumn<>("Rank");
         rankColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getRank()));
-        rankColumn.setPrefWidth(100);
+        rankColumn.setPrefWidth(90);
 
         TableColumn<Player, String> usernameColumn = new TableColumn<>("Username");
         usernameColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getUsername()));
@@ -56,7 +59,7 @@ public class LeaderboardUI {
 
         TableColumn<Player, Number> damageColumn = new TableColumn<>("Total Damage");
         damageColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getTotalDamage()));
-        damageColumn.setPrefWidth(150);
+        damageColumn.setPrefWidth(155);
 
         tableView.getColumns().addAll(rankColumn, usernameColumn, survivalTimeColumn, damageColumn);
 
@@ -66,21 +69,50 @@ public class LeaderboardUI {
             row.itemProperty().addListener((obs, oldItem, newItem) -> {
                 if (newItem != null) {
                     int rank = newItem.getRank();
-                    if (rank == 1) {
+                    String username = newItem.getUsername();
+
+                    // Style for the current player (takes priority)
+                    if (username != null && username.equals(currentPlayerUsername)) {
+                        // Current player style (green effect)
                         row.setStyle("-fx-background-color: rgba(0, 255, 0, 0.3); -fx-text-fill: white; -fx-font-size: 14; -fx-font-family: 'Arial'; -fx-effect: dropshadow(gaussian, #00FF00, 10, 0.5, 0, 0);");
                     } else {
+                        // Default style
                         row.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14; -fx-font-family: 'Arial';");
                     }
                 }
             });
+
             row.setOnMouseEntered(e -> {
-                if (!row.isEmpty() && row.getItem().getRank() != 1) {
-                    row.setStyle("-fx-background-color: rgba(24, 183, 231, 0.3); -fx-text-fill: white; -fx-font-size: 14; -fx-font-family: 'Arial'; -fx-effect: dropshadow(gaussian, #18b7e7, 10, 0.5, 0, 0);");
+                if (!row.isEmpty()) {
+                    Player player = row.getItem();
+                    int rank = player.getRank();
+                    String username = player.getUsername();
+
+                    // Enhance style for the current player on hover
+                    if (username != null && username.equals(currentPlayerUsername)) {
+                        // Enhance current player style on hover
+                        row.setStyle("-fx-background-color: rgba(0, 255, 0, 0.4); -fx-text-fill: white; -fx-font-size: 14; -fx-font-family: 'Arial'; -fx-effect: dropshadow(gaussian, #00FF00, 12, 0.6, 0, 0);");
+                    } else {
+                        // Regular hover style
+                        row.setStyle("-fx-background-color: rgba(24, 183, 231, 0.3); -fx-text-fill: white; -fx-font-size: 14; -fx-font-family: 'Arial'; -fx-effect: dropshadow(gaussian, #18b7e7, 10, 0.5, 0, 0);");
+                    }
                 }
             });
+
             row.setOnMouseExited(e -> {
-                if (!row.isEmpty() && row.getItem().getRank() != 1) {
-                    row.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14; -fx-font-family: 'Arial';");
+                if (!row.isEmpty()) {
+                    Player player = row.getItem();
+                    int rank = player.getRank();
+                    String username = player.getUsername();
+
+                    // Reset to original style on mouse exit
+                    if (username != null && username.equals(currentPlayerUsername)) {
+                        // Current player style
+                        row.setStyle("-fx-background-color: rgba(0, 255, 0, 0.3); -fx-text-fill: white; -fx-font-size: 14; -fx-font-family: 'Arial'; -fx-effect: dropshadow(gaussian, #00FF00, 10, 0.5, 0, 0);");
+                    } else {
+                        // Default style
+                        row.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14; -fx-font-family: 'Arial';");
+                    }
                 }
             });
             return row;
@@ -139,5 +171,10 @@ public class LeaderboardUI {
 
     public Button getCloseButton() {
         return closeButton;
+    }
+
+    // No-arg constructor for backward compatibility
+    public LeaderboardUI() {
+        this(null); // Pass null as currentPlayerUsername
     }
 }

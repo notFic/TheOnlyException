@@ -3,9 +3,6 @@ package org.example.controllers;
 import com.almasb.fxgl.dsl.FXGL;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
@@ -14,48 +11,24 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.geometry.Pos;
 import org.example.core.GameApp;
-import org.example.data.LeaderboardDatabase;
 import org.example.scenes.LeaderboardUI;
+import org.example.scenes.LoginScene;
 import org.example.scenes.MainMenuScene;
-import org.example.scenes.NameInputScene;
-import org.example.model.Player;
-
-import java.util.List;
 
 public class MainMenuController {
     private boolean isLeaderboardOpen = false;
 
-    @FXML
-    private StackPane root;
-
-    @FXML
-    private MediaView backgroundMediaView;
-
-    @FXML
-    private Rectangle overlay;
-
-    @FXML
-    private VBox menuBox;
-
-    @FXML
-    private Text title;
-
-    @FXML
-    private Button startButton;
-
-    @FXML
-    private Button settingsButton;
-
-    @FXML
-    private Button leaderboardButton;
-
-    @FXML
-    private Button exitButton;
-
-    @FXML
-    private Button logoutButton;
+    @FXML private StackPane root;
+    @FXML private MediaView backgroundMediaView;
+    @FXML private Rectangle overlay;
+    @FXML private VBox menuBox;
+    @FXML private Text title;
+    @FXML private Button startButton;
+    @FXML private Button settingsButton;
+    @FXML private Button leaderboardButton;
+    @FXML private Button exitButton;
+    @FXML private Button logoutButton;
 
     private MediaPlayer mediaPlayer;
     private AudioClip menuMusic;
@@ -124,7 +97,6 @@ public class MainMenuController {
         }
     }
 
-    // Method to restart media when the scene is shown again
     public void onSceneShown() {
         System.out.println("MainMenuScene shown - restarting media");
         startMedia();
@@ -155,7 +127,9 @@ public class MainMenuController {
             return;
         }
         System.out.println("Opening leaderboard dialog...");
-        LeaderboardUI leaderboardUI = new LeaderboardUI();
+        String currentUsername = GameApp.getStoredPlayerName();
+        System.out.println("Passing currentUsername to LeaderboardUI: " + currentUsername);
+        LeaderboardUI leaderboardUI = new LeaderboardUI(currentUsername);
         isLeaderboardOpen = true;
         FXGL.getDialogService().showBox("Leaderboard", leaderboardUI.getContainer(), leaderboardUI.getCloseButton());
         leaderboardUI.getCloseButton().setOnAction(e -> {
@@ -179,8 +153,7 @@ public class MainMenuController {
         System.out.println("Logging out...");
         stopMedia();
         FXGL.getSceneService().popSubScene();
-        NameInputScene nameInputScene = (NameInputScene) FXGL.getSceneService().getCurrentScene();
-        nameInputScene.reloadLoginUI();
+        FXGL.getSceneService().pushSubScene(new LoginScene());
         GameApp gameApp = (GameApp) FXGL.getAppCast();
         gameApp.setLoggedIn(false);
     }

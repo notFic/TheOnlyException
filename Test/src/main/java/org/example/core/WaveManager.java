@@ -135,13 +135,13 @@ public class WaveManager {
      */
     public void start(Entity player) {
         this.player = player;
-        this.isActive = true;
+        var state = this.player.isActive();
         this.currentWave = 1;
         this.elapsedTimeSeconds = 0;
         
         // Set up the time tracking timer
         FXGL.getGameTimer().runAtInterval(() -> {
-            if (isActive) {
+            if (state) {
                 elapsedTimeSeconds++;
                 
                 // Check for wave transition
