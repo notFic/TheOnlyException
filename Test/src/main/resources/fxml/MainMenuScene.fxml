@@ -1,26 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
+<?import java.net.URL?>
 
-<StackPane fx:id="root" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controllers.MainMenuController">
+<?import javafx.geometry.Insets?>
+<StackPane fx:id="root" prefHeight="720.0" prefWidth="1280.0"
+           xmlns="http://javafx.com/javafx/21.0.1"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.example.controllers.MainMenuController"
+           styleClass="overlay-container">
+
+    <stylesheets>
+        <URL value="@/css/styles.css" />
+    </stylesheets>
+
     <!-- Video Background -->
     <MediaView fx:id="backgroundMediaView" fitHeight="720.0" fitWidth="1280.0" preserveRatio="true" />
 
     <!-- Semi-transparent Overlay -->
     <Rectangle fx:id="overlay" height="720.0" width="1280.0" fill="#00000080" />
 
-    <!-- Menu Box (Title and Buttons) -->
-    <VBox fx:id="menuBox" alignment="CENTER" spacing="20" style="-fx-padding: 20;">
-        <Text fx:id="title" fill="WHITE" style="-fx-font-size: 48; -fx-font-weight: bold;" text="Main Menu" />
-        <Button fx:id="startButton" onAction="#startGame" style="-fx-font-size: 24; -fx-background-color: #177bdf; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;" text="Start" />
-        <Button fx:id="settingsButton" onAction="#showSettings" style="-fx-font-size: 24; -fx-background-color: #177bdf; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;" text="Settings" />
-        <Button fx:id="leaderboardButton" onAction="#showLeaderboard" style="-fx-font-size: 24; -fx-background-color: #177bdf; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;" text="Leaderboard" />
-        <Button fx:id="exitButton" onAction="#exitGame" style="-fx-font-size: 24; -fx-background-color: #177bdf; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;" text="Exit" />
-        <Button fx:id="logoutButton" onAction="#logout" style="-fx-font-size: 24; -fx-background-color: #177bdf; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;" text="Logout" />
-    </VBox>
+    <!-- Centered Menu Pane -->
+    <Pane maxHeight="450" maxWidth="400" styleClass="login-pane">
+        <VBox alignment="CENTER" maxHeight="450.0" maxWidth="400.0" minHeight="450.0" minWidth="400.0" prefHeight="450.0" prefWidth="400.0" spacing="15" styleClass="login-box">
+            <padding>
+                <Insets bottom="25" left="35" right="35" top="25" />
+            </padding>
+
+            <Text fx:id="title" styleClass="login-title-label" text="Main Menu" />
+            <Button fx:id="startButton" maxHeight="45.0" maxWidth="330.0" minHeight="45.0" minWidth="330.0" onAction="#startGame" prefHeight="45.0" prefWidth="330.0" styleClass="login-action-button" text="Start">
+                <VBox.margin>
+                    <Insets top="20" />
+                </VBox.margin>
+            </Button>
+            <Button fx:id="settingsButton" maxHeight="45.0" maxWidth="330.0" minHeight="45.0" minWidth="330.0" onAction="#showSettings" prefHeight="45.0" prefWidth="330.0" styleClass="login-action-button" text="Settings">
+                <VBox.margin>
+                    <Insets top="10" />
+                </VBox.margin>
+            </Button>
+            <Button fx:id="leaderboardButton" maxHeight="45.0" maxWidth="330.0" minHeight="45.0" minWidth="330.0" onAction="#showLeaderboard" prefHeight="45.0" prefWidth="330.0" styleClass="login-action-button" text="Leaderboard">
+                <VBox.margin>
+                    <Insets top="10" />
+                </VBox.margin>
+            </Button>
+            <Button fx:id="exitButton" maxHeight="45.0" maxWidth="330.0" minHeight="45.0" minWidth="330.0" onAction="#exitGame" prefHeight="45.0" prefWidth="330.0" styleClass="login-action-button" text="Exit">
+                <VBox.margin>
+                    <Insets top="10" />
+                </VBox.margin>
+            </Button>
+            <Button fx:id="logoutButton" maxHeight="45.0" maxWidth="330.0" minHeight="45.0" minWidth="330.0" onAction="#logout" prefHeight="45.0" prefWidth="330.0" styleClass="login-action-button" text="Logout">
+                <VBox.margin>
+                    <Insets top="10" />
+                </VBox.margin>
+            </Button>
+        </VBox>
+    </Pane>
 </StackPane>

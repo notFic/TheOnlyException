@@ -25,7 +25,6 @@ import java.util.*;
 public class LevelUpMenu {
     private final PlayerComponent playerComponent;
 
-    // Constants for the menu design
     private static final int CARD_WIDTH = 200;
     private static final int CARD_HEIGHT = 300;
     private static final int ICON_SIZE = 100;
@@ -36,38 +35,31 @@ public class LevelUpMenu {
     }
 
     public void show() {
-        // Pause the game timers before showing the menu
         GameApp gameApp = playerComponent.getGameApp();
         if (gameApp != null) {
             gameApp.pauseGameTimers();
         }
 
-        // Create the main container
         VBox container = new VBox(15);
         container.setAlignment(Pos.CENTER);
         container.setPadding(new Insets(20));
         container.setStyle("-fx-background-color: rgba(0, 0, 0, 0.85); -fx-border-color: goldenrod; -fx-border-width: 3;");
 
-        // Create the title
         Text titleText = new Text("LEVEL UP!");
         titleText.setFont(Font.font("Verdana", FontWeight.BOLD, 36));
         titleText.setFill(Color.GOLD);
         titleText.setTextAlignment(TextAlignment.CENTER);
 
-        // Create subtitle
         Text subtitleText = new Text("Choose a weapon or powerup:");
         subtitleText.setFont(Font.font("Verdana", 18));
         subtitleText.setFill(Color.WHITE);
 
-        // Create the grid of weapon options
         HBox weaponGrid = new HBox(20);
         weaponGrid.setAlignment(Pos.CENTER);
 
-        // Get random upgrade options to display from the registry
         UpgradeRegistry registry = UpgradeRegistry.getInstance();
         List<UpgradeOption> selectedOptions = registry.getRandomUpgradeOptions(playerComponent, OPTIONS_TO_SHOW);
 
-        // Create buttons for each upgrade option
         List<Button> optionButtons = new ArrayList<>();
         for (UpgradeOption option : selectedOptions) {
             Button button = createUpgradeCard(option);
@@ -75,13 +67,10 @@ public class LevelUpMenu {
             weaponGrid.getChildren().add(button);
         }
 
-        // Add components to the container
         container.getChildren().addAll(titleText, subtitleText, weaponGrid);
 
-        // Convert list to array for the dialog
         Button[] buttons = optionButtons.toArray(new Button[0]);
 
-        // Show the dialog without pausing the engine
         FXGL.getDialogService().showBox("Level Up", container, buttons);
     }
 
@@ -91,7 +80,6 @@ public class LevelUpMenu {
         cardContent.setPadding(new Insets(15));
         cardContent.setPrefSize(CARD_WIDTH, CARD_HEIGHT);
 
-        // Create a button that wraps the card content
         Button card = new Button();
         card.setGraphic(cardContent);
         card.setStyle(
@@ -102,7 +90,6 @@ public class LevelUpMenu {
                         "-fx-background-radius: 5;"
         );
 
-        // Add hover effect
         card.setOnMouseEntered(e -> card.setStyle(
                 "-fx-background-color: rgba(80, 80, 80, 0.8); " +
                         "-fx-border-color: gold; " +
@@ -118,31 +105,22 @@ public class LevelUpMenu {
                         "-fx-background-radius: 5;"
         ));
 
-        // Add click event
         card.setOnAction(e -> {
             int currentLevel = playerComponent.getWeaponLevel(option.getId());
-
-            // Update the weapon level
             playerComponent.onWeaponSelectedNoResume(option.getId(), currentLevel + 1);
 
-            // Resume game timers with slight delay to avoid speed-up
             GameApp gameApp = playerComponent.getGameApp();
             if (gameApp != null) {
                 FXGL.runOnce(() -> {
-                    // Force an immediate UI update to reset exp bar to the correct value
                     FXGL.getWorldProperties().setValue("exp", playerComponent.getExp());
                     gameApp.updateExpBar();
-
-                    // Resume game timers
                     gameApp.resumeGameTimers();
                 }, Duration.seconds(0.2));
             }
         });
 
-        // Store the option with the button for reference
         card.setUserData(option);
 
-        // Create category badge
         HBox categoryBox = new HBox();
         categoryBox.setAlignment(Pos.CENTER);
 
@@ -151,33 +129,29 @@ public class LevelUpMenu {
         categoryText.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
         categoryText.setFill(Color.WHITE);
 
-        // Create badge background with different color for each type
         Rectangle categoryBadge = new Rectangle(80, 20);
         categoryBadge.setArcWidth(10);
         categoryBadge.setArcHeight(10);
 
         if (option.getType() == OptionType.WEAPON) {
-            categoryBadge.setFill(Color.web("#8B0000")); // Dark red for weapons
+            categoryBadge.setFill(Color.web("#8B0000"));
         } else {
-            categoryBadge.setFill(Color.web("#006400")); // Dark green for powerups
+            categoryBadge.setFill(Color.web("#006400"));
         }
 
         StackPane badge = new StackPane(categoryBadge, categoryText);
         categoryBox.getChildren().add(badge);
 
-        // Create upgrade title
         Text upgradeName = new Text(option.getName());
         upgradeName.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
         upgradeName.setFill(Color.WHITE);
 
-        // Show the next level instead of current level
         int currentLevel = playerComponent.getWeaponLevel(option.getId());
         int nextLevel = currentLevel + 1;
         Text levelText = new Text(currentLevel == 0 ? "NEW!" : "Level " + nextLevel);
         levelText.setFont(Font.font("Verdana", 14));
         levelText.setFill(currentLevel == 0 ? Color.GOLD : Color.LIGHTGREEN);
 
-        // Create a colored rectangle as icon placeholder
         Rectangle placeholder = new Rectangle(ICON_SIZE, ICON_SIZE);
         placeholder.setFill(option.getColor());
         placeholder.setArcWidth(10);
@@ -191,46 +165,36 @@ public class LevelUpMenu {
 
         StackPane iconPane = new StackPane(placeholder, initial);
 
-        // Create a wrapper with proper dimensions
         StackPane iconWrapper = new StackPane(iconPane);
         iconWrapper.setMinSize(ICON_SIZE, ICON_SIZE);
         iconWrapper.setMaxSize(ICON_SIZE, ICON_SIZE);
 
-        // Add drop shadow effect to the icon
         DropShadow shadow = new DropShadow();
         shadow.setRadius(10);
         shadow.setColor(Color.BLACK);
         iconWrapper.setEffect(shadow);
 
-        // Create upgrade description with only the next level info for Lightning Strike
         String description = option.getDescription();
         if ("lightning".equals(option.getId())) {
-            // If at max level, show maxed out message
             if (currentLevel >= 7) {
                 description = "MAXED OUT";
             } else {
-                // Show only the next level description
                 description = org.example.powerups.LightningStrikeComponent.getLevelDescription(currentLevel, true);
             }
-        }
-        // Add Poison Aura next level description
-        else if ("poison".equals(option.getId())) {
-            // If at max level, show maxed out message
+        } else if ("poison".equals(option.getId())) {
             if (currentLevel >= 7) {
                 description = "MAXED OUT";
             } else {
-                // Show only the next level description
                 description = org.example.powerups.PoisonAuraComponent.getLevelDescription(currentLevel, true);
             }
         }
-        
+
         Text descriptionText = new Text(description);
         descriptionText.setFont(Font.font("Verdana", 14));
         descriptionText.setFill(Color.LIGHTGRAY);
         descriptionText.setWrappingWidth(CARD_WIDTH - 30);
         descriptionText.setTextAlignment(TextAlignment.CENTER);
 
-        // Add all elements to the card content
         cardContent.getChildren().addAll(categoryBox, upgradeName, levelText, iconWrapper, descriptionText);
 
         return card;
@@ -244,9 +208,8 @@ public class LevelUpMenu {
                 .zIndex(1000)
                 .buildAndAttach();
 
-        // Animate the damageText node directly
         javafx.animation.TranslateTransition tt = new javafx.animation.TranslateTransition(javafx.util.Duration.seconds(1), damageText);
-        tt.setByX(-60); // move語言
+        tt.setByX(-60); // move left
         tt.setByY(-80); // move up
         tt.setInterpolator(javafx.animation.Interpolator.EASE_OUT);
 

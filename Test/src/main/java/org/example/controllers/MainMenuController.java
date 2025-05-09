@@ -3,9 +3,6 @@ package org.example.controllers;
 import com.almasb.fxgl.dsl.FXGL;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
@@ -14,77 +11,46 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.geometry.Pos;
 import org.example.core.GameApp;
-import org.example.data.LeaderboardDatabase;
 import org.example.scenes.LeaderboardUI;
+import org.example.scenes.LoginScene;
 import org.example.scenes.MainMenuScene;
-import org.example.scenes.NameInputScene;
-import org.example.model.Player;
-
-import java.util.List;
 
 public class MainMenuController {
     private boolean isLeaderboardOpen = false;
 
-    @FXML
-    private StackPane root;
-
-    @FXML
-    private MediaView backgroundMediaView;
-
-    @FXML
-    private Rectangle overlay;
-
-    @FXML
-    private VBox menuBox;
-
-    @FXML
-    private Text title;
-
-    @FXML
-    private Button startButton;
-
-    @FXML
-    private Button settingsButton;
-
-    @FXML
-    private Button leaderboardButton;
-
-    @FXML
-    private Button exitButton;
-
-    @FXML
-    private Button logoutButton;
+    @FXML private StackPane root;
+    @FXML private MediaView backgroundMediaView;
+    @FXML private Rectangle overlay;
+    @FXML private VBox menuBox;
+    @FXML private Text title;
+    @FXML private Button startButton;
+    @FXML private Button settingsButton;
+    @FXML private Button leaderboardButton;
+    @FXML private Button exitButton;
+    @FXML private Button logoutButton;
 
     private MediaPlayer mediaPlayer;
     private AudioClip menuMusic;
 
     @FXML
     private void initialize() {
-        // Add hover effects to buttons
         addHoverEffect(startButton);
         addHoverEffect(settingsButton);
         addHoverEffect(leaderboardButton);
         addHoverEffect(exitButton);
         addHoverEffect(logoutButton);
-
-        // Start the media
         startMedia();
     }
 
     private void startMedia() {
-        // Stop any existing media to prevent overlap
         stopMedia();
-
-        // Set up the video background
         try {
             System.out.println("Attempting to load video for MainMenuScene...");
             java.net.URL videoUrl = getClass().getResource("/assets/images/mainmenubg_placeholder.mp4");
             if (videoUrl == null) {
                 throw new IllegalStateException("Video file not found at /assets/images/mainmenubg_placeholder.mp4.");
             }
-
             String videoPath = videoUrl.toExternalForm();
             Media media = new Media(videoPath);
             mediaPlayer = new MediaPlayer(media);
@@ -92,14 +58,12 @@ public class MainMenuController {
             mediaPlayer.setMute(true);
             backgroundMediaView.setMediaPlayer(mediaPlayer);
             mediaPlayer.play();
-
             mediaPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
                 System.out.println("MainMenuScene MediaPlayer status: " + newValue);
                 if (newValue == MediaPlayer.Status.HALTED) {
                     System.out.println("MainMenuScene MediaPlayer error: " + mediaPlayer.getError());
                 }
             });
-
             System.out.println("MainMenuScene background video loaded and playing successfully");
         } catch (Exception e) {
             System.err.println("Error loading MainMenuScene video: " + e.getMessage());
@@ -107,7 +71,6 @@ public class MainMenuController {
             root.setStyle("-fx-background-color: black;");
         }
 
-        // Load background music
         try {
             java.net.URL musicUrl = getClass().getResource("/assets/music/music2.mp3");
             if (musicUrl == null) {
@@ -124,7 +87,6 @@ public class MainMenuController {
         }
     }
 
-    // Method to restart media when the scene is shown again
     public void onSceneShown() {
         System.out.println("MainMenuScene shown - restarting media");
         startMedia();
@@ -155,13 +117,14 @@ public class MainMenuController {
             return;
         }
         System.out.println("Opening leaderboard dialog...");
-        LeaderboardUI leaderboardUI = new LeaderboardUI();
+        String currentUsername = GameApp.getStoredPlayerName();
+        System.out.println("Passing currentUsername to LeaderboardUI: " + currentUsername);
+        LeaderboardUI leaderboardUI = new LeaderboardUI(currentUsername);
         isLeaderboardOpen = true;
         FXGL.getDialogService().showBox("Leaderboard", leaderboardUI.getContainer(), leaderboardUI.getCloseButton());
         leaderboardUI.getCloseButton().setOnAction(e -> {
             isLeaderboardOpen = false;
             System.out.println("Leaderboard dialog closed");
-            // Workaround: Refresh the scene to clear the overlay
             FXGL.getSceneService().popSubScene();
             FXGL.getSceneService().pushSubScene(new MainMenuScene());
         });
@@ -179,8 +142,7 @@ public class MainMenuController {
         System.out.println("Logging out...");
         stopMedia();
         FXGL.getSceneService().popSubScene();
-        NameInputScene nameInputScene = (NameInputScene) FXGL.getSceneService().getCurrentScene();
-        nameInputScene.reloadLoginUI();
+        FXGL.getSceneService().pushSubScene(new LoginScene());
         GameApp gameApp = (GameApp) FXGL.getAppCast();
         gameApp.setLoggedIn(false);
     }
