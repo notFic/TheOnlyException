@@ -1,0 +1,142 @@
+package org.example.upgrades;
+
+import javafx.scene.paint.Color;
+import org.example.components.PlayerComponent;
+import org.example.model.OptionType;
+import org.example.model.UpgradeOption;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
+// LIST OF AVAILABLE UPGRADES
+public class UpgradeRegistry {
+    // Singleton instance
+    private static UpgradeRegistry instance;
+
+    // List of all available upgrades
+    private final List<UpgradeOption> allUpgrades;
+
+    private UpgradeRegistry() {
+        allUpgrades = Arrays.asList(
+
+            // Weapons
+            new UpgradeOption("lightning", "Lightning Strike", "Strikes random enemies with lightning", Color.BLUE, OptionType.WEAPON),
+            new UpgradeOption("poison", "Poison Aura", "damages enemies within range", Color.GREENYELLOW, OptionType.WEAPON),
+            new UpgradeOption("fire_trail", "Fire Trail", "damages enemies standing on trail", Color.RED, OptionType.WEAPON),
+            new UpgradeOption("3", "WEAPON 4", "PLACEHOLDER DESCRIPTION", Color.LIGHTGRAY, OptionType.WEAPON),
+            new UpgradeOption("explosive_mines", "Data Wipe", "Spawns memory leak zones with a countdown that explodes", Color.ORANGE, OptionType.WEAPON),
+            new UpgradeOption("auto_heal", "System Restore", "Periodically repairs the player's system", Color.LIMEGREEN, OptionType.POWERUP),
+            //new UpgradeOption("6", "WEAPON 7", "PLACEHOLDER DESCRIPTION", Color.ORANGE, OptionType.WEAPON),
+            //new UpgradeOption("7", "WEAPON 8", "PLACEHOLDER DESCRIPTION", Color.DARKBLUE, OptionType.WEAPON),
+
+            // Powerups
+            new UpgradeOption("10", "POWERUP 1", "PLACEHOLDER DESCRIPTION", Color.YELLOW, OptionType.POWERUP),
+            new UpgradeOption("11", "POWERUP 2", "PLACEHOLDER DESCRIPTION", Color.SKYBLUE, OptionType.POWERUP),
+            new UpgradeOption("12", "POWERUP 3", "PLACEHOLDER DESCRIPTION", Color.DARKGRAY, OptionType.POWERUP),
+            new UpgradeOption("13", "POWERUP 4", "PLACEHOLDER DESCRIPTION", Color.PINK, OptionType.POWERUP)
+            //new UpgradeOption("14", "POWERUP 5", "PLACEHOLDER DESCRIPTION", Color.LIGHTPINK, OptionType.POWERUP),
+            //new UpgradeOption("15", "POWERUP 6", "PLACEHOLDER DESCRIPTION", Color.DARKVIOLET, OptionType.POWERUP),
+            //new UpgradeOption("16", "POWERUP 7", "PLACEHOLDER DESCRIPTION", Color.FIREBRICK, OptionType.POWERUP),
+            //new UpgradeOption("17", "POWERUP 8", "PLACEHOLDER DESCRIPTION", Color.GOLDENROD, OptionType.POWERUP)
+        );
+    }
+
+    // Get the singleton instance
+    public static UpgradeRegistry getInstance() {
+        if (instance == null) {
+            instance = new UpgradeRegistry();
+        }
+        return instance;
+    }
+
+    // Get all upgrades
+    public List<UpgradeOption> getAllUpgrades() {
+        return Collections.unmodifiableList(allUpgrades);
+    }
+
+    // Get upgrades of specific type
+    public List<UpgradeOption> getUpgradesByType(OptionType type) {
+        return allUpgrades.stream()
+            .filter(upgrade -> upgrade.getType() == type)
+            .collect(Collectors.toList());
+    }
+
+    // Find upgrade by ID
+    public UpgradeOption getUpgradeById(String id) {
+        return allUpgrades.stream()
+                .filter(upgrade -> upgrade.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
+    // Get random selection of upgrade options
+    public List<UpgradeOption> getRandomUpgradeOptions(PlayerComponent playerComponent, int count) {
+        List<UpgradeOption> allOptions = new ArrayList<>(allUpgrades);
+
+        // Prioritize upgrades the player already has
+        List<UpgradeOption> playerUpgrades = new ArrayList<>();
+        List<UpgradeOption> weaponOptions = new ArrayList<>();
+        List<UpgradeOption> powerupOptions = new ArrayList<>();
+
+        for (UpgradeOption option : allOptions) {
+            int upgradeLevel = playerComponent.getWeaponLevel(option.getId());
+            if (upgradeLevel > 0) {
+                playerUpgrades.add(option);
+            } else {
+                if (option.getType() == OptionType.WEAPON) {
+                    weaponOptions.add(option);
+                } else {
+                    powerupOptions.add(option);
+                }
+            }
+        }
+
+        // Shuffle all lists
+        Collections.shuffle(playerUpgrades, new Random());
+        Collections.shuffle(weaponOptions, new Random());
+        Collections.shuffle(powerupOptions, new Random());
+
+        // Create the result list, starting with at least one upgrade the player already has (if possible)
+        List<UpgradeOption> result = new ArrayList<>();
+
+        // Add one upgrade the player already has (if any)
+        if (!playerUpgrades.isEmpty()) {
+            result.add(playerUpgrades.remove(0));
+        }
+
+        // Ensure at least one weapon option
+        if (result.isEmpty() || result.stream().noneMatch(o -> o.getType() == OptionType.WEAPON)) {
+            if (!weaponOptions.isEmpty()) {
+                result.add(weaponOptions.remove(0));
+            }
+        }
+
+        // Ensure at least one powerup option
+        if (result.stream().noneMatch(o -> o.getType() == OptionType.POWERUP)) {
+            if (!powerupOptions.isEmpty()) {
+                result.add(powerupOptions.remove(0));
+            }
+        }
+
+        // Combine remaining options
+        List<UpgradeOption> remainingOptions = new ArrayList<>();
+        remainingOptions.addAll(playerUpgrades);
+        remainingOptions.addAll(weaponOptions);
+        remainingOptions.addAll(powerupOptions);
+        Collections.shuffle(remainingOptions, new Random());
+
+        // Fill the remaining slots
+        while (result.size() < count && !remainingOptions.isEmpty()) {
+            result.add(remainingOptions.remove(0));
+        }
+
+        // Shuffle the final selection
+        Collections.shuffle(result, new Random());
+
+        return result;
+    }
+}

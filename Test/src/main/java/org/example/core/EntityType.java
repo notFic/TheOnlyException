@@ -1,0 +1,5 @@
+package org.example.core;
+
+public enum EntityType {
+    PLAYER, BULLET, ENEMY, DROP, BACKGROUND, BURN_ZONE, FIRETRAIL, MINE
+}
