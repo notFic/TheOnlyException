@@ -213,6 +213,16 @@ public class LevelUpMenu {
                 description = org.example.powerups.LightningStrikeComponent.getLevelDescription(currentLevel, true);
             }
         }
+        // Add Poison Aura next level description
+        else if ("poison".equals(option.getId())) {
+            // If at max level, show maxed out message
+            if (currentLevel >= 7) {
+                description = "MAXED OUT";
+            } else {
+                // Show only the next level description
+                description = org.example.powerups.PoisonAuraComponent.getLevelDescription(currentLevel, true);
+            }
+        }
         
         Text descriptionText = new Text(description);
         descriptionText.setFont(Font.font("Verdana", 14));

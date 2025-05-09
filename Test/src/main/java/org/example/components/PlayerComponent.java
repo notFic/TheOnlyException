@@ -755,7 +755,13 @@ public class PlayerComponent extends Component {
             System.out.println("Updating Lightning Strike cooldown to level " + newLevel);
             // Reinitialize the timer to apply the new cooldown
             reinitializePowerupTimers();
-
+        }
+        // For already acquired poison aura, update it when upgrading to any level
+        else if ("poison".equals(weaponId) && newLevel > 1) {
+            System.out.println("Updating Poison Aura to level " + newLevel);
+            if (poisonaura != null) {
+                poisonaura.activatePowerUp(); // This will update the stats based on the new level
+            }
         }
     }
     
