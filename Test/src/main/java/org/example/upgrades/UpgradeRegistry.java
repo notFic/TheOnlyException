@@ -24,21 +24,19 @@ public class UpgradeRegistry {
         allUpgrades = Arrays.asList(
 
             // Weapons
-            new UpgradeOption("lightning", "Lightning Strike", "Strikes random enemies with lightning", Color.BLUE, OptionType.WEAPON),
+            new UpgradeOption("lightning", "Lightning Strike", "Strikes random enemies with lightning bolts", Color.BLUE, OptionType.WEAPON),
             new UpgradeOption("poison", "Poison Aura", "damages enemies within range", Color.GREENYELLOW, OptionType.WEAPON),
             new UpgradeOption("fire_trail", "Fire Trail", "damages enemies standing on trail", Color.RED, OptionType.WEAPON),
             new UpgradeOption("3", "WEAPON 4", "PLACEHOLDER DESCRIPTION", Color.LIGHTGRAY, OptionType.WEAPON),
             new UpgradeOption("explosive_mines", "Data Wipe", "Spawns memory leak zones with a countdown that explodes", Color.ORANGE, OptionType.WEAPON),
-            new UpgradeOption("auto_heal", "System Restore", "Periodically repairs the player's system", Color.LIMEGREEN, OptionType.POWERUP),
-            new UpgradeOption("shield", "Firewall Shield", "Absorbs damage and reduces damage taken by 10%", Color.CYAN, OptionType.POWERUP),
-            //new UpgradeOption("6", "WEAPON 7", "PLACEHOLDER DESCRIPTION", Color.ORANGE, OptionType.WEAPON),
-            //new UpgradeOption("7", "WEAPON 8", "PLACEHOLDER DESCRIPTION", Color.DARKBLUE, OptionType.WEAPON),
+            new UpgradeOption("6", "WEAPON 7", "PLACEHOLDER DESCRIPTION", Color.ORANGE, OptionType.WEAPON),
+            new UpgradeOption("7", "WEAPON 8", "PLACEHOLDER DESCRIPTION", Color.DARKBLUE, OptionType.WEAPON),
 
             // Powerups
-            new UpgradeOption("10", "POWERUP 1", "PLACEHOLDER DESCRIPTION", Color.YELLOW, OptionType.POWERUP),
-            new UpgradeOption("11", "POWERUP 2", "PLACEHOLDER DESCRIPTION", Color.SKYBLUE, OptionType.POWERUP),
-            new UpgradeOption("12", "POWERUP 3", "PLACEHOLDER DESCRIPTION", Color.DARKGRAY, OptionType.POWERUP),
-            new UpgradeOption("13", "POWERUP 4", "PLACEHOLDER DESCRIPTION", Color.PINK, OptionType.POWERUP)
+            new UpgradeOption("shield", "Firewall Shield", "Absorbs damage and reduces damage taken by 10%", Color.CYAN, OptionType.POWERUP),
+            new UpgradeOption("shield", "Firewall Shield", "Absorbs damage and reduces damage taken by 10%", Color.CYAN, OptionType.POWERUP),
+            new UpgradeOption("auto_heal", "System Restore", "Periodically repairs the player's system", Color.LIMEGREEN, OptionType.POWERUP)
+            //new UpgradeOption("13", "POWERUP 4", "PLACEHOLDER DESCRIPTION", Color.PINK, OptionType.POWERUP)
             //new UpgradeOption("14", "POWERUP 5", "PLACEHOLDER DESCRIPTION", Color.LIGHTPINK, OptionType.POWERUP),
             //new UpgradeOption("15", "POWERUP 6", "PLACEHOLDER DESCRIPTION", Color.DARKVIOLET, OptionType.POWERUP),
             //new UpgradeOption("16", "POWERUP 7", "PLACEHOLDER DESCRIPTION", Color.FIREBRICK, OptionType.POWERUP),

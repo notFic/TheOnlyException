@@ -80,6 +80,12 @@ public class PlayerComponent extends Component {
     private ExplosiveMinesComponent explosiveMines;
     private AutoHealComponent autoHeal;
     private ShieldComponent shield;
+    
+    // Store timer references to cancel them when needed
+    private com.almasb.fxgl.time.TimerAction lightningStrikeTimer;
+    private com.almasb.fxgl.time.TimerAction explosiveMinesTimer;
+    private com.almasb.fxgl.time.TimerAction autoHealTimer;
+    private com.almasb.fxgl.time.TimerAction shieldTimer;
 
     // Initialize player animations
     public PlayerComponent() {
@@ -202,20 +208,42 @@ public class PlayerComponent extends Component {
 
     // Recreate all powerup timers to prevent stacking after pauses
     public void reinitializePowerupTimers() {
-        // First clear any existing powerup timers
-        // We must recreate them instead of just activating them to avoid stacking
+        // First clear any existing powerup timers to avoid stacking effects
+        if (lightningStrikeTimer != null) {
+            lightningStrikeTimer.expire();
+            lightningStrikeTimer = null;
+        }
+        
+        if (explosiveMinesTimer != null) {
+            explosiveMinesTimer.expire();
+            explosiveMinesTimer = null;
+        }
+        
+        if (autoHealTimer != null) {
+            autoHealTimer.expire();
+            autoHealTimer = null;
+        }
+        
+        if (shieldTimer != null) {
+            shieldTimer.expire();
+            shieldTimer = null;
+        }
 
         // Create a new lightning strike timer if weapon is acquired
         if (getWeaponLevel("lightning") > 0) {
             System.out.println("Creating lightning strike timer");
 
-            // Activate lightning strike every 5 seconds
-            FXGL.getGameTimer().runAtInterval(() -> {
+            // Get the appropriate cooldown based on the current level
+            double cooldown = LightningStrikeComponent.getCooldownForLevel(getWeaponLevel("lightning"));
+            System.out.println("Setting Lightning Strike cooldown to: " + cooldown + " seconds");
+            
+            // Activate lightning strike based on the level-specific cooldown
+            lightningStrikeTimer = FXGL.getGameTimer().runAtInterval(() -> {
                 if (isAlive && getWeaponLevel("lightning") > 0 && lightningstrike != null) {
                     System.out.println("Lightning strike activated");
                     lightningstrike.activatePowerUp();
                 }
-            }, Duration.seconds(5));
+            }, Duration.seconds(cooldown));
         }
 
         // Create a new explosive mines timer if weapon is acquired
@@ -223,7 +251,7 @@ public class PlayerComponent extends Component {
             System.out.println("Creating explosive mines timer");
 
             // Activate explosive mines every 2 seconds
-            FXGL.getGameTimer().runAtInterval(() -> {
+            explosiveMinesTimer = FXGL.getGameTimer().runAtInterval(() -> {
                 if (isAlive && getWeaponLevel("explosive_mines") > 0 && explosiveMines != null) {
                     System.out.println("Explosive mines activated");
                     explosiveMines.activatePowerUp();
@@ -236,7 +264,7 @@ public class PlayerComponent extends Component {
             System.out.println("Creating auto heal timer");
 
             // Activate auto heal every 5 seconds
-            FXGL.getGameTimer().runAtInterval(() -> {
+            autoHealTimer = FXGL.getGameTimer().runAtInterval(() -> {
                 if (isAlive && getWeaponLevel("auto_heal") > 0 && autoHeal != null) {
                     System.out.println("Auto heal activated");
                     autoHeal.activatePowerUp();
@@ -249,7 +277,7 @@ public class PlayerComponent extends Component {
             System.out.println("Creating shield timer");
 
             // Activate shield
-            FXGL.getGameTimer().runAtInterval(() -> {
+            shieldTimer = FXGL.getGameTimer().runAtInterval(() -> {
                 if (isAlive && getWeaponLevel("shield") > 0 && shield != null) {
                     System.out.println("Shield activated");
                     shield.activatePowerUp();
@@ -721,6 +749,13 @@ public class PlayerComponent extends Component {
                 shield.activatePowerUp();
                 FXGL.getNotificationService().pushNotification("Acquired Firewall Shield!");
             }
+        } 
+        // For already acquired lightning strike, update the timer when reaching cooldown reduction levels
+        else if ("lightning".equals(weaponId) && (newLevel == 3 || newLevel == 6)) {
+            System.out.println("Updating Lightning Strike cooldown to level " + newLevel);
+            // Reinitialize the timer to apply the new cooldown
+            reinitializePowerupTimers();
+
         }
     }
     
