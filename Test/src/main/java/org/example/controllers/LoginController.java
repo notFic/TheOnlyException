@@ -35,6 +35,7 @@ public class LoginController {
     private void initialize() {
         initializeBackgroundVideo();
         errorLabel.setText("");
+        // Add listener to load stylesheet when scene is available
         backgroundMediaView.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 newScene.getStylesheets().add(ResourceLoader.getResource("/css/styles.css").toExternalForm());
@@ -55,12 +56,14 @@ public class LoginController {
             backgroundMediaView.setMediaPlayer(mediaPlayer);
             mediaPlayer.setMute(true);
             mediaPlayer.play();
+
             mediaPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
                 System.out.println("MediaPlayer status: " + newValue);
                 if (newValue == MediaPlayer.Status.HALTED) {
                     System.out.println("MediaPlayer error: " + mediaPlayer.getError());
                 }
             });
+
             UIAnimations.fadeIn(backgroundMediaView.getParent(), 800);
         } catch (Exception e) {
             handleMediaLoadError(e);
@@ -95,6 +98,7 @@ public class LoginController {
 
         try {
             boolean loginSuccess = DatabaseManager.validateUser(user, pass);
+
             if (loginSuccess) {
                 handleSuccessfulLogin(user);
             } else {
@@ -109,13 +113,18 @@ public class LoginController {
     private void handleSuccessfulLogin(String username) {
         FXGL.getWorldProperties().setValue("playerName", username);
         GameApp.startGameWithName(username);
+
         GameApp gameApp = (GameApp) FXGL.getAppCast();
         gameApp.setLoggedIn(true);
+
         System.out.println("Login successful for user: " + username);
+
         if (mediaPlayer != null) {
             mediaPlayer.stop();
         }
+
         gameApp.gotoNewMainMenu();
+
         if (loginSuccessCallback != null) {
             loginSuccessCallback.run();
         }

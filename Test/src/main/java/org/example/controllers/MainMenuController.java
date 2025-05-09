@@ -35,22 +35,29 @@ public class MainMenuController {
 
     @FXML
     private void initialize() {
+        // Add hover effects to buttons
         addHoverEffect(startButton);
         addHoverEffect(settingsButton);
         addHoverEffect(leaderboardButton);
         addHoverEffect(exitButton);
         addHoverEffect(logoutButton);
+
+        // Start the media
         startMedia();
     }
 
     private void startMedia() {
+        // Stop any existing media to prevent overlap
         stopMedia();
+
+        // Set up the video background
         try {
             System.out.println("Attempting to load video for MainMenuScene...");
             java.net.URL videoUrl = getClass().getResource("/assets/images/mainmenubg_placeholder.mp4");
             if (videoUrl == null) {
                 throw new IllegalStateException("Video file not found at /assets/images/mainmenubg_placeholder.mp4.");
             }
+
             String videoPath = videoUrl.toExternalForm();
             Media media = new Media(videoPath);
             mediaPlayer = new MediaPlayer(media);
@@ -58,12 +65,14 @@ public class MainMenuController {
             mediaPlayer.setMute(true);
             backgroundMediaView.setMediaPlayer(mediaPlayer);
             mediaPlayer.play();
+
             mediaPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
                 System.out.println("MainMenuScene MediaPlayer status: " + newValue);
                 if (newValue == MediaPlayer.Status.HALTED) {
                     System.out.println("MainMenuScene MediaPlayer error: " + mediaPlayer.getError());
                 }
             });
+
             System.out.println("MainMenuScene background video loaded and playing successfully");
         } catch (Exception e) {
             System.err.println("Error loading MainMenuScene video: " + e.getMessage());
@@ -71,6 +80,7 @@ public class MainMenuController {
             root.setStyle("-fx-background-color: black;");
         }
 
+        // Load background music
         try {
             java.net.URL musicUrl = getClass().getResource("/assets/music/music2.mp3");
             if (musicUrl == null) {
@@ -125,6 +135,7 @@ public class MainMenuController {
         leaderboardUI.getCloseButton().setOnAction(e -> {
             isLeaderboardOpen = false;
             System.out.println("Leaderboard dialog closed");
+            // Workaround: Refresh the scene to clear the overlay
             FXGL.getSceneService().popSubScene();
             FXGL.getSceneService().pushSubScene(new MainMenuScene());
         });
