@@ -3,12 +3,18 @@ package org.example.components;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.example.powerups.AutoHealComponent;
+import org.example.powerups.ExplosiveMinesComponent;
 import org.example.core.GameApp;
 import org.example.scenes.LevelUpMenu;
 import org.example.powerups.FireTrailComponent;
@@ -66,7 +72,8 @@ public class PlayerComponent extends Component {
     private LightningStrikeComponent lightningstrike;
     private PoisonAuraComponent poisonaura;
     private FireTrailComponent firetrail;
-
+    private ExplosiveMinesComponent explosiveMines;
+    private AutoHealComponent autoHeal;
 
     // Initialize player animations
     public PlayerComponent() {
@@ -154,16 +161,16 @@ public class PlayerComponent extends Component {
         previousPosition = entity.getPosition();
         createHealthBar();
         gameApp = entity.getObject("gameApp");
-        
+
         // Only initialize weapon levels map if it doesn't exist
         if (weaponLevels == null) {
             weaponLevels = new HashMap<>();
         }
-        
+
         // Initialize available powerups based on acquired weapons
         initializeAcquiredPowerups();
     }
-    
+
     // Initialize powerups based on acquired weapons
     private void initializeAcquiredPowerups() {
         // Initialize lightning strike if acquired
@@ -176,8 +183,13 @@ public class PlayerComponent extends Component {
         if (getWeaponLevel("fire_trail") > 0) {
             initializeFireTrail();
         }
+        if (getWeaponLevel("explosive_mines") > 0) {
+            initializeExplosiveMines();
+        }
+        if (getWeaponLevel("auto_heal") > 0) {
+            initializeAutoHeal();
+        }
     }
-
 
     // Recreate all powerup timers to prevent stacking after pauses
     public void reinitializePowerupTimers() {
@@ -197,7 +209,31 @@ public class PlayerComponent extends Component {
             }, Duration.seconds(5));
         }
 
-        // Add other powerup timers here as they are implemented
+        // Create a new explosive mines timer if weapon is acquired
+        if (getWeaponLevel("explosive_mines") > 0) {
+            System.out.println("Creating explosive mines timer");
+
+            // Activate explosive mines every 2 seconds
+            FXGL.getGameTimer().runAtInterval(() -> {
+                if (isAlive && getWeaponLevel("explosive_mines") > 0 && explosiveMines != null) {
+                    System.out.println("Explosive mines activated");
+                    explosiveMines.activatePowerUp();
+                }
+            }, Duration.seconds(2));
+        }
+
+        // Create a new auto heal timer if powerup is acquired
+        if (getWeaponLevel("auto_heal") > 0) {
+            System.out.println("Creating auto heal timer");
+
+            // Activate auto heal every 5 seconds
+            FXGL.getGameTimer().runAtInterval(() -> {
+                if (isAlive && getWeaponLevel("auto_heal") > 0 && autoHeal != null) {
+                    System.out.println("Auto heal activated");
+                    autoHeal.activatePowerUp();
+                }
+            }, Duration.seconds(5));
+        }
     }
 
     // Update player state each frame
@@ -311,18 +347,24 @@ public class PlayerComponent extends Component {
 
     // Apply damage to player
     public void damage(int dmg) {
-        if (!isAlive) return;
-        
+        if (!isAlive || (autoHeal != null && autoHeal.isInvulnerable())) return;
+
+        // Check for Safe Mode invulnerability
+        if (autoHeal != null && autoHeal.canTriggerInvulnerability() && (health - dmg) <= (maxHealth * 0.1)) {
+            autoHeal.triggerInvulnerability();
+            return;
+        }
+
         health -= dmg;
         FXGL.getWorldProperties().setValue("health", health);
-        
+
         // Check if player died
         if (health <= 0) {
             health = 0;
             isAlive = false;
             FXGL.getWorldProperties().setValue("health", health);
             System.out.println("Player dead");
-            
+
             // Stop game timers
             if (gameApp != null) {
                 gameApp.stopTimer();
@@ -356,10 +398,10 @@ public class PlayerComponent extends Component {
         expToNextLevel = 100;
         speed = 1.5;
         isAlive = true;
-        
+
         // Clear weapon levels
         weaponLevels.clear();
-        
+
         FXGL.getWorldProperties().setValue("health", health);
         FXGL.getWorldProperties().setValue("level", level);
         FXGL.getWorldProperties().setValue("exp", exp);
@@ -448,16 +490,15 @@ public class PlayerComponent extends Component {
         // Update game world properties
         FXGL.getWorldProperties().setValue("level", level);
         FXGL.getWorldProperties().setValue("health", health);
-        
+
         // Force UI update if game app is available
         if (gameApp != null) {
             gameApp.updateExpBar();
         }
 
-        
         // Show level up menu with weapon choices
         showLevelUpMenu();
-        
+
         // After menu is shown, reset exp to correct value
         exp = originalExp;
         expToNextLevel = (int) (expToNextLevel * 1.5);
@@ -465,7 +506,7 @@ public class PlayerComponent extends Component {
 
         updateHealthBar();
     }
-    
+
     // Show the level up menu
     private void showLevelUpMenu() {
         LevelUpMenu menu = new LevelUpMenu(this);
@@ -486,17 +527,17 @@ public class PlayerComponent extends Component {
     public int getExpToNextLevel() {
         return expToNextLevel;
     }
-    
+
     // Get the level of a weapon or powerup
     public int getWeaponLevel(String weaponId) {
         return weaponLevels.getOrDefault(weaponId, 0);
     }
-    
+
     // Get the reference to the game app
     public GameApp getGameApp() {
         return gameApp;
     }
-    
+
     // Handle weapon selection from level-up menu (without resuming the engine)
     public void onWeaponSelectedNoResume(String weaponId, int newLevel) {
         // Update the weapon/powerup level
@@ -520,6 +561,16 @@ public class PlayerComponent extends Component {
                 firetrail.activatePowerUp();
                 FXGL.getNotificationService().pushNotification("Acquired Fire Trail!");
             }
+            if ("explosive_mines".equals(weaponId)) {
+                initializeExplosiveMines();
+                explosiveMines.activatePowerUp();
+                FXGL.getNotificationService().pushNotification("Acquired Data Wipe!");
+            }
+            if ("auto_heal".equals(weaponId)) {
+                initializeAutoHeal();
+                autoHeal.activatePowerUp();
+                FXGL.getNotificationService().pushNotification("Acquired System Restore!");
+            }
         }
     }
     
@@ -527,7 +578,12 @@ public class PlayerComponent extends Component {
     public void onWeaponSelected(String weaponId, int newLevel) {
         // Update the weapon/powerup level using the non-resuming method
         onWeaponSelectedNoResume(weaponId, newLevel);
-        
+
+        // Resume fire trail damage after level-up menu closes
+        if (firetrail != null && getWeaponLevel("fire_trail") > 0) {
+            firetrail.resumePowerUp();
+        }
+
         // Resume the game
         if (gameApp != null) {
             gameApp.resetTimers(); // Reset timers to prevent speed-up bug
@@ -554,7 +610,6 @@ public class PlayerComponent extends Component {
         reinitializePowerupTimers();
     }
 
-
     private void initializePoisonAura(){
         if(poisonaura == null){
             poisonaura = new PoisonAuraComponent();
@@ -568,6 +623,22 @@ public class PlayerComponent extends Component {
             firetrail = new FireTrailComponent();
             entity.addComponent(firetrail);
             firetrail.activatePowerUp();
+        }
+    }
+
+    private void initializeExplosiveMines() {
+        if (explosiveMines == null) {
+            explosiveMines = new ExplosiveMinesComponent();
+            entity.addComponent(explosiveMines);
+            explosiveMines.activatePowerUp();
+        }
+    }
+
+    private void initializeAutoHeal() {
+        if (autoHeal == null) {
+            autoHeal = new AutoHealComponent();
+            entity.addComponent(autoHeal);
+            autoHeal.activatePowerUp();
         }
     }
 

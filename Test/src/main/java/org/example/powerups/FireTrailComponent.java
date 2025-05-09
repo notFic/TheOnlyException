@@ -17,25 +17,40 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 public class FireTrailComponent extends Component {
 
     private static final double TRAIL_SPAWN_DISTANCE = 20; // Distance between trail segments
-    private static final double TRAIL_LIFETIME = 3.0;
-    private static final double DAMAGE_INTERVAL = 0.5;
-    private static final double DAMAGE_AMOUNT = 5.0;
-    private static final double TRAIL_SIZE = 40;
-    private static final double BURN_DURATION = 3.0;
-    private static final double BURN_DAMAGE = 10;
+    private static final double TRAIL_LIFETIME = 3.0; // Duration each segment lasts
+    private static final double TRAIL_SIZE = 40; // Size of each trail segment
+    private static final double DIRECT_DAMAGE = 4.0; // Damage when in trail
+    private static final double DIRECT_DAMAGE_INTERVAL = 0.5; // Damage every 2 seconds
+    private static final double BURN_DURATION = 3.0; // Duration of burn effect
+    private static final double BURN_TICK_INTERVAL = 1.0; // Burn damage every 1 second
+    private static final double BURN_TICK_DAMAGE = 2.0; // Damage per burn tick (total 1.5 over 3 seconds)
 
     private boolean isActive = false;
-
+    private boolean isGamePaused = false; // Track game pause state
     private final List<Entity> trailSegments = new ArrayList<>();
-    private com.almasb.fxgl.time.TimerAction damageDealer;
+    private Point2D lastTrailSpawnPosition;
+    private double directDamageTimer = 0.0; // Timer for direct damage
+    private double burnTickTimer = 0.0; // Timer for burn damage ticks
 
-    private Map<Entity, Double> burningEnemies = new HashMap<>();
-    private Point2D lastTrailSpawnPosition; // Track the last position
+    // Tracks enemy states: inHitbox (true/false), burnTimeRemaining (seconds)
+    private final Map<Entity, EnemyState> enemyStates = new HashMap<>();
+
+    private static class EnemyState {
+        boolean inHitbox; // Is enemy currently in a trail hitbox?
+        double burnTimeRemaining; // Remaining burn duration (0 if not burning)
+
+        EnemyState(boolean inHitbox, double burnTimeRemaining) {
+            this.inHitbox = inHitbox;
+            this.burnTimeRemaining = burnTimeRemaining;
+        }
+    }
 
     @Override
     public void onAdded() {
@@ -45,41 +60,47 @@ public class FireTrailComponent extends Component {
     public void activatePowerUp() {
         if (isActive) return;
         isActive = true;
-
-        if (damageDealer != null) damageDealer.expire();
-
-        startDamagingEnemies();
-        lastTrailSpawnPosition = entity.getCenter(); // Initialize
+        lastTrailSpawnPosition = entity.getCenter();
     }
 
     public void deactivatePowerUp() {
         if (!isActive) return;
         isActive = false;
-
-        if (damageDealer != null) damageDealer.expire();
-
         clearTrail();
+        enemyStates.clear();
+    }
+
+    public void pausePowerUp() {
+        if (!isActive || isGamePaused) return;
+        isGamePaused = true;
+    }
+
+    public void resumePowerUp() {
+        if (!isActive || !isGamePaused) return;
+        isGamePaused = false;
+        lastTrailSpawnPosition = entity.getCenter();
     }
 
     @Override
     public void onUpdate(double tpf) {
-        if (!isActive) return;
+        if (!isActive || isGamePaused) return;
 
+        // Spawn trail segments
         Point2D currentPosition = entity.getCenter();
         double distanceMoved = currentPosition.distance(lastTrailSpawnPosition);
-
         if (distanceMoved >= TRAIL_SPAWN_DISTANCE) {
             spawnTrailSegment();
             lastTrailSpawnPosition = currentPosition;
         }
 
-        if (!trailSegments.isEmpty()) {
-            damageEnemiesTouchingTrail();
-        }
-    }
+        // Update timers
+        directDamageTimer += tpf;
+        burnTickTimer += tpf;
 
-    private void startDamagingEnemies() {
-        damageDealer = FXGL.getGameTimer().runAtInterval(this::damageEnemiesTouchingTrail, Duration.seconds(DAMAGE_INTERVAL));
+        // Update enemy states and apply damage
+        updateEnemyStates();
+        applyDirectDamage();
+        applyBurnDamage();
     }
 
     private void spawnTrailSegment() {
@@ -100,43 +121,97 @@ public class FireTrailComponent extends Component {
 
         trailSegments.add(trail);
 
-        FXGL.getGameTimer().runOnceAfter(() -> {
-            trail.removeFromWorld();
-            trailSegments.remove(trail);
-        }, Duration.seconds(TRAIL_LIFETIME));
+        // Use real-time timer for cleanup
+        Timer timer = new Timer(true);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (trail.isActive()) {
+                    FXGL.runOnce(() -> {
+                        trail.removeFromWorld();
+                        trailSegments.remove(trail);
+                    }, Duration.ZERO);
+                }
+            }
+        }, (long) (TRAIL_LIFETIME * 1000));
     }
 
-    private void damageEnemiesTouchingTrail() {
-        List<Entity> touchingEnemies = FXGL.getGameWorld()
+    private void updateEnemyStates() {
+        // Get all active enemies
+        List<Entity> activeEnemies = FXGL.getGameWorld()
                 .getEntitiesByType(EntityType.ENEMY)
                 .stream()
-                .filter(e -> e.isActive() &&
-                        trailSegments.stream().anyMatch(t ->
-                                e.getBoundingBoxComponent().isCollidingWith(t.getBoundingBoxComponent())))
+                .filter(Entity::isActive)
                 .collect(Collectors.toList());
 
-        touchingEnemies.forEach(enemy -> {
-            enemy.getComponentOptional(EnemyComponent.class)
-                    .ifPresent(ec -> ec.damage(DAMAGE_AMOUNT, enemy.getCenter()));
-            burningEnemies.put(enemy, BURN_DURATION);
-        });
+        // Update hitbox status for each enemy
+        for (Entity enemy : activeEnemies) {
+            boolean inHitbox = trailSegments.stream()
+                    .anyMatch(t -> t.isActive() &&
+                            enemy.getBoundingBoxComponent().isCollidingWith(t.getBoundingBoxComponent()));
 
-        burningEnemies.entrySet().removeIf(entry -> {
+            EnemyState state = enemyStates.computeIfAbsent(enemy, k -> new EnemyState(false, 0.0));
+
+            if (inHitbox) {
+                state.inHitbox = true;
+                // Reset burn timer while in hitbox
+                state.burnTimeRemaining = 0.0;
+            } else {
+                // Enemy is not in hitbox
+                if (state.inHitbox) {
+                    // Enemy just exited hitbox, start burn effect
+                    state.burnTimeRemaining = BURN_DURATION;
+                    System.out.println("FireTrail: Enemy exited hitbox, starting burn effect for " + BURN_DURATION + " seconds");
+                }
+                state.inHitbox = false;
+            }
+        }
+
+        // Remove inactive enemies from tracking
+        enemyStates.entrySet().removeIf(entry -> !entry.getKey().isActive());
+    }
+
+    private void applyDirectDamage() {
+        if (directDamageTimer < DIRECT_DAMAGE_INTERVAL) return;
+
+        directDamageTimer = 0.0; // Reset timer
+
+        for (Map.Entry<Entity, EnemyState> entry : enemyStates.entrySet()) {
             Entity enemy = entry.getKey();
-            double remaining = entry.getValue() - DAMAGE_INTERVAL;
+            EnemyState state = entry.getValue();
 
-            if (remaining <= 0 || !enemy.isActive()) {
-                return true;
-            }
-
-            if (!touchingEnemies.contains(enemy)) {
+            if (state.inHitbox) {
                 enemy.getComponentOptional(EnemyComponent.class)
-                        .ifPresent(ec -> ec.damage(BURN_DAMAGE, enemy.getCenter()));
+                        .ifPresent(ec -> {
+                            ec.damage(DIRECT_DAMAGE, enemy.getCenter());
+                            System.out.println("FireTrail: Dealt " + DIRECT_DAMAGE + " direct damage to enemy");
+                        });
             }
+        }
+    }
 
-            burningEnemies.put(enemy, remaining);
-            return false;
-        });
+    private void applyBurnDamage() {
+        if (burnTickTimer < BURN_TICK_INTERVAL) return;
+
+        burnTickTimer = 0.0; // Reset timer
+
+        for (Map.Entry<Entity, EnemyState> entry : enemyStates.entrySet()) {
+            Entity enemy = entry.getKey();
+            EnemyState state = entry.getValue();
+
+            if (state.burnTimeRemaining > 0 && !state.inHitbox) {
+                enemy.getComponentOptional(EnemyComponent.class)
+                        .ifPresent(ec -> {
+                            ec.damage(BURN_TICK_DAMAGE, enemy.getCenter());
+                            System.out.println("FireTrail: Dealt " + BURN_TICK_DAMAGE + " burn damage to enemy (remaining burn time: " + state.burnTimeRemaining + ")");
+                        });
+                state.burnTimeRemaining -= BURN_TICK_INTERVAL;
+                if (state.burnTimeRemaining <= 0) {
+                    state.burnTimeRemaining = 0;
+                    System.out.println("FireTrail: Burn effect ended for enemy");
+                }
+            }
+        }
     }
 
     private void clearTrail() {

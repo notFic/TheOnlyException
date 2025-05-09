@@ -6,6 +6,9 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
+import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.physics.BoundingShape;
+import com.almasb.fxgl.physics.HitBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.example.components.BulletComponent;
@@ -202,6 +205,19 @@ public class GameEntityFactor implements EntityFactory {
                 .viewWithBBox(new Rectangle(15, 15, Color.GOLD))
                 .with(new DropComponent())
                 .collidable()
+                .build();
+    }
+
+    @Spawns("mine")
+    public Entity newMine(SpawnData data) {
+        var hitbox = new Rectangle(20, 20, Color.DARKORANGE);
+        hitbox.setStroke(Color.ORANGE);
+        hitbox.setStrokeWidth(1.5);
+        return FXGL.entityBuilder(data)
+                .type(EntityType.MINE)
+                .view(hitbox)
+                .bbox(new HitBox(BoundingShape.circle(10)))
+                .with(new CollidableComponent(true))
                 .build();
     }
 }

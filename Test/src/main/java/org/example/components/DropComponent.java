@@ -11,7 +11,7 @@ import org.example.core.EntityType;
 
 public class DropComponent extends Component {
 
-    private final Color[] YELLOW_SHADES = { // shades of yellow that gives the entity a shining/pulsing effect
+    private final Color[] YELLOW_SHADES = {
             Color.GOLD,
             Color.YELLOW,
             Color.LIGHTYELLOW,
@@ -19,12 +19,12 @@ public class DropComponent extends Component {
             Color.GOLDENROD
     };
 
-    private int currentColorIndex = 0; // for the pulse animation
+    private int currentColorIndex = 0;
     private Rectangle dropVisual;
     private Entity player;
-    private final double MAGNET_RANGE = 150.0; // para ni for when na mag start ug follow ang drop
-    private final double MOVE_SPEED = 2.5; // attraction speed
-    private final int EXP_VALUE = 50; // EXP awarded when collected
+    private final double MAGNET_RANGE = 150.0;
+    private final double MOVE_SPEED = 2.5;
+    private final int EXP_VALUE = 50;
 
     @Override
     public void onAdded() {
@@ -36,20 +36,19 @@ public class DropComponent extends Component {
         if (entity.getViewComponent().getChildren().get(0) instanceof Rectangle) {
             dropVisual = (Rectangle) entity.getViewComponent().getChildren().get(0);
 
-            // ang pulsing/"shining" animation
             FXGL.getGameTimer().runAtInterval(() -> {
                 if (entity != null && entity.isActive()) {
                     currentColorIndex = (currentColorIndex + 1) % YELLOW_SHADES.length;
                     dropVisual.setFill(YELLOW_SHADES[currentColorIndex]);
                 }
-            }, Duration.seconds(0.2)); // animation change
+            }, Duration.seconds(0.2));
         }
 
         FXGL.getGameTimer().runOnceAfter(() -> {
             if (entity != null && entity.isActive()) {
                 entity.removeFromWorld();
             }
-        }, Duration.seconds(20)); // mu disappear ang drop in 20 seconds
+        }, Duration.seconds(20));
     }
 
     @Override
@@ -58,27 +57,18 @@ public class DropComponent extends Component {
             return;
         }
 
-        // if mu collide ang duha ka hitboxes then ma disappear na ang entity
         if (entity.isColliding(player)) {
             PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
-            playerComponent.addExp(EXP_VALUE); // Award EXP to player
-            
-            // Update EXP bar UI immediately
-            if (playerComponent.getGameApp() != null) {
-                playerComponent.getGameApp().updateExpBar();
-            }
-            
+            playerComponent.addExp(EXP_VALUE);
             entity.removeFromWorld();
             return;
         }
 
-        // movement sa attraction
         Point2D playerCenter = player.getCenter();
         Point2D dropCenter = entity.getCenter();
 
         if (playerCenter != null && dropCenter != null &&
                 dropCenter.distance(playerCenter) <= MAGNET_RANGE) {
-
             Point2D direction = playerCenter.subtract(dropCenter).normalize();
             entity.translate(direction.multiply(MOVE_SPEED * tpf * 60));
         }
