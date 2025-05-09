@@ -2,6 +2,7 @@ package org.example.core;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
+import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
@@ -9,8 +10,14 @@ import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
+import org.example.components.LaserComponent;
+import org.example.components.SwordComponent;
+import org.example.components.VoltChainComponent;
 import org.example.components.BulletComponent;
 import org.example.components.DropComponent;
 import org.example.components.EnemyComponent;
@@ -292,6 +299,75 @@ public class GameEntityFactor implements EntityFactory {
                 .view(hitbox)
                 .bbox(new HitBox(BoundingShape.circle(10)))
                 .with(new CollidableComponent(true))
+                .build();
+    }
+
+    @Spawns("laser")
+    public Entity newLaser(SpawnData data) {
+        Point2D direction = data.get("direction");
+        double angle = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
+
+        return entityBuilder()
+                .type(EntityType.LASER)
+                .from(data)
+                .viewWithBBox(new Rectangle(10, 100, Color.LIGHTBLUE))
+                .rotate(angle - 90) // Rotate the laser so the tip faces the mouse
+                .with(new LaserComponent())
+                .with(new OffscreenCleanComponent())
+                .collidable()
+                .build();
+    }
+
+    @Spawns("slash")
+    public Entity newSword(SpawnData data) {
+        Point2D dir = data.get("direction");
+        Point2D playerCenter = data.get("playerCenter");
+        double radius = 50;
+        double offsetDistance = radius * 0.5;
+
+        Point2D offsetVector = dir.multiply(offsetDistance);
+        Point2D circleCenter = playerCenter.add(offsetVector);
+
+        Circle circle = new Circle();
+        circle.setCenterX(radius); // Center the circle in its entity
+        circle.setCenterY(radius);
+        circle.setRadius(radius);
+        circle.setFill(Color.YELLOW);
+        circle.setStroke(Color.BLACK);
+
+        Point2D entityPos = circleCenter.subtract(radius, radius);
+
+        Entity slash = entityBuilder()
+                .type(EntityType.SLASH)
+                .from(data)
+                .viewWithBBox(circle)
+                .with(new SwordComponent(dir))
+                .collidable()
+                .at(entityPos)
+                .build();
+
+        double angleToMouse = Math.toDegrees(Math.atan2(dir.getY(), dir.getX()));
+        slash.setRotation(angleToMouse);
+
+        getGameTimer().runOnceAfter(() -> {
+            slash.removeFromWorld();
+        }, Duration.millis(100));
+
+        return slash;
+    }
+
+    @Spawns("voltChain")
+    public Entity newVoltChain(SpawnData data) {
+        Point2D direction = data.get("direction");
+        int chainCount = data.get("chainCount");
+
+        return FXGL.entityBuilder(data)
+                .type(EntityType.VOLT_CHAIN)
+                .bbox(new HitBox(BoundingShape.box(10, 10)))
+                .viewWithBBox(new Rectangle(10, 10, Color.YELLOW))
+                .with(new ProjectileComponent(direction, 1000)) // <---- Here change speed
+                .with(new VoltChainComponent(chainCount))
+                .collidable()
                 .build();
     }
 }
