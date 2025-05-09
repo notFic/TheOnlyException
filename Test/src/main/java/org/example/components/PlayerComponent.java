@@ -2,6 +2,7 @@ package org.example.components;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.texture.AnimatedTexture;
@@ -13,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.example.core.EntityType;
 import org.example.powerups.AutoHealComponent;
 import org.example.powerups.ExplosiveMinesComponent;
 import org.example.core.GameApp;
@@ -24,6 +26,8 @@ import org.example.powerups.PoisonAuraComponent;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 
 /*                         !!    REGARDING POWER-UP IMPLEMENTATION    !!
     note for future kurt: ang pag activate sa power-ups kay ma triggered within the onAdded sa dinhi nga file,
@@ -343,6 +347,59 @@ public class PlayerComponent extends Component {
         double newX = vector.getX() * cos - vector.getY() * sin;
         double newY = vector.getX() * sin + vector.getY() * cos;
         return new Point2D(newX, newY);
+    }
+
+    // Slash sword in the direction of the mouse
+    public void swordSlash() {
+        if (!isAlive) return;
+
+        Point2D mousePos = getInput().getMousePositionWorld();
+        Point2D playerCenter = entity.getCenter();
+        Point2D direction = mousePos.subtract(playerCenter).normalize();
+
+        // pass dta
+        SpawnData data = new SpawnData()
+                .put("direction", direction)
+                .put("playerCenter", playerCenter);
+
+        Entity sword = FXGL.spawn("slash", data);
+    }
+
+    // Shoot lasers
+    public void shootLaser() {
+        if (!isAlive) return;
+
+        Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
+        double viewportX = FXGL.getGameScene().getViewport().getX();
+        double viewportY = FXGL.getGameScene().getViewport().getY();
+        Point2D mouseWorldPos = new Point2D(
+                mouseScreenPos.getX() + viewportX,
+                mouseScreenPos.getY() + viewportY - 45 // shift upward by 20 pixels
+        );
+        Point2D laserSpawnPoint = new Point2D(entity.getX() - 10, entity.getY() - 40);
+        Point2D direction = mouseWorldPos.subtract(laserSpawnPoint).normalize();
+        spawnLaserWithAngle(laserSpawnPoint, direction, 0);
+    }
+
+    // Spawn a laser with the given direction
+    private void spawnLaserWithAngle(Point2D spawnPoint, Point2D direction, double angleDegrees) {
+        Point2D rotatedDirection = rotate(direction, angleDegrees);
+        SpawnData spawnData = new SpawnData(spawnPoint.getX(), spawnPoint.getY())
+                .put("direction", rotatedDirection);
+        Entity laser = FXGL.spawn("laser", spawnData);
+
+        laser.getComponent(LaserComponent.class).setDirection(rotatedDirection);
+    }
+
+    // Spawn volt chain
+    public void shootVoltChain() {
+        Point2D mousePosition = FXGL.getInput().getMousePositionWorld();
+        Point2D playerCenter = FXGL.getGameWorld().getSingleton(EntityType.PLAYER).getCenter();
+
+        Point2D direction = mousePosition.subtract(playerCenter).normalize();
+
+        FXGL.spawn("voltChain", new SpawnData(playerCenter)
+                .put("direction", direction).put("chainCount", 10)); // <--- Change here amount of chaining/bounces
     }
 
     // Apply damage to player
