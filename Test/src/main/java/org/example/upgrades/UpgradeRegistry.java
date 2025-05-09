@@ -1,9 +1,11 @@
 package org.example.upgrades;
 
+import com.almasb.fxgl.dsl.FXGL;
 import javafx.scene.paint.Color;
 import org.example.components.PlayerComponent;
 import org.example.model.OptionType;
 import org.example.model.UpgradeOption;
+import org.example.powerups.LightningStrikeComponent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +26,7 @@ public class UpgradeRegistry {
         allUpgrades = Arrays.asList(
 
             // Weapons
-            new UpgradeOption("lightning", "Lightning Strike", "Strikes random enemies with lightning", Color.BLUE, OptionType.WEAPON),
+            new UpgradeOption("lightning", "Lightning Strike", "Strikes random enemies with lightning from the sky", Color.BLUE, OptionType.WEAPON),
             new UpgradeOption("poison", "Poison Aura", "damages enemies within range", Color.GREENYELLOW, OptionType.WEAPON),
             new UpgradeOption("fire_trail", "Fire Trail", "damages enemies standing on trail", Color.RED, OptionType.WEAPON),
             new UpgradeOption("3", "WEAPON 4", "PLACEHOLDER DESCRIPTION", Color.LIGHTGRAY, OptionType.WEAPON),
@@ -68,10 +70,22 @@ public class UpgradeRegistry {
 
     // Find upgrade by ID
     public UpgradeOption getUpgradeById(String id) {
-        return allUpgrades.stream()
+        UpgradeOption option = allUpgrades.stream()
                 .filter(upgrade -> upgrade.getId().equals(id))
                 .findFirst()
                 .orElse(null);
+        
+        // Update Lightning Strike description dynamically based on current level
+        if (option != null && "lightning".equals(id)) {
+            PlayerComponent player = FXGL.getWorldProperties().getObject("player");
+            if (player != null) {
+                int currentLevel = player.getWeaponLevel("lightning");
+                String nextLevelDescription = LightningStrikeComponent.getNextLevelDescription(currentLevel);
+                option.setDescription(nextLevelDescription);
+            }
+        }
+        
+        return option;
     }
 
     // Get random selection of upgrade options
@@ -85,9 +99,16 @@ public class UpgradeRegistry {
 
         for (UpgradeOption option : allOptions) {
             int upgradeLevel = playerComponent.getWeaponLevel(option.getId());
-            if (upgradeLevel > 0) {
+            
+            // For Lightning Strike, update description to show next level benefits
+            if ("lightning".equals(option.getId())) {
+                String nextLevelDescription = LightningStrikeComponent.getNextLevelDescription(upgradeLevel);
+                option.setDescription(nextLevelDescription);
+            }
+            
+            if (upgradeLevel > 0 && upgradeLevel < 7) {  // Check if weapon is upgradable (max level for lightning is 7)
                 playerUpgrades.add(option);
-            } else {
+            } else if (upgradeLevel == 0) {  // Only add new weapons if not acquired yet
                 if (option.getType() == OptionType.WEAPON) {
                     weaponOptions.add(option);
                 } else {

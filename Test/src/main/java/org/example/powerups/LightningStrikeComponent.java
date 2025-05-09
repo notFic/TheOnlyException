@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
 import org.example.components.EnemyComponent;
+import org.example.components.PlayerComponent;
 import org.example.core.EntityType;
 
 import java.util.List;
@@ -24,6 +25,10 @@ public class LightningStrikeComponent extends Component {
 
     // ACHIEVED ^^
 
+    // Lightning strike level attributes
+    private int enemiesToStrike = 3;  // Default for level 1
+    private int damage = 30;         // Default for level 1
+
     public void activatePowerUp() {
         // Get all active enemies on screen
         List<Entity> enemies = FXGL.getGameWorld().getEntitiesByType(EntityType.ENEMY)
@@ -31,20 +36,87 @@ public class LightningStrikeComponent extends Component {
                 .filter(Entity::isActive)
                 .collect(Collectors.toList());
 
-        // Damage 3 random enemies (or all if there are less than 3)
-        int enemiesToDamage = Math.min(3, enemies.size());
+        // Damage random enemies (or all if there are less than the allowed amount)
+        int enemiesToDamage = Math.min(enemiesToStrike, enemies.size());
         for (int i = 0; i < enemiesToDamage; i++) {
             int randomIndex = (int) (Math.random() * enemies.size());
             Entity enemy = enemies.get(randomIndex);
             EnemyComponent enemyComponent = enemy.getComponent(EnemyComponent.class);
 
             showLightningStrike(enemy.getCenter());
-            enemyComponent.damage(50, enemy.getCenter());
+            enemyComponent.damage(damage, enemy.getCenter());
 
             // Remove from list to avoid damaging same enemy twice
             enemies.remove(randomIndex);
         }
+    }
 
+    // Update the component based on player's lightning level
+    public void updateForLevel(int level) {
+        switch (level) {
+            case 1:
+                // Level 1: Strike 3 random enemies, 30 damage
+                enemiesToStrike = 3;
+                damage = 30;
+                break;
+            case 2:
+                // Level 2: Increased damage by 50%
+                enemiesToStrike = 3;
+                damage = 45;  // 30 + 50%
+                break;
+            case 3:
+                // Level 3: Same as level 2 but cooldown decreased in PlayerComponent
+                enemiesToStrike = 3;
+                damage = 45;
+                break;
+            case 4:
+                // Level 4: Strike 5 enemies
+                enemiesToStrike = 5;
+                damage = 45;
+                break;
+            case 5:
+                // Level 5: Increased damage by another 50%
+                enemiesToStrike = 5;
+                damage = 68;  // 45 + 50% (rounded up)
+                break;
+            case 6:
+                // Level 6: Same as level 5 but cooldown decreased in PlayerComponent
+                enemiesToStrike = 5;
+                damage = 68;
+                break;
+            case 7:
+                // Level 7: Strike 8 enemies
+                enemiesToStrike = 8;
+                damage = 68;
+                break;
+            default:
+                // Should not happen, but default to level 1
+                enemiesToStrike = 3;
+                damage = 30;
+                break;
+        }
+    }
+
+    // Gets upgrade description for next level
+    public static String getNextLevelDescription(int currentLevel) {
+        switch (currentLevel) {
+            case 0:
+                return "Level 1: Strike 3 random enemies every 5 secs (30 dmg)";
+            case 1:
+                return "Level 2: Increase damage by 50%";
+            case 2:
+                return "Level 3: Decrease cooldown to 3 secs";
+            case 3:
+                return "Level 4: Strike 5 enemies";
+            case 4:
+                return "Level 5: Increase damage by 50%";
+            case 5:
+                return "Level 6: Decrease cooldown to 1.5 secs";
+            case 6:
+                return "Level 7 (MAX): Strike 8 enemies";
+            default:
+                return "MAXIMUM LEVEL";
+        }
     }
 
     private void showLightningStrike(Point2D position) {
@@ -71,7 +143,6 @@ public class LightningStrikeComponent extends Component {
 
         FXGL.getGameTimer().runOnceAfter(lightning::removeFromWorld, Duration.seconds(0.5));
     }
-
 
     void cameraShake(){
         Node root = FXGL.getGameScene().getRoot();

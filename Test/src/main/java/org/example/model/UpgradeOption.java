@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 public class UpgradeOption {
     private final String id;
     private final String name;
-    private final String description;
+    private String description;  // Changed from final to allow updating
     private final Color color;
     private final OptionType type;
 
@@ -27,6 +27,11 @@ public class UpgradeOption {
 
     public String getDescription() {
         return description;
+    }
+    
+    // Add a setter for description
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Color getColor() {

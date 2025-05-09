@@ -208,14 +208,25 @@ public class PlayerComponent extends Component {
         // Create a new lightning strike timer if weapon is acquired
         if (getWeaponLevel("lightning") > 0) {
             System.out.println("Creating lightning strike timer");
-
-            // Activate lightning strike every 5 seconds
+            
+            // Get the current level and determine cooldown
+            int lightningLevel = getWeaponLevel("lightning");
+            double cooldown = 5.0; // default for level 1
+            
+            // Adjust cooldown based on level
+            if (lightningLevel >= 6) {
+                cooldown = 1.5; // Level 6-7: 1.5 seconds
+            } else if (lightningLevel >= 3) {
+                cooldown = 3.0; // Level 3-5: 3 seconds
+            }
+            
+            // Activate lightning strike at the appropriate interval
             FXGL.getGameTimer().runAtInterval(() -> {
                 if (isAlive && getWeaponLevel("lightning") > 0 && lightningstrike != null) {
                     System.out.println("Lightning strike activated");
                     lightningstrike.activatePowerUp();
                 }
-            }, Duration.seconds(5));
+            }, Duration.seconds(cooldown));
         }
 
         // Create a new explosive mines timer if weapon is acquired
@@ -722,6 +733,43 @@ public class PlayerComponent extends Component {
                 FXGL.getNotificationService().pushNotification("Acquired Firewall Shield!");
             }
         }
+        // Handle upgrade for existing powerups
+        else if (newLevel > 1) {
+            // Update Lightning Strike for leveling up
+            if ("lightning".equals(weaponId) && lightningstrike != null) {
+                // Update the Lightning Strike component with new level properties
+                lightningstrike.updateForLevel(newLevel);
+                
+                // Reinitialize timers to apply new cooldown
+                reinitializePowerupTimers();
+                
+                // Show notification of the upgrade
+                String notification = "";
+                switch (newLevel) {
+                    case 2:
+                        notification = "Lightning Strike: Damage increased by 50%!";
+                        break;
+                    case 3:
+                        notification = "Lightning Strike: Cooldown reduced to 3 seconds!";
+                        break;
+                    case 4:
+                        notification = "Lightning Strike: Now strikes 5 enemies!";
+                        break;
+                    case 5:
+                        notification = "Lightning Strike: Damage increased by 50%!";
+                        break;
+                    case 6:
+                        notification = "Lightning Strike: Cooldown reduced to 1.5 seconds!";
+                        break;
+                    case 7:
+                        notification = "Lightning Strike: Now strikes 8 enemies! (MAX LEVEL)";
+                        break;
+                    default:
+                        notification = "Lightning Strike upgraded!";
+                }
+                FXGL.getNotificationService().pushNotification(notification);
+            }
+        }
     }
     
     // Handle weapon selection from level-up menu
@@ -755,6 +803,10 @@ public class PlayerComponent extends Component {
         // Always create a new component to avoid stale references
         lightningstrike = new LightningStrikeComponent();
         entity.addComponent(lightningstrike);
+        
+        // Update component based on current level
+        int level = getWeaponLevel("lightning");
+        lightningstrike.updateForLevel(level);
 
         // Always recreate the timer to avoid stacking
         reinitializePowerupTimers();

@@ -202,7 +202,12 @@ public class LevelUpMenu {
         iconWrapper.setEffect(shadow);
 
         // Create upgrade description
-        Text descriptionText = new Text(option.getDescription());
+        String description = option.getDescription();
+        
+        // We no longer need special handling for Lightning Strike here
+        // as the description is now updated in the UpgradeRegistry
+        
+        Text descriptionText = new Text(description);
         descriptionText.setFont(Font.font("Verdana", 14));
         descriptionText.setFill(Color.LIGHTGRAY);
         descriptionText.setWrappingWidth(CARD_WIDTH - 30);
