@@ -30,6 +30,7 @@ public class UpgradeRegistry {
             new UpgradeOption("3", "WEAPON 4", "PLACEHOLDER DESCRIPTION", Color.LIGHTGRAY, OptionType.WEAPON),
             new UpgradeOption("explosive_mines", "Data Wipe", "Spawns memory leak zones with a countdown that explodes", Color.ORANGE, OptionType.WEAPON),
             new UpgradeOption("auto_heal", "System Restore", "Periodically repairs the player's system", Color.LIMEGREEN, OptionType.POWERUP),
+            new UpgradeOption("shield", "Firewall Shield", "Absorbs damage and reduces damage taken by 10%", Color.CYAN, OptionType.POWERUP),
             //new UpgradeOption("6", "WEAPON 7", "PLACEHOLDER DESCRIPTION", Color.ORANGE, OptionType.WEAPON),
             //new UpgradeOption("7", "WEAPON 8", "PLACEHOLDER DESCRIPTION", Color.DARKBLUE, OptionType.WEAPON),
 

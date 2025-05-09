@@ -22,6 +22,7 @@ import org.example.scenes.LevelUpMenu;
 import org.example.powerups.FireTrailComponent;
 import org.example.powerups.LightningStrikeComponent;
 import org.example.powerups.PoisonAuraComponent;
+import org.example.powerups.ShieldComponent;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -78,6 +79,7 @@ public class PlayerComponent extends Component {
     private FireTrailComponent firetrail;
     private ExplosiveMinesComponent explosiveMines;
     private AutoHealComponent autoHeal;
+    private ShieldComponent shield;
 
     // Initialize player animations
     public PlayerComponent() {
@@ -193,6 +195,9 @@ public class PlayerComponent extends Component {
         if (getWeaponLevel("auto_heal") > 0) {
             initializeAutoHeal();
         }
+        if (getWeaponLevel("shield") > 0) {
+            initializeShield();
+        }
     }
 
     // Recreate all powerup timers to prevent stacking after pauses
@@ -237,6 +242,19 @@ public class PlayerComponent extends Component {
                     autoHeal.activatePowerUp();
                 }
             }, Duration.seconds(5));
+        }
+
+        // Create a new shield timer if powerup is acquired
+        if (getWeaponLevel("shield") > 0) {
+            System.out.println("Creating shield timer");
+
+            // Activate shield
+            FXGL.getGameTimer().runAtInterval(() -> {
+                if (isAlive && getWeaponLevel("shield") > 0 && shield != null) {
+                    System.out.println("Shield activated");
+                    shield.activatePowerUp();
+                }
+            }, Duration.seconds(15));
         }
     }
 
@@ -410,6 +428,15 @@ public class PlayerComponent extends Component {
         if (autoHeal != null && autoHeal.canTriggerInvulnerability() && (health - dmg) <= (maxHealth * 0.1)) {
             autoHeal.triggerInvulnerability();
             return;
+        }
+
+        // Apply shield damage absorption if shield is active
+        if (shield != null) {
+            dmg = shield.absorbDamage(dmg);
+            if (dmg <= 0) {
+                // Shield absorbed all damage
+                return;
+            }
         }
 
         health -= dmg;
@@ -689,6 +716,11 @@ public class PlayerComponent extends Component {
                 autoHeal.activatePowerUp();
                 FXGL.getNotificationService().pushNotification("Acquired System Restore!");
             }
+            if ("shield".equals(weaponId)) {
+                initializeShield();
+                shield.activatePowerUp();
+                FXGL.getNotificationService().pushNotification("Acquired Firewall Shield!");
+            }
         }
     }
     
@@ -757,6 +789,14 @@ public class PlayerComponent extends Component {
             autoHeal = new AutoHealComponent();
             entity.addComponent(autoHeal);
             autoHeal.activatePowerUp();
+        }
+    }
+
+    private void initializeShield() {
+        if (shield == null) {
+            shield = new ShieldComponent();
+            entity.addComponent(shield);
+            shield.activatePowerUp();
         }
     }
 
