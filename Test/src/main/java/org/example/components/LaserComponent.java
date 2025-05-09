@@ -1,4 +1,4 @@
-package org.example;
+package org.example.components;
 
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
