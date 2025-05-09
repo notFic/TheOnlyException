@@ -374,50 +374,12 @@ public class GameApp extends GameApplication {
             System.out.println("Game music already loaded, skipping replay");
         }
 
-        // Start survival timer
-        isTimerRunning = true;
-        FXGL.getGameTimer().runAtInterval(() -> {
-            if (isTimerRunning) {
-                int currentTime = getWorldProperties().getInt("survivalTime");
-                getWorldProperties().setValue("survivalTime", currentTime + 1);
-            }
-        }, Duration.seconds(1));
-
-        if(userType.equals("Gun")){
-            FXGL.getGameTimer().runAtInterval(() -> {
-                if (isTimerRunning) {
-                    player.getComponent(PlayerComponent.class).shootTripleBurst();
-                }
-            }, Duration.seconds(0.2));
-        } else if(userType.equals("Sword")){
-            FXGL.getGameTimer().runAtInterval(() -> {
-                if (isTimerRunning) {
-                    player.getComponent(PlayerComponent.class).swordSlash();
-                }
-            }, Duration.seconds(0.5));
-        } else if(userType.equals("Laser")){
-            FXGL.runOnce(() -> {
-                player.getComponent(PlayerComponent.class).shootLaser();
-            }, Duration.seconds(0.2));
-
-            FXGL.getGameTimer().runAtInterval(() -> {
-                if (isTimerRunning) {
-                    player.getComponent(PlayerComponent.class).shootLaser();
-                }
-            }, Duration.seconds(.5));
-        } else {
-            FXGL.getGameTimer().runAtInterval(() -> {
-                if (isTimerRunning) {
-                    player.getComponent(PlayerComponent.class).shootVoltChain();
-                }
-            }, Duration.seconds(.5));
-        }
-
         // Initialize the wave manager and start it
         waveManager = WaveManager.getInstance();
         waveManager.start(player);
         System.out.println("Wave manager initialized and started");
 
+        // Initialize timers
         resetTimers();
     }
 
@@ -583,6 +545,9 @@ public class GameApp extends GameApplication {
 
     // Clear and recreate all game timers to prevent speed-up bug
     public void resetTimers() {
+        // First clear all existing timers to prevent duplication
+        FXGL.getGameTimer().clear();
+        
         // Recreate time and score timers
         FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) {
