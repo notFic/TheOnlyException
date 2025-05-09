@@ -58,6 +58,7 @@ public class WaveManager {
     public static WaveManager getInstance() {
         if (instance == null) {
             instance = new WaveManager();
+            System.out.println("WaveManager singleton initialized");
         }
         return instance;
     }
@@ -138,24 +139,28 @@ public class WaveManager {
         var state = this.player.isActive();
         this.currentWave = 1;
         this.elapsedTimeSeconds = 0;
-        
+        this.isActive = true; // Ensure isActive is set
+        FXGL.getWorldProperties().setValue("wave", currentWave);
+        System.out.println("WaveManager started. Player active: " + state + ", Initial wave: " + currentWave);
+
         // Set up the time tracking timer
         FXGL.getGameTimer().runAtInterval(() -> {
             if (state) {
                 elapsedTimeSeconds++;
-                
+                System.out.println("WaveManager time tick: " + elapsedTimeSeconds + "s, Current wave: " + currentWave);
+
                 // Check for wave transition
                 if (elapsedTimeSeconds % WAVE_DURATION_SECONDS == 0) {
                     currentWave++;
+                    System.out.println("Transitioning to Wave " + currentWave + " at time: " + elapsedTimeSeconds + "s");
                     announceNewWave();
                 }
             }
         }, Duration.seconds(1));
-        
+
         // Set up enemy spawning timer
         scheduleEnemySpawning();
-        
-        System.out.println("Wave system started. Current wave: " + currentWave);
+        System.out.println("Wave system fully started. Current wave: " + currentWave);
     }
     
     /**
@@ -208,37 +213,36 @@ public class WaveManager {
      * - In what formation
      */
     private void spawnEnemyForCurrentWave() {
-        if (!isActive || player == null) return;
-        
-        // Get current wave configuration
-        List<String> enemyPool = waveEnemyPools.getOrDefault(currentWave, List.of("enemy"));
-        String formation = waveFormations.getOrDefault(currentWave, "random");
-        
-        // Calculate max enemies with an additional scaling factor based on elapsed time
-        // This ensures enemy count keeps increasing even within the same wave
-        int baseMax = waveMaxEnemies.getOrDefault(currentWave, BASE_ENEMIES_PER_WAVE);
-        double timeScaling = 1.0 + (elapsedTimeSeconds / 300.0); // Additional scaling of 33% per 5 minutes
-        int maxEnemies = (int)(baseMax * timeScaling);
-        
-        // Check if we've hit the max enemy limit - with higher tolerance for later waves
-        int currentEnemyCount = FXGL.getGameWorld().getEntitiesByType(EntityType.ENEMY).size();
-        int waveAllowance = Math.min(currentWave * 5, 50); // Additional allowance scales with wave number
-        
-        if (currentEnemyCount >= maxEnemies + waveAllowance) {
+        if (!isActive || player == null) {
+            System.out.println("Skipping enemy spawn: WaveManager inactive or player null");
             return;
         }
-        
-        // Select a random enemy type from the pool with weighting based on wave
+
+        List<String> enemyPool = waveEnemyPools.getOrDefault(currentWave, List.of("enemy"));
+        String formation = waveFormations.getOrDefault(currentWave, "random");
+
+        int baseMax = waveMaxEnemies.getOrDefault(currentWave, BASE_ENEMIES_PER_WAVE);
+        double timeScaling = 1.0 + (elapsedTimeSeconds / 300.0);
+        int maxEnemies = (int)(baseMax * timeScaling);
+
+        int currentEnemyCount = FXGL.getGameWorld().getEntitiesByType(EntityType.ENEMY).size();
+        int waveAllowance = Math.min(currentWave * 5, 50);
+
+        if (currentEnemyCount >= maxEnemies + waveAllowance) {
+            System.out.println("Enemy spawn skipped: Current enemies (" + currentEnemyCount + ") exceed max (" + (maxEnemies + waveAllowance) + ")");
+            return;
+        }
+
         String enemyType;
         if (currentWave >= 6 && random.nextDouble() < 0.1 * (currentWave / 6.0)) {
-            // Increased chance of spawning mini-boss enemies in later waves
             int bossIndex = Math.min(enemyPool.size() - 1, enemyPool.size() - 2);
             enemyType = enemyPool.get(Math.max(bossIndex, 0));
         } else {
             enemyType = enemyPool.get(random.nextInt(enemyPool.size()));
         }
-        
-        // Spawn based on formation
+
+        System.out.println("Spawning enemy for Wave " + currentWave + ": Type=" + enemyType + ", Formation=" + formation + ", Total enemies=" + (currentEnemyCount + 1));
+
         switch (formation) {
             case "circle":
                 spawnEnemyInCircleFormation(enemyType);
@@ -266,20 +270,21 @@ public class WaveManager {
         System.out.println("New wave started: " + currentWave);
         System.out.println("Max enemies: " + waveMaxEnemies.getOrDefault(currentWave, BASE_ENEMIES_PER_WAVE));
         System.out.println("Spawn interval: " + waveSpawnRates.getOrDefault(currentWave, BASE_SPAWN_INTERVAL));
-        
+        System.out.println("Enemy types available: " + waveEnemyPools.getOrDefault(currentWave, List.of("enemy")));
+
         // Special announcement for milestone waves
         if (currentWave % 5 == 0) {
-            System.out.println("WARNING: Special formation incoming!");
-            
+            System.out.println("WARNING: Special formation incoming! Formation: " + waveFormations.getOrDefault(currentWave, "random"));
+
             // Add a slight delay before spawning the formation to avoid immediate spawning
             FXGL.getGameTimer().runOnceAfter(() -> {
                 String enemyType = waveEnemyPools.get(currentWave).get(
                         random.nextInt(waveEnemyPools.get(currentWave).size()));
-                
-                // Choose one of the formations
+                System.out.println("Spawning special formation for Wave " + currentWave + " with enemy: " + enemyType);
+
                 String formation = waveFormations.get(currentWave);
                 if (formation == null) formation = "circle";
-                
+
                 switch (formation) {
                     case "line":
                         spawnEnemyInLineFormation(enemyType);
@@ -294,26 +299,26 @@ public class WaveManager {
                 }
             }, Duration.seconds(1.5));
         }
-        
+
         if (currentWave % 10 == 0) {
             System.out.println("DANGER: Massive enemy wave approaching!");
-            
-            // Add a more significant delay for milestone waves
+
             FXGL.getGameTimer().runOnceAfter(() -> {
                 String enemyType = waveEnemyPools.get(currentWave).get(
                         random.nextInt(waveEnemyPools.get(currentWave).size()));
+                System.out.println("Spawning first formation (circle) for Wave " + currentWave + " with enemy: " + enemyType);
                 spawnEnemyInCircleFormation(enemyType);
-                
-                // Spawn a second formation after a short delay
+
                 FXGL.getGameTimer().runOnceAfter(() -> {
                     String secondEnemyType = waveEnemyPools.get(currentWave).get(
                             random.nextInt(waveEnemyPools.get(currentWave).size()));
+                    System.out.println("Spawning second formation (spiral) for Wave " + currentWave + " with enemy: " + secondEnemyType);
                     spawnEnemyInSpiralFormation(secondEnemyType);
-                    
-                    // For milestone waves, add a third formation
+
                     FXGL.getGameTimer().runOnceAfter(() -> {
                         String thirdEnemyType = waveEnemyPools.get(currentWave).get(
                                 random.nextInt(waveEnemyPools.get(currentWave).size()));
+                        System.out.println("Spawning third formation (line) for Wave " + currentWave + " with enemy: " + thirdEnemyType);
                         spawnEnemyInLineFormation(thirdEnemyType);
                     }, Duration.seconds(2));
                 }, Duration.seconds(3));

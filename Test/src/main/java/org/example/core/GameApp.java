@@ -197,6 +197,12 @@ public class GameApp extends GameApplication {
 
     @Override
     protected void initUI() {
+        Text waveText = getUIFactoryService().newText("", 24);
+        waveText.textProperty().bind(FXGL.getWorldProperties().intProperty("wave").asString("Wave: %d"));
+        waveText.setFill(Color.BLUE);
+        waveText.setStyle("-fx-font-weight: bold;");
+        addUINode(waveText, 20, 170);
+
         Text nameText = getUIFactoryService().newText("", 20);
         nameText.textProperty().bind(getWorldProperties().stringProperty("playerName").concat("'s Game"));
         nameText.setFill(Color.WHITE);
@@ -360,7 +366,7 @@ public class GameApp extends GameApplication {
         // Initialize the wave manager and start it
         waveManager = WaveManager.getInstance();
         waveManager.start(player);
-        System.out.println("Wave manager initialized and started");
+        System.out.println("WaveManager initialized and started in initGame");
 
         resetTimers();
     }
@@ -368,13 +374,11 @@ public class GameApp extends GameApplication {
     public void stopTimer() {
         isTimerRunning = false;
 
-        // Stop the wave manager
         if (waveManager != null) {
             waveManager.stop();
-            System.out.println("Wave manager stopped");
+            System.out.println("WaveManager stopped in stopTimer");
         }
 
-        // Stop the game music before showing the game over screen
         if (gameMusic != null) {
             gameMusic.stop();
             System.out.println("Game music stopped in stopTimer");
@@ -694,7 +698,7 @@ public class GameApp extends GameApplication {
         System.out.println("Game state reset for new session - player set to null");
         if (waveManager != null) {
             waveManager.reset();
-            System.out.println("Wave manager reset");
+            System.out.println("WaveManager reset in resetGameState");
         }
         System.out.println("Game state reset complete");
     }
@@ -722,20 +726,19 @@ public class GameApp extends GameApplication {
         isTimerRunning = false;
         if (waveManager != null) {
             waveManager.stop();
-            System.out.println("Wave manager paused");
+            System.out.println("WaveManager paused in pauseGameTimers");
         }
     }
 
     public void resumeGameTimers() {
         isTimerRunning = true;
-        System.out.println("Game timers resumed");
+        System.out.println("Game timers resumed in resumeGameTimers");
         resetTimers();
         if (waveManager != null && player != null) {
             waveManager.start(player);
-            System.out.println("Wave manager resumed");
+            System.out.println("WaveManager resumed in resumeGameTimers");
         }
     }
-
     public static String getStoredPlayerName() {
         return storedPlayerName;
     }
