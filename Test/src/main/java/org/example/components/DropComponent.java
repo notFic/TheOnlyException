@@ -1,4 +1,4 @@
-package org.example;
+package org.example.components;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -7,6 +7,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import org.example.core.EntityType;
 
 public class DropComponent extends Component {
 

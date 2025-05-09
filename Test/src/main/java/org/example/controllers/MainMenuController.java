@@ -1,4 +1,4 @@
-package org.example;
+package org.example.controllers;
 
 import com.almasb.fxgl.dsl.FXGL;
 import javafx.fxml.FXML;
@@ -15,10 +15,17 @@ import javafx.scene.media.MediaView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.geometry.Pos;
+import org.example.core.GameApp;
+import org.example.data.LeaderboardDatabase;
+import org.example.scenes.LeaderboardUI;
+import org.example.scenes.MainMenuScene;
+import org.example.scenes.NameInputScene;
+import org.example.model.Player;
 
 import java.util.List;
 
 public class MainMenuController {
+    private boolean isLeaderboardOpen = false;
 
     @FXML
     private StackPane root;
@@ -143,40 +150,23 @@ public class MainMenuController {
 
     @FXML
     private void showLeaderboard() {
-        System.out.println("Fetching leaderboard data...");
-        List<Player> topPlayers = LeaderboardDatabase.getTopPlayers(10);
-
-        StringBuilder leaderboardText = new StringBuilder("Leaderboard\n\n");
-        if (topPlayers.isEmpty()) {
-            leaderboardText.append("No leaderboard data available.");
-        } else {
-            for (int i = 0; i < topPlayers.size(); i++) {
-                Player player = topPlayers.get(i);
-                leaderboardText.append(String.format("Rank %d: %s - Survival Time: %d s, Total Damage: %d\n",
-                        player.getRank(), player.getUsername(), player.getBestSurvivalTime(), player.getTotalDamage()));
-            }
+        if (isLeaderboardOpen) {
+            System.out.println("Leaderboard dialog already open - ignoring request");
+            return;
         }
-
-        TextArea textArea = new TextArea(leaderboardText.toString());
-        textArea.setEditable(false);
-        textArea.setStyle("-fx-font-size: 16; -fx-font-family: 'Arial';");
-        textArea.setPrefSize(600, 400);
-
-        ScrollPane scrollPane = new ScrollPane(textArea);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-        scrollPane.setPrefSize(600, 400);
-        HBox dialogBox = new HBox(scrollPane);
-        dialogBox.setAlignment(Pos.CENTER);
-
-        Button closeButton = new Button("Close");
-        closeButton.setStyle("-fx-font-size: 16; -fx-background-color: #177bdf; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;");
-        addHoverEffect(closeButton);
-
-        FXGL.getDialogService().showBox("Leaderboard", dialogBox, closeButton);
+        System.out.println("Opening leaderboard dialog...");
+        LeaderboardUI leaderboardUI = new LeaderboardUI();
+        isLeaderboardOpen = true;
+        FXGL.getDialogService().showBox("Leaderboard", leaderboardUI.getContainer(), leaderboardUI.getCloseButton());
+        leaderboardUI.getCloseButton().setOnAction(e -> {
+            isLeaderboardOpen = false;
+            System.out.println("Leaderboard dialog closed");
+            // Workaround: Refresh the scene to clear the overlay
+            FXGL.getSceneService().popSubScene();
+            FXGL.getSceneService().pushSubScene(new MainMenuScene());
+        });
     }
 
-    // Exit the game
     @FXML
     private void exitGame() {
         System.out.println("Exiting game...");
@@ -184,7 +174,6 @@ public class MainMenuController {
         FXGL.getGameController().exit();
     }
 
-    // Logout and return to login screen
     @FXML
     private void logout() {
         System.out.println("Logging out...");
@@ -192,7 +181,6 @@ public class MainMenuController {
         FXGL.getSceneService().popSubScene();
         NameInputScene nameInputScene = (NameInputScene) FXGL.getSceneService().getCurrentScene();
         nameInputScene.reloadLoginUI();
-        // Reset login state
         GameApp gameApp = (GameApp) FXGL.getAppCast();
         gameApp.setLoggedIn(false);
     }

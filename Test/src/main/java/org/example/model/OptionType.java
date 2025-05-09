@@ -1,4 +1,4 @@
-package org.example;
+package org.example.model;
 
 public enum OptionType {
     WEAPON, // OFFENSIVE WEAPON THAT DAMAGE ENEMIES

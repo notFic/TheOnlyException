@@ -1,4 +1,4 @@
-package org.example;
+package org.example.components;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -8,6 +8,7 @@ import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import org.example.core.EntityType;
 
 import java.util.List;
 

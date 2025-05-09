@@ -10,8 +10,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import org.example.EnemyComponent;
-import org.example.EntityType;
+import org.example.components.EnemyComponent;
+import org.example.core.EntityType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

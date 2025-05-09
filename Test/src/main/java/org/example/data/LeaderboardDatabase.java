@@ -1,4 +1,6 @@
-package org.example;
+package org.example.data;
+
+import org.example.model.Player;
 
 import java.sql.*;
 import java.util.ArrayList;

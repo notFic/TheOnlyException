@@ -1,6 +1,10 @@
-package org.example;
+package org.example.upgrades;
 
 import javafx.scene.paint.Color;
+import org.example.components.PlayerComponent;
+import org.example.model.OptionType;
+import org.example.model.UpgradeOption;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

@@ -1,6 +1,5 @@
-package org.example;
+package org.example.controllers;
 
-import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.dsl.FXGL;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import org.example.core.GameApp;
 
 import java.sql.*;
 

@@ -1,4 +1,4 @@
-package org.example;
+package org.example.core;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
@@ -11,6 +11,10 @@ import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import org.example.components.BulletComponent;
+import org.example.components.DropComponent;
+import org.example.components.EnemyComponent;
+import org.example.components.PlayerComponent;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 

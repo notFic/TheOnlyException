@@ -1,9 +1,10 @@
-package org.example;
+package org.example.scenes;
 
 import com.almasb.fxgl.app.scene.GameSubScene;
 import com.almasb.fxgl.dsl.FXGL;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import org.example.controllers.MainMenuController;
 
 public class MainMenuScene extends GameSubScene {
     private MainMenuController controller;

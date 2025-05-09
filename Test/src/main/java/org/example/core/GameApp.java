@@ -1,4 +1,4 @@
-package org.example;
+package org.example.core;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
@@ -8,6 +8,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.media.AudioClip;
@@ -17,16 +18,24 @@ import javafx.util.Duration;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import javafx.scene.shape.Rectangle;
+import org.example.data.LeaderboardDatabase;
+import org.example.scenes.LeaderboardUI;
+import org.example.scenes.MainMenuScene;
+import org.example.scenes.NameInputScene;
+import org.example.model.Player;
+import org.example.components.BulletComponent;
+import org.example.components.EnemyComponent;
+import org.example.components.PlayerComponent;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 // Main game application class managing game world, UI, and physics
 public class GameApp extends GameApplication {
+
     private boolean hasUpdatedExpBar = false; // Flag to ensure updateExpBar runs only once after init
     private Entity player; // Player entity
     private static String storedPlayerName = "Unknown"; // Player's username
@@ -44,6 +53,23 @@ public class GameApp extends GameApplication {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/dbtheonlyexception";
     private static final String DB_USER = "root";
     private static final String DB_PASS = "";
+
+    private boolean isLeaderboardOpen = false;
+
+    public void showLeaderboard() {
+        if (isLeaderboardOpen) {
+            System.out.println("Leaderboard dialog already open - ignoring request");
+            return;
+        }
+        System.out.println("showLeaderboard called");
+        LeaderboardUI leaderboardUI = new LeaderboardUI();
+        isLeaderboardOpen = true;
+        FXGL.getDialogService().showBox("Leaderboard", leaderboardUI.getContainer(), leaderboardUI.getCloseButton());
+        leaderboardUI.getCloseButton().setOnAction(e -> {
+            isLeaderboardOpen = false;
+            System.out.println("Leaderboard dialog closed");
+        });
+    }
 
     // Configure game window and main menu
     @Override
@@ -672,48 +698,23 @@ public class GameApp extends GameApplication {
         System.out.println("Game state reset for new session - player set to null");
     }
 
-    public void showLeaderboard() {
-        System.out.println("showLeaderboard called");
-        List<Player> topPlayers = LeaderboardDatabase.getTopPlayers(10);
+    public class MainMenuController {
+        private boolean isLeaderboardOpen = false;
 
-        // Create a VBox to display the leaderboard
-        javafx.scene.layout.VBox leaderboardBox = new javafx.scene.layout.VBox(10);
-        leaderboardBox.setAlignment(javafx.geometry.Pos.CENTER);
-        leaderboardBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-padding: 20;");
-
-        // Add title
-        Text title = new Text("Leaderboard");
-        title.setFill(Color.WHITE);
-        title.setFont(javafx.scene.text.Font.font("Arial", javafx.scene.text.FontWeight.BOLD, 24));
-        leaderboardBox.getChildren().add(title);
-
-        // Add player entries
-        if (topPlayers.isEmpty()) {
-            Text noDataText = new Text("No leaderboard data available.");
-            noDataText.setFill(Color.WHITE);
-            noDataText.setFont(javafx.scene.text.Font.font("Arial", 16));
-            leaderboardBox.getChildren().add(noDataText);
-        } else {
-            for (int i = 0; i < topPlayers.size(); i++) {
-                Player player = topPlayers.get(i);
-                // Updated to include totalDamage in the display
-                Text entry = new Text((i + 1) + ". " + player.getUsername() + " - " + player.getBestSurvivalTime() + "s, Damage: " + player.getTotalDamage() + " (Rank: " + player.getRank() + ")");
-                entry.setFill(Color.WHITE);
-                entry.setFont(javafx.scene.text.Font.font("Arial", 16));
-                leaderboardBox.getChildren().add(entry);
+        public void showLeaderboard() {
+            if (isLeaderboardOpen) {
+                System.out.println("Leaderboard dialog already open - ignoring request");
+                return;
             }
+            System.out.println("showLeaderboard called");
+            LeaderboardUI leaderboardUI = new LeaderboardUI();
+            isLeaderboardOpen = true;
+            FXGL.getDialogService().showBox("Leaderboard", leaderboardUI.getContainer(), leaderboardUI.getCloseButton());
+            leaderboardUI.getCloseButton().setOnAction(e -> {
+                isLeaderboardOpen = false;
+                System.out.println("Leaderboard dialog closed");
+            });
         }
-
-        // Add a close button
-        javafx.scene.control.Button closeButton = new javafx.scene.control.Button("Close");
-        closeButton.setStyle("-fx-font-size: 16; -fx-background-color: #444; -fx-text-fill: white;");
-        closeButton.setOnAction(e -> {
-            // Dialog closes automatically
-        });
-        leaderboardBox.getChildren().add(closeButton);
-
-        // Show the leaderboard dialog
-        FXGL.getDialogService().showBox("Leaderboard", leaderboardBox, closeButton);
     }
 
     // Pause game timers without ending the game
@@ -728,6 +729,10 @@ public class GameApp extends GameApplication {
         System.out.println("Game timers resumed");
         // Reset timers to prevent speed-up bug
         resetTimers();
+    }
+
+    public static String getStoredPlayerName() {
+        return storedPlayerName;
     }
 
     // Launch the game

@@ -1,4 +1,4 @@
-package org.example;
+package org.example.scenes;
 
 import com.almasb.fxgl.dsl.FXGL;
 import javafx.geometry.Insets;
@@ -14,6 +14,11 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+import org.example.upgrades.UpgradeRegistry;
+import org.example.components.PlayerComponent;
+import org.example.core.GameApp;
+import org.example.model.OptionType;
+import org.example.model.UpgradeOption;
 
 import java.util.*;
 

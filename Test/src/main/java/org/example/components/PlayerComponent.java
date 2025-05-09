@@ -1,4 +1,4 @@
-package org.example;
+package org.example.components;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -15,6 +15,8 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.example.powerups.AutoHealComponent;
 import org.example.powerups.ExplosiveMinesComponent;
+import org.example.core.GameApp;
+import org.example.scenes.LevelUpMenu;
 import org.example.powerups.FireTrailComponent;
 import org.example.powerups.LightningStrikeComponent;
 import org.example.powerups.PoisonAuraComponent;
@@ -571,7 +573,7 @@ public class PlayerComponent extends Component {
             }
         }
     }
-
+    
     // Handle weapon selection from level-up menu
     public void onWeaponSelected(String weaponId, int newLevel) {
         // Update the weapon/powerup level using the non-resuming method
