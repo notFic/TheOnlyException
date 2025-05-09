@@ -128,15 +128,15 @@ public class EnemyComponent extends Component {
         }
         if (type.equals("bee")) {
             entity.getViewComponent().addChild(texture);
-            texture.setScaleX(1.5);// para mas modako
-            texture.setScaleY(1.5);// para mas modako
-            texture.setTranslateX(-10);
+            texture.setScaleX(2.0);// para mas modako
+            texture.setScaleY(2.0);// para mas modako
+            texture.setTranslateX(-15);
             texture.setTranslateY(-25);
         }
         if (type.equals("giantfly")) {
             entity.getViewComponent().addChild(texture);
-            texture.setTranslateX(-15);
-            texture.setTranslateY(-30);
+            texture.setTranslateX(0);
+            texture.setTranslateY(5);
 
             texture.setScaleX(2.0); // para mas modako
             texture.setScaleY(2.0);// para mas modako
@@ -144,7 +144,7 @@ public class EnemyComponent extends Component {
         if (type.equals("dragonfly")) {
             entity.getViewComponent().addChild(texture);
             texture.setTranslateX(-10);
-            texture.setTranslateY(-25);
+            texture.setTranslateY(-28);
 
             texture.setScaleX(1.3); // para mas modako
             texture.setScaleY(1.3);// para mas modako

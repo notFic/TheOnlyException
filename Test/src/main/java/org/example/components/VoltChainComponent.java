@@ -9,6 +9,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import org.example.core.EntityType;
 
 import java.util.Comparator;
 import java.util.List;

@@ -83,15 +83,15 @@ public class GameApp extends GameApplication {
         settings.setHeight(720);
         settings.setTitle("Prototype Game");
         settings.setVersion("0.1.5");
-//        settings.setMainMenuEnabled(true);
+        settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(true); // Enable the game menu
-//        settings.setSceneFactory(new SceneFactory() {
-//            @Override
-//            public FXGLMenu newMainMenu() {
-//                System.out.println("Creating new NameInputScene as MainMenu");
-//                return new NameInputScene();
-//            }
-//        });
+        settings.setSceneFactory(new SceneFactory() {
+            @Override
+            public FXGLMenu newMainMenu() {
+                System.out.println("Creating new NameInputScene as MainMenu");
+                return new NameInputScene();
+            }
+        });
         System.out.println("initSettings completed - main menu and game menu enabled, expecting NameInputScene at startup");
     }
 
