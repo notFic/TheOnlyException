@@ -72,14 +72,10 @@ public class SoundManager {
         loadSoundAsMedia("btn_click", "/assets/sounds/btn.mp3"); // Use Media for mp3 files
         loadSound("level_up", "/assets/sounds/level_up.mp3");
         loadSound("error", "/assets/sounds/error.mp3");
-        loadSound("shoot", "/assets/sounds/SHOOT.mp3"); // Added gunshot sound
-        loadSound("explosion", "/assets/sounds/EXPLOSION.mp3"); // Added gunshot sound
-        loadSound("hit", "/assets/sounds/HIT.mp3"); // Added gunshot sound
-        loadSound("lightning", "/assets/sounds/LIGHTNING.mp3"); // Added gunshot sound
-        // If sound files don't exist yet, create a default one
-        if (soundEffects.isEmpty()) {
         loadSound("shoot", "/assets/sounds/SHOOT.mp3");
         loadSound("explosion", "/assets/sounds/EXPLOSION.mp3");
+        loadSound("hit", "/assets/sounds/HIT.mp3");
+        loadSound("lightning", "/assets/sounds/LIGHTNING.mp3");
 
         // Debug output - show all loaded sounds
         if (!soundEffects.isEmpty()) {
