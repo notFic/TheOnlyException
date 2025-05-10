@@ -7,23 +7,35 @@ import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.time.TimerAction;
+import com.almasb.fxgl.ui.FontType;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.scene.text.FontWeight;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.example.controllers.GameOverController;
 import org.example.scenes.LoginScene;
 import org.example.scenes.RegisterScene;
 import org.example.scenes.MainMenuScene;
 import org.example.components.LaserComponent;
 import org.example.components.SwordComponent;
 import org.example.components.VoltChainComponent;
-import org.example.data.LeaderboardDatabase;
 import org.example.scenes.LeaderboardUI;
-import org.example.model.Player;
 import org.example.components.BulletComponent;
 import org.example.components.EnemyComponent;
 import org.example.components.PlayerComponent;
@@ -47,7 +59,7 @@ public class GameApp extends GameApplication {
     private AudioClip gameMusic;
     private String userType = "Gun";
 
-    // EXP progress bar UI elements
+    private TimerAction survivalTimerAction;
     private Rectangle expBarFill;
     private Text expProgressText;
     private static final String DB_URL = "jdbc:mysql://localhost:3306/dbtheonlyexception";
@@ -79,7 +91,12 @@ public class GameApp extends GameApplication {
         settings.setHeight(720);
         settings.setTitle("Prototype Game");
         settings.setVersion("0.1.5");
-        settings.setMainMenuEnabled(true);
+        // Load Pixelify Sans fonts
+        Font.loadFont(getClass().getResourceAsStream("/fonts/PixelifySans_Bold.ttf"), 52);
+        Font.loadFont(getClass().getResourceAsStream("/fonts/PixelifySans_SemiBold.ttf"), 24);
+        Font.loadFont(getClass().getResourceAsStream("/fonts/PixelifySans_Medium.ttf"), 18);
+        Font.loadFont(getClass().getResourceAsStream("/fonts/PixelifySans_Regular.ttf"), 16);
+        System.out.println("Pixelify Sans fonts loaded: Bold, SemiBold, Medium, Regular");settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(false);
         settings.setSceneFactory(new SceneFactory() {
             @Override
@@ -120,9 +137,11 @@ public class GameApp extends GameApplication {
         vars.put("health", 100);
         vars.put("survivalTime", 0);
         vars.put("level", 1);
-        vars.put("exp", 0);
+        vars.put("rawExp", 0); // Raw EXP value
+        vars.put("expPercentage", 0); // Percentage for UI
         vars.put("totalDamage", 0);
         vars.put("kills", 0);
+        vars.put("wave", 1);
         System.out.println("Game vars initialized with playerName: " + storedPlayerName);
     }
 
@@ -179,6 +198,7 @@ public class GameApp extends GameApplication {
         System.out.println("isLoggedIn set to: " + loggedIn);
     }
 
+
     public void gotoNewMainMenu() {
         System.out.println("Transitioning to MainMenuScene...");
         FXGL.getGameWorld().getEntitiesCopy().forEach(Entity::removeFromWorld);
@@ -196,53 +216,82 @@ public class GameApp extends GameApplication {
 
     @Override
     protected void initUI() {
-        Text waveText = getUIFactoryService().newText("", 24);
+        // Create a semi-transparent panel for the HUD
+        VBox hudPanel = new VBox(10);
+        hudPanel.setPadding(new Insets(10));
+        hudPanel.setStyle("-fx-background-color: rgba(25, 25, 112, 0.7); -fx-border-color: #1E90FF; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5;");
+        hudPanel.setTranslateX(20);
+        hudPanel.setTranslateY(20);
+
+        // Neon glow effect for text
+        DropShadow neonGlow = new DropShadow();
+        neonGlow.setColor(Color.web("#00B7EB"));
+        neonGlow.setRadius(10);
+        neonGlow.setSpread(0.5);
+
+        // Wave Text
+        Text waveText = getUIFactoryService().newText("", Color.web("#87CEEB"), FontType.GAME, 24);
+        waveText.setEffect(neonGlow);
         waveText.textProperty().bind(FXGL.getWorldProperties().intProperty("wave").asString("Wave: %d"));
-        waveText.setFill(Color.BLUE);
-        waveText.setStyle("-fx-font-weight: bold;");
-        addUINode(waveText, 20, 170);
+        hudPanel.getChildren().add(waveText);
 
-        Text nameText = getUIFactoryService().newText("", 20);
+        // Player Name Text
+        Text nameText = getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 20);
+        nameText.setEffect(neonGlow);
         nameText.textProperty().bind(getWorldProperties().stringProperty("playerName").concat("'s Game"));
-        nameText.setFill(Color.WHITE);
-        addUINode(nameText, 20, 20);
+        hudPanel.getChildren().add(nameText);
 
-        Text healthText = getUIFactoryService().newText("", 24);
+        // Health Text
+        Text healthText = getUIFactoryService().newText("", Color.web("#1E90FF"), FontType.GAME, 24);
+        healthText.setEffect(neonGlow);
         healthText.textProperty().bind(getWorldProperties().intProperty("health").asString("Health: %d"));
-        healthText.setFill(Color.RED);
-        healthText.setStyle("-fx-font-weight: bold;");
-        addUINode(healthText, 20, 50);
+        hudPanel.getChildren().add(healthText);
 
-        Text timerText = getUIFactoryService().newText("", 24);
+        // Timer Text
+        Text timerText = getUIFactoryService().newText("", Color.web("#87CEEB"), FontType.GAME, 24);
+        timerText.setEffect(neonGlow);
         timerText.textProperty().bind(getWorldProperties().intProperty("survivalTime").asString("Time: %d s"));
-        timerText.setFill(Color.YELLOW);
-        timerText.setStyle("-fx-font-weight: bold;");
-        addUINode(timerText, 20, 80);
+        hudPanel.getChildren().add(timerText);
 
-        Text levelText = getUIFactoryService().newText("", 24);
+        // Level Text
+        Text levelText = getUIFactoryService().newText("", Color.web("#00B7EB"), FontType.GAME, 24);
+        levelText.setEffect(neonGlow);
         levelText.textProperty().bind(getWorldProperties().intProperty("level").asString("Level: %d"));
-        levelText.setFill(Color.CYAN);
-        levelText.setStyle("-fx-font-weight: bold;");
-        addUINode(levelText, 20, 110);
+        hudPanel.getChildren().add(levelText);
 
-        Text expText = getUIFactoryService().newText("", 24);
+        // EXP Text
+        Text expText = getUIFactoryService().newText("", Color.web("#87CEEB"), FontType.GAME, 24);
+        expText.setEffect(neonGlow);
         expText.textProperty().bind(getWorldProperties().intProperty("exp").asString("EXP: %d"));
-        expText.setFill(Color.YELLOWGREEN);
-        expText.setStyle("-fx-font-weight: bold;");
-        addUINode(expText, 20, 140);
+        hudPanel.getChildren().add(expText);
 
-        Rectangle expBarBackground = new Rectangle(getAppWidth(), 20);
-        expBarBackground.setFill(Color.rgb(30, 30, 30, 0.8));
-        addUINode(expBarBackground, 0, getAppHeight() - 20);
+        // Add HUD panel to scene
+        addUINode(hudPanel);
 
-        expBarFill = new Rectangle(0, 20);
-        expBarFill.setFill(Color.YELLOWGREEN);
-        addUINode(expBarFill, 0, getAppHeight() - 20);
+        // EXP Bar Background
+        Rectangle expBarBackground = new Rectangle(getAppWidth() - 40, 30);
+        expBarBackground.setFill(Color.rgb(25, 25, 112, 0.8));
+        expBarBackground.setStroke(Color.web("#1E90FF"));
+        expBarBackground.setStrokeWidth(2);
+        expBarBackground.setArcWidth(10);
+        expBarBackground.setArcHeight(10);
+        expBarBackground.setEffect(new DropShadow(10, Color.web("#00B7EB")));
+        addUINode(expBarBackground, 20, getAppHeight() - 50);
 
-        expProgressText = getUIFactoryService().newText("", 16);
-        expProgressText.setFill(Color.WHITE);
-        expProgressText.setStyle("-fx-font-weight: bold;");
-        addUINode(expProgressText, getAppWidth() / 2 - 50, getAppHeight() - 5);
+        // EXP Bar Fill
+        expBarFill = new Rectangle(0, 30);
+        expBarFill.setFill(Color.web("#87CEEB"));
+        expBarFill.setArcWidth(10);
+        expBarFill.setArcHeight(10);
+        expBarFill.setEffect(new DropShadow(8, Color.web("#00B7EB")));
+        addUINode(expBarFill, 20, getAppHeight() - 50);
+        expBarFill.toFront();
+
+        // EXP Progress Text
+        expProgressText = getUIFactoryService().newText("", Color.WHITE, FontType.GAME, 18);
+        expProgressText.setEffect(neonGlow);
+        expProgressText.textProperty().bind(getWorldProperties().intProperty("expPercentage").asString("EXP: %d%%"));
+        addUINode(expProgressText, getAppWidth() / 2 - 50, getAppHeight() - 35);
 
         updateExpBar();
     }
@@ -252,14 +301,38 @@ public class GameApp extends GameApplication {
             System.out.println("Skipping EXP bar update - UI elements not yet initialized");
             return;
         }
-        if (player != null && player.hasComponent(PlayerComponent.class)) {
-            PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
-            int currentExp = playerComponent.getExp();
-            int expToNext = playerComponent.getExpToNextLevel();
-            double percentage = Math.min(1.0, (double) currentExp / expToNext);
-            expBarFill.setWidth(getAppWidth() * percentage);
-            expProgressText.setText("EXP: " + currentExp + " / " + expToNext);
+
+        if (player == null || !player.hasComponent(PlayerComponent.class)) {
+            System.out.println("Skipping EXP bar update - player or PlayerComponent not initialized");
+            return;
         }
+
+        PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+        int currentExp = playerComponent.getExp();
+        int expToNext = playerComponent.getExpToNextLevel();
+
+        // Calculate the percentage (capped at 100%)
+        double percentage = expToNext > 0 ? Math.min(1.0, (double) currentExp / expToNext) : 0.0;
+
+        // Calculate the width based on the EXP bar background width
+        double maxBarWidth = getAppWidth() - 40;
+        double fillWidth = maxBarWidth * percentage;
+
+        // Ensure bar is at least 1px wide if there's any EXP
+        if (currentExp > 0 && fillWidth < 1) {
+            fillWidth = 1;
+        }
+
+        // Update the fill width
+        expBarFill.setWidth(fillWidth);
+
+        // Update the world property for EXP percentage
+        int expPercentage = (int) (percentage * 100);
+        getWorldProperties().setValue("expPercentage", expPercentage);
+
+        // Debug output
+        System.out.println("EXP Update: currentExp=" + currentExp + ", expToNext=" + expToNext +
+                ", percentage=" + expPercentage + "%, fillWidth=" + fillWidth);
     }
 
     @Override
@@ -309,7 +382,7 @@ public class GameApp extends GameApplication {
         FXGL.getGameTimer().clear();
         resetGameState();
 
-        FXGL.getGameWorld().addEntityFactory(new GameEntityFactor());
+        FXGL.getGameWorld().addEntityFactory(new GameEntityFactory());
 
         if (!storedPlayerName.equals("Unknown")) {
             FXGL.getWorldProperties().setValue("playerName", storedPlayerName);
@@ -367,26 +440,28 @@ public class GameApp extends GameApplication {
         waveManager.start(player);
         System.out.println("WaveManager initialized and started in initGame");
 
+        // Add listener for EXP updates
+        getWorldProperties().intProperty("exp").addListener((obs, oldValue, newValue) -> {
+            updateExpBar();
+            System.out.println("EXP property changed: old=" + oldValue + ", new=" + newValue);
+        });
+
         resetTimers();
     }
 
     public void stopTimer() {
         isTimerRunning = false;
-
         if (waveManager != null) {
             waveManager.stop();
             System.out.println("WaveManager stopped in stopTimer");
         }
-
-        if (gameMusic != null) {
-            gameMusic.stop();
-            System.out.println("Game music stopped in stopTimer");
-            gameMusic = null;
-        }
+        // Do not stop music here; it stops when Back to Main Menu is clicked
         saveGameSession();
         updateLeaderboard();
         showGameOverScreen();
     }
+
+
 
     private void saveGameSession() {
         if (playerId == -1) {
@@ -479,63 +554,65 @@ public class GameApp extends GameApplication {
 
     private void showGameOverScreen() {
         FXGL.getGameController().pauseEngine();
-        Text gameOverText = FXGL.getUIFactoryService().newText("Game Over", Color.RED, 48);
-        gameOverText.setStyle("-fx-font-weight: bold;");
-        gameOverText.setTranslateX(FXGL.getAppWidth() / 2.0 - 100);
-        gameOverText.setTranslateY(FXGL.getAppHeight() / 2.0 - 50);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GameOverScene.fxml"));
+            GameOverController controller = new GameOverController();
+            controller.setGameApp(this);
+            loader.setController(controller);
+            javafx.scene.Parent root = loader.load();
 
-        Text statsText = FXGL.getUIFactoryService().newText(
-                "Survival Time: " + FXGL.getWorldProperties().getInt("survivalTime") + " s\n" +
-                        "Total Damage: " + FXGL.getWorldProperties().getInt("totalDamage") + "\n" +
-                        "Kills: " + FXGL.getWorldProperties().getInt("kills"),
-                Color.WHITE, 24
-        );
-        statsText.setTranslateX(FXGL.getAppWidth() / 2.0 - 100);
-        statsText.setTranslateY(FXGL.getAppHeight() / 2.0);
+            // Pass game stats to controller
+            controller.setStats(
+                    FXGL.getWorldProperties().getInt("survivalTime"),
+                    FXGL.getWorldProperties().getInt("totalDamage"),
+                    FXGL.getWorldProperties().getInt("kills")
+            );
 
-        Button backToMenuButton = new Button("Back to Main Menu");
-        backToMenuButton.setStyle("-fx-font-size: 20; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;");
-        backToMenuButton.setTranslateX(FXGL.getAppWidth() / 2.0 - 80);
-        backToMenuButton.setTranslateY(FXGL.getAppHeight() / 2.0 + 100);
-        backToMenuButton.setOnAction(e -> {
-            getGameScene().clearUINodes();
-            FXGL.getGameController().resumeEngine();
-            gotoNewMainMenu();
-        });
+            // Set callback for back-to-menu action
+            controller.setBackToMenuCallback(() -> {
+                FXGL.getGameScene().clearUINodes();
+                FXGL.getGameController().resumeEngine();
+                if (gameMusic != null) {
+                    gameMusic.stop();
+                    System.out.println("Game music stopped in backToMenuCallback");
+                    gameMusic = null;
+                }
+                gotoNewMainMenu();
+            });
 
-        getGameScene().addUINodes(gameOverText, statsText, backToMenuButton);
-    }
-
-    public void startTimer() {
-        isTimerRunning = true;
+            // Add root directly to game scene for debugging
+            System.out.println("Adding game over UI to game scene");
+            FXGL.getGameScene().addUINode(root);
+        } catch (Exception e) {
+            System.err.println("Error loading GameOverScene.fxml: " + e.getMessage());
+            e.printStackTrace();
+            // Fallback to basic text if FXML fails
+            Text gameOverText = FXGL.getUIFactoryService().newText("Game Over - Error Loading UI", Color.RED, 24);
+            gameOverText.setFont(Font.font("Pixelify Sans", javafx.scene.text.FontWeight.BOLD, 24));
+            gameOverText.setTranslateX(FXGL.getAppWidth() / 2.0 - 100);
+            gameOverText.setTranslateY(FXGL.getAppHeight() / 2.0);
+            getGameScene().addUINode(gameOverText);
+        }
     }
 
     public void resetTimers() {
         System.out.println("Resetting game timers to prevent speed-up");
         isTimerRunning = false;
-        // CHANGED: Avoid clearing all timers to preserve WaveManager timers
-        // FXGL.getGameTimer().clear();
+
+        // Cancel existing survival timer if it exists
+        if (survivalTimerAction != null) {
+            survivalTimerAction.expire();
+            survivalTimerAction = null;
+            System.out.println("Existing survival timer cancelled");
+        }
 
         // Recreate survival time timer
-        FXGL.getGameTimer().runAtInterval(() -> {
+        survivalTimerAction = FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) {
                 int currentTime = getWorldProperties().getInt("survivalTime");
                 getWorldProperties().setValue("survivalTime", currentTime + 1);
             }
         }, Duration.seconds(1));
-
-        // REMOVED: Redundant enemy spawn timers that conflict with WaveManager
-        /*
-        FXGL.getGameTimer().runAtInterval(() -> {
-            if (isTimerRunning) spawnEnemyOutsideViewport("enemy");
-        }, Duration.seconds(1));
-        FXGL.getGameTimer().runAtInterval(() -> {
-            if (isTimerRunning) spawnEnemyOutsideViewport("fastEnemy");
-        }, Duration.seconds(2));
-        FXGL.getGameTimer().runAtInterval(() -> {
-            if (isTimerRunning) spawnEnemyOutsideViewport("tankEnemy");
-        }, Duration.seconds(3));
-        */
 
         // Recreate weapon timers
         if (userType.equals("Gun")) {
@@ -568,7 +645,7 @@ public class GameApp extends GameApplication {
             }, Duration.seconds(.5));
         }
 
-        // CHANGED: Ensure WaveManager timers are preserved and restarted
+        // Ensure WaveManager timers are preserved and restarted
         if (waveManager == null) {
             waveManager = WaveManager.getInstance();
             System.out.println("WaveManager initialized in resetTimers");
@@ -588,6 +665,85 @@ public class GameApp extends GameApplication {
         isTimerRunning = true;
         System.out.println("All game timers reset successfully");
     }
+
+//    public void resetTimers() {
+//        System.out.println("Resetting game timers to prevent speed-up");
+//        isTimerRunning = false;
+//        // CHANGED: Avoid clearing all timers to preserve WaveManager timers
+//        // FXGL.getGameTimer().clear();
+//
+//        // Recreate survival time timer
+//        FXGL.getGameTimer().runAtInterval(() -> {
+//            if (isTimerRunning) {
+//                int currentTime = getWorldProperties().getInt("survivalTime");
+//                getWorldProperties().setValue("survivalTime", currentTime + 1);
+//            }
+//        }, Duration.seconds(1));
+//
+//        // REMOVED: Redundant enemy spawn timers that conflict with WaveManager
+//        /*
+//        FXGL.getGameTimer().runAtInterval(() -> {
+//            if (isTimerRunning) spawnEnemyOutsideViewport("enemy");
+//        }, Duration.seconds(1));
+//        FXGL.getGameTimer().runAtInterval(() -> {
+//            if (isTimerRunning) spawnEnemyOutsideViewport("fastEnemy");
+//        }, Duration.seconds(2));
+//        FXGL.getGameTimer().runAtInterval(() -> {
+//            if (isTimerRunning) spawnEnemyOutsideViewport("tankEnemy");
+//        }, Duration.seconds(3));
+//        */
+//
+//        // Recreate weapon timers
+//        if (userType.equals("Gun")) {
+//            FXGL.getGameTimer().runAtInterval(() -> {
+//                if (isTimerRunning) {
+//                    player.getComponent(PlayerComponent.class).shootTripleBurst();
+//                }
+//            }, Duration.seconds(0.2));
+//        } else if (userType.equals("Sword")) {
+//            FXGL.getGameTimer().runAtInterval(() -> {
+//                if (isTimerRunning) {
+//                    player.getComponent(PlayerComponent.class).swordSlash();
+//                }
+//            }, Duration.seconds(0.5));
+//        } else if (userType.equals("Laser")) {
+//            FXGL.runOnce(() -> {
+//                player.getComponent(PlayerComponent.class).shootLaser();
+//            }, Duration.seconds(0.2));
+//
+//            FXGL.getGameTimer().runAtInterval(() -> {
+//                if (isTimerRunning) {
+//                    player.getComponent(PlayerComponent.class).shootLaser();
+//                }
+//            }, Duration.seconds(.5));
+//        } else {
+//            FXGL.getGameTimer().runAtInterval(() -> {
+//                if (isTimerRunning) {
+//                    player.getComponent(PlayerComponent.class).shootVoltChain();
+//                }
+//            }, Duration.seconds(.5));
+//        }
+//
+//        // CHANGED: Ensure WaveManager timers are preserved and restarted
+//        if (waveManager == null) {
+//            waveManager = WaveManager.getInstance();
+//            System.out.println("WaveManager initialized in resetTimers");
+//        }
+//
+//        if (!waveManager.isActive() && player != null) {
+//            waveManager.start(player);
+//            System.out.println("WaveManager restarted in resetTimers");
+//        } else {
+//            System.out.println("WaveManager already active or player null, skipping restart");
+//        }
+//
+//        // Reinitialize player powerup timers
+//        if (player != null && player.hasComponent(PlayerComponent.class)) {
+//            player.getComponent(PlayerComponent.class).reinitializeAfterPause();
+//        }
+//        isTimerRunning = true;
+//        System.out.println("All game timers reset successfully");
+//    }
 
     private void spawnEnemyOutsideViewport(String enemyType) {
         double viewMinX = getGameScene().getViewport().getX();
@@ -636,9 +792,11 @@ public class GameApp extends GameApplication {
             FXGL.getWorldProperties().increment("totalDamage", damage);
             if (enemyComponent.getHealth() <= 0) {
                 FXGL.getWorldProperties().increment("kills", 1);
+                playerComponent.addExp(10); // Add 10 EXP per kill
             }
             bullet.removeFromWorld();
         });
+
         onCollision(EntityType.PLAYER, EntityType.ENEMY, (player, enemy) -> {
             EnemyComponent enemyComponent = enemy.getComponent(EnemyComponent.class);
             PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
@@ -658,6 +816,7 @@ public class GameApp extends GameApplication {
             FXGL.getWorldProperties().increment("totalDamage", damage);
             if (enemyComponent.getHealth() <= 0) {
                 FXGL.getWorldProperties().increment("kills", 1);
+                player.getComponent(PlayerComponent.class).addExp(10); // Add 10 EXP per kill
             }
         });
 
@@ -671,6 +830,7 @@ public class GameApp extends GameApplication {
             FXGL.getWorldProperties().increment("totalDamage", damage);
             if (enemyComponent.getHealth() <= 0) {
                 FXGL.getWorldProperties().increment("kills", 1);
+                playerComponent.addExp(10); // Add 10 EXP per kill
             }
         });
 
@@ -679,6 +839,10 @@ public class GameApp extends GameApplication {
             EnemyComponent enemyComp = enemy.getComponent(EnemyComponent.class);
             enemyComp.damage(10, chain.getPosition());
             chainComp.onHitEnemy(enemy);
+            if (enemyComp.getHealth() <= 0) {
+                FXGL.getWorldProperties().increment("kills", 1);
+                player.getComponent(PlayerComponent.class).addExp(10); // Add 10 EXP per kill
+            }
             chain.removeFromWorld();
         });
 
@@ -694,6 +858,7 @@ public class GameApp extends GameApplication {
         getWorldProperties().setValue("exp", 0);
         getWorldProperties().setValue("totalDamage", 0);
         getWorldProperties().setValue("kills", 0);
+        getWorldProperties().setValue("wave", 1); // Reset wave property
         isTimerRunning = true;
         player = null;
         hasUpdatedExpBar = false;

@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.CheckBox; // Added import
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -16,6 +17,7 @@ import org.example.utils.UIAnimations;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.prefs.Preferences; // Added import
 
 public class LoginController {
     private Runnable loginSuccessCallback;
@@ -28,13 +30,24 @@ public class LoginController {
     @FXML private Button loginButton;
     @FXML private Button registerButton;
     @FXML private MediaView backgroundMediaView;
+    @FXML private CheckBox rememberMeCheckBox;
 
     private MediaPlayer mediaPlayer;
+    private Preferences prefs;
 
     @FXML
     private void initialize() {
         initializeBackgroundVideo();
         errorLabel.setText("");
+
+        prefs = Preferences.userNodeForPackage(LoginController.class);
+        // Load remembered username if available
+        String rememberedUser = prefs.get("rememberedUser", "");
+        if (!rememberedUser.isEmpty()) {
+            userField.setText(rememberedUser);
+            rememberMeCheckBox.setSelected(true);
+        }
+
         // Add listener to load stylesheet when scene is available
         backgroundMediaView.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
@@ -100,6 +113,14 @@ public class LoginController {
             boolean loginSuccess = DatabaseManager.validateUser(user, pass);
 
             if (loginSuccess) {
+                // Handle "Remember Me" functionality
+                if (rememberMeCheckBox.isSelected()) {
+                    prefs.put("rememberedUser", user);
+                    System.out.println("Username saved to Preferences: " + user);
+                } else {
+                    prefs.remove("rememberedUser");
+                    System.out.println("Removed remembered username from Preferences");
+                }
                 handleSuccessfulLogin(user);
             } else {
                 showError("Incorrect username or password. Please try again.");

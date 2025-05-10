@@ -1,0 +1,748 @@
+Index: Test/src/main/resources/css/styles.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/* Base Styles */\r\n.app-root {\r\n    -fx-background-color: #121212;\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n}\r\n\r\n/* Overlay Container */\r\n.overlay-container {\r\n    -fx-background-color: rgba(0, 0, 0, 0.5);\r\n    -fx-alignment: center;\r\n}\r\n\r\n/* Game Over Specific Styles */\r\n.game-over-pane {\r\n    -fx-background-color: rgba(0, 0, 0, 0.7);\r\n    -fx-border-width: 1px;\r\n    -fx-border-color: #FF4040;\r\n    -fx-border-radius: 10px;\r\n    -fx-background-radius: 10px;\r\n    -fx-effect: dropshadow(gaussian, #FF4040, 15, 0.5, 0, 0);\r\n    -fx-animation: glow 3s infinite;\r\n}\r\n\r\n.game-over-box {\r\n    -fx-background-color: transparent;\r\n}\r\n\r\n.game-over-title-label {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 55px;\r\n    -fx-text-fill: #FF4040;\r\n    -fx-stroke: #FFFFFF;\r\n    -fx-stroke-width: 0.5;\r\n    -fx-effect: innershadow(gaussian, #FF4040, 8, 0.8, 0, 0);\r\n    -fx-alignment: center;\r\n}\r\n\r\n.game-over-stats-label {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 25px;\r\n    -fx-text-fill: white;\r\n    -fx-alignment: center;\r\n    -fx-wrap-text: true;\r\n}\r\n\r\n.game-over-action-button {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: semibold;\r\n    -fx-font-size: 15px;\r\n    -fx-background-color: #8B0000;\r\n    -fx-text-fill: white;\r\n    -fx-padding: 12px 25px;\r\n    -fx-background-radius: 5px;\r\n    -fx-effect: dropshadow(gaussian, #FF4040, 10, 0.5, 0, 0);\r\n    -fx-cursor: hand;\r\n}\r\n\r\n.game-over-action-button:hover {\r\n    -fx-background-color: #FF4040;\r\n    -fx-effect: dropshadow(gaussian, #FF4040, 15, 0.7, 0, 0);\r\n    -fx-scale-x: 1.05;\r\n    -fx-scale-y: 1.05;\r\n}\r\n\r\n/* Animations */\r\n@keyframes glow {\r\n    0% { -fx-effect: innershadow(gaussian, #FF4040, 6, 0.6, 0, 0); }\r\n    50% { -fx-effect: innershadow(gaussian, #FF4040, 10, 0.9, 0, 0); }\r\n    100% { -fx-effect: innershadow(gaussian, #FF4040, 6, 0.6, 0, 0); }\r\n}\r\n\r\n/* Login Specific Styles */\r\n.login-pane {\r\n    -fx-background-color: rgba(0, 0, 0, 0.7);\r\n    -fx-border-width: 1px;\r\n    -fx-border-color: #18b7e7;\r\n    -fx-border-radius: 10px;\r\n    -fx-background-radius: 10px;\r\n    -fx-effect: dropshadow(gaussian, #18b7e7, 15, 0.5, 0, 0);\r\n    -fx-animation: glow 3s infinite;\r\n}\r\n\r\n.login-box {\r\n    -fx-background-color: transparent;\r\n}\r\n\r\n.login-title-label {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 50px;\r\n    -fx-text-fill: white;\r\n    -fx-effect: dropshadow(gaussian, #18b7e7, 15, 0.7, 0, 0);\r\n    -fx-alignment: center;\r\n}\r\n\r\n.login-error-label {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 14px;\r\n    -fx-text-fill: #ff6363;\r\n    -fx-alignment: center;\r\n    -fx-wrap-text: true;\r\n}\r\n\r\n.login-text-field {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: semibold;\r\n    -fx-font-size: 16px;\r\n    -fx-background-color: rgba(30, 30, 30, 0.8);\r\n    -fx-text-fill: white;\r\n    -fx-padding: 12px;\r\n    -fx-border-color: #18b7e7;\r\n    -fx-border-width: 1.5px;\r\n    -fx-border-radius: 5px;\r\n    -fx-background-radius: 5px;\r\n    -fx-prompt-text-fill: #a0a0a0;\r\n}\r\n\r\n.login-text-field:focused {\r\n    -fx-border-color: #ffffff;\r\n    -fx-effect: dropshadow(gaussian, #18b7e7, 10, 0.5, 0, 0);\r\n    -fx-background-color: rgba(40, 40, 40, 0.8);\r\n}\r\n\r\n.login-action-button {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: semibold;\r\n    -fx-font-size: 18px;\r\n    -fx-background-color: #177bdf;\r\n    -fx-text-fill: white;\r\n    -fx-padding: 12px 25px;\r\n    -fx-background-radius: 5px;\r\n    -fx-effect: dropshadow(gaussian, #18b7e7, 10, 0.5, 0, 0);\r\n    -fx-cursor: hand;\r\n}\r\n\r\n.login-action-button:hover {\r\n    -fx-background-color: #18b7e7;\r\n    -fx-effect: dropshadow(gaussian, #18b7e7, 15, 0.7, 0, 0);\r\n    -fx-scale-x: 1.05;\r\n    -fx-scale-y: 1.05;\r\n}\r\n\r\n.login-switch-button {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 14px;\r\n    -fx-background-color: transparent;\r\n    -fx-text-fill: #18b7e7;\r\n    -fx-underline: true;\r\n    -fx-cursor: hand;\r\n}\r\n\r\n.login-switch-button:hover {\r\n    -fx-text-fill: white;\r\n    -fx-effect: dropshadow(gaussian, #18b7e7, 8, 0.4, 0, 0);\r\n}\r\n\r\n/* Registration Styles */\r\n.register-pane {\r\n    -fx-background-color: rgba(0, 0, 0, 0.7);\r\n    -fx-border-width: 1px;\r\n    -fx-border-color: #ff3333;\r\n    -fx-border-radius: 10px;\r\n    -fx-background-radius: 10px;\r\n    -fx-effect: dropshadow(gaussian, #ff3333, 15, 0.5, 0, 0);\r\n    -fx-animation: glow 3s infinite;\r\n}\r\n\r\n.register-title-label {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 35px;\r\n    -fx-text-fill: white;\r\n    -fx-effect: dropshadow(gaussian, #ff3333, 15, 0.7, 0, 0);\r\n    -fx-alignment: center;\r\n}\r\n\r\n.register-error-label {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 14px;\r\n    -fx-text-fill: #ff6363;\r\n    -fx-alignment: center;\r\n    -fx-wrap-text: true;\r\n}\r\n\r\n.register-text-field {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: semibold;\r\n    -fx-font-size: 16px;\r\n    -fx-background-color: rgba(30, 30, 30, 0.8);\r\n    -fx-text-fill: white;\r\n    -fx-padding: 12px;\r\n    -fx-border-color: #ff3333;\r\n    -fx-border-width: 1.5px;\r\n    -fx-border-radius: 5px;\r\n    -fx-background-radius: 5px;\r\n    -fx-prompt-text-fill: #a0a0a0;\r\n}\r\n\r\n.register-text-field:focused {\r\n    -fx-border-color: #ffffff;\r\n    -fx-effect: dropshadow(gaussian, #ff3333, 10, 0.5, 0, 0);\r\n    -fx-background-color: rgba(40, 40, 40, 0.8);\r\n}\r\n\r\n.register-action-button {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: semibold;\r\n    -fx-font-size: 18px;\r\n    -fx-background-color: #e71818;\r\n    -fx-text-fill: white;\r\n    -fx-padding: 12px 25px;\r\n    -fx-background-radius: 5px;\r\n    -fx-effect: dropshadow(gaussian, #ff3333, 10, 0.5, 0, 0);\r\n    -fx-cursor: hand;\r\n}\r\n\r\n.register-action-button:hover {\r\n    -fx-background-color: #ff3333;\r\n    -fx-effect: dropshadow(gaussian, #ff3333, 15, 0.7, 0, 0);\r\n    -fx-scale-x: 1.05;\r\n    -fx-scale-y: 1.05;\r\n}\r\n\r\n.register-switch-button {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 14px;\r\n    -fx-background-color: transparent;\r\n    -fx-text-fill: #ff3333;\r\n    -fx-underline: true;\r\n    -fx-cursor: hand;\r\n}\r\n\r\n.register-switch-button:hover {\r\n    -fx-text-fill: white;\r\n    -fx-effect: dropshadow(gaussian, #ff3333, 8, 0.4, 0, 0);\r\n}\r\n\r\n.menu-box {\r\n    -fx-spacing: 20px;\r\n    -fx-alignment: center;\r\n}\r\n\r\n/* HUD Panel */\r\n.hud-panel {\r\n    -fx-background-color: rgba(0, 0, 0, 0.7);\r\n    -fx-border-color: #18b7e7;\r\n    -fx-border-width: 1;\r\n    -fx-border-radius: 5;\r\n    -fx-background-radius: 5;\r\n}\r\n\r\n/* Text Styles */\r\n.wave-text {\r\n    -fx-font-family: 'Pixelify Sans';\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 24px;\r\n}\r\n\r\n.name-text {\r\n    -fx-font-family: 'Pixelify Sans';\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 20px;\r\n}\r\n\r\n.health-text {\r\n    -fx-font-family: 'Pixelify Sans';\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 24px;\r\n}\r\n\r\n.timer-text {\r\n    -fx-font-family: 'Pixelify Sans';\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 24px;\r\n}\r\n\r\n.level-text {\r\n    -fx-font-family: 'Pixelify Sans';\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 24px;\r\n}\r\n\r\n.exp-text {\r\n    -fx-font-family: 'Pixelify Sans';\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 24px;\r\n}\r\n\r\n.exp-progress-text {\r\n    -fx-font-family: 'Pixelify Sans';\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 18px;\r\n}\r\n\r\n/* EXP Bar Styles */\r\n.exp-bar-background {\r\n    -fx-fill: rgba(30, 30, 30, 0.8);\r\n    -fx-stroke: #007fa7;\r\n    -fx-stroke-width: 2;\r\n    -fx-arc-width: 10;\r\n    -fx-arc-height: 10;\r\n}\r\n\r\n.exp-bar-fill {\r\n    -fx-fill: #fff943;\r\n    -fx-arc-width: 10;\r\n    -fx-arc-height: 10;\r\n}\r\n/* Checkbox Styles */\r\n.login-checkbox {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 14px;\r\n    -fx-text-fill: white;\r\n    -fx-padding: 5px;\r\n}\r\n\r\n.login-checkbox .box {\r\n    -fx-background-color: rgba(30, 30, 30, 0.8);\r\n    -fx-border-color: #18b7e7;\r\n    -fx-border-width: 1.5px;\r\n    -fx-border-radius: 3px;\r\n}\r\n\r\n.login-checkbox:selected .mark {\r\n    -fx-background-color: #18b7e7;\r\n}\r\n\r\n.login-checkbox:hover .box {\r\n    -fx-background-color: rgba(40, 40, 40, 0.8);\r\n    -fx-effect: dropshadow(gaussian, #18b7e7, 8, 0.4, 0, 0);\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Test/src/main/resources/css/styles.css b/Test/src/main/resources/css/styles.css
+--- a/Test/src/main/resources/css/styles.css	(revision ad4bd3a6e0e4260b2fa6efd6bef37033ca5784a4)
++++ b/Test/src/main/resources/css/styles.css	(date 1746861369872)
+@@ -335,4 +335,7 @@
+ .login-checkbox:hover .box {
+     -fx-background-color: rgba(40, 40, 40, 0.8);
+     -fx-effect: dropshadow(gaussian, #18b7e7, 8, 0.4, 0, 0);
+-}
+\ No newline at end of file
++}
++
++
++
+Index: logs/FXGL-10-May-2025-14.27.27.log
+===================================================================
+diff --git a/logs/FXGL-10-May-2025-14.27.27.log b/logs/FXGL-10-May-2025-14.27.27.log
+deleted file mode 100644
+--- a/logs/FXGL-10-May-2025-14.27.27.log	(revision ad4bd3a6e0e4260b2fa6efd6bef37033ca5784a4)
++++ /dev/null	(revision ad4bd3a6e0e4260b2fa6efd6bef37033ca5784a4)
+@@ -1,198 +0,0 @@
+-14:27:14.407 [main                     ] DEBUG Logger               - Configured Logger
+-14:27:14.412 [main                     ] DEBUG GameApplication      - Logging settings
+-Title: Prototype Game
+-Version: 0.1.5
+-Width: 1280
+-Height: 720
+-Fullscreen: false
+-Intro: false
+-Profiling: false
+-Single step:false
+-App Mode: DEVELOPER
+-Menu Key: ESCAPE
+-Stage Style: DECORATED
+-Scene Factory: class org.example.core.GameApp$1
+-
+-14:27:14.642 [JavaFX Application Thread] DEBUG FXGLApplication      - Initializing FXGL
+-14:27:14.647 [JavaFX Application Thread] INFO  Engine               - FXGL-21+dev-SNAPSHOT (26.03.2024 21.04) on WINDOWS (J:24 FX:21.0.1)
+-14:27:14.647 [JavaFX Application Thread] DEBUG Engine               - JRE Vendor Name: Oracle Corporation
+-14:27:14.647 [JavaFX Application Thread] DEBUG Engine               - Running on OS: Windows 11 version 10.0
+-14:27:14.648 [JavaFX Application Thread] DEBUG Engine               - Architecture: amd64
+-14:27:14.648 [JavaFX Application Thread] INFO  Engine               - Source code and latest versions at: https://github.com/AlmasB/FXGL
+-14:27:14.648 [JavaFX Application Thread] INFO  Engine               -       Ask questions and discuss at: https://github.com/AlmasB/FXGL/discussions
+-14:27:14.648 [JavaFX Application Thread] INFO  Engine               -              Join the FXGL chat at: https://gitter.im/AlmasB/FXGL
+-14:27:14.886 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Creating a JavaFX scene
+-14:27:14.968 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Target settings size: 1280.0 x 720.0
+-14:27:14.968 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled scene size:    1280.0 x 720.0
+-14:27:14.969 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled ratio: (1.0, 1.0)
+-14:27:14.970 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Set initial scene to FXGLStartupScene
+-14:27:14.976 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Opening main window
+-14:27:15.138 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Window border size: (14.4000244140625, 37.5999755859375)
+-14:27:15.139 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled size: 1280.0 x 720.0
+-14:27:15.139 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled ratio: (1.0, 1.0)
+-14:27:15.139 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scene size: 1280.0 x 720.0
+-14:27:15.139 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Stage size: 1294.4000244140625 x 757.5999755859375
+-14:27:15.151 [FXGL Background Thread 1 ] DEBUG Engine               - Initializing environment variables
+-14:27:15.226 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - User app class for loading assets: class org.example.core.GameApp
+-14:27:15.226 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Applying CSS: fxgl_dark.css
+-14:27:15.227 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/ui/css/fxgl_dark.css
+-14:27:15.293 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Initializing application scenes
+-14:27:15.347 [FXGL Background Thread 1 ] DEBUG GameWorld            - Game world initialized
+-14:27:15.451 [FXGL Background Thread 1 ] DEBUG PhysicsWorld         - Physics world initialized: appHeight=720, physics.ppm=50.0
+-14:27:15.451 [FXGL Background Thread 1 ] DEBUG PhysicsWorld         - Using strategy: BRUTE_FORCE
+-14:27:15.457 [FXGL Background Thread 1 ] DEBUG GameScene            - Game scene initialized: 1280x720
+-14:27:15.949 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Application scenes initialized
+-14:27:15.980 [FXGL Background Thread 1 ] DEBUG SystemBundleService  - Loading FXGL system data
+-14:27:15.982 [FXGL Background Thread 1 ] DEBUG FileSystemAccess     - Reading from: C:\Users\ginac\IdeaProjects\TheOnlyException3\system\fxgl.bundle
+-14:27:15.988 [FXGL Background Thread 1 ] DEBUG SystemBundleService  - Bundle FXGL: {}
+-14:27:15.988 [FXGL Background Thread 1 ] DEBUG UpdaterService       - Checking for updates
+-14:27:16.003 [FXGL Background Thread 4 ] DEBUG FXGLApplication      - Loading fonts
+-14:27:16.003 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl-samples/21.1/fxgl-samples-21.1.jar!/assets/ui/fonts/VarelaRound-Regular.ttf
+-14:27:16.004 [FXGL Background Thread 1 ] DEBUG FXGLApplication      - Loading default localization
+-14:27:16.006 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/languages/english.lang
+-14:27:16.031 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/ui/fonts/Abel-Regular.ttf
+-14:27:16.043 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/ui/fonts/TerminalLandMono-Regular.otf
+-14:27:16.055 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/ui/fonts/Courier-Prime.ttf
+-14:27:16.071 [JavaFX Application Thread] DEBUG FXGLApplication      - Registering font factories with UI factory
+-14:27:16.077 [FXGL Background Thread 1 ] INFO  FXGLApplication      - FXGL initialization took: 0.926 sec
+-14:27:16.097 [JavaFX Application Thread] DEBUG Input                - Registered new binding: action0 - A
+-14:27:16.098 [JavaFX Application Thread] DEBUG Input                - Registered new binding: action1 - D
+-14:27:16.098 [JavaFX Application Thread] DEBUG Input                - Registered new binding: action2 - W
+-14:27:16.099 [JavaFX Application Thread] DEBUG Input                - Registered new binding: action3 - S
+-14:27:16.100 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/textures/fxgl_icon.png
+-14:27:16.226 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/textures/fxgl_default_cursor.png
+-14:27:16.231 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Screenshot - CTRL+8
+-14:27:16.232 [JavaFX Application Thread] DEBUG Input                - Registered new binding: System info dump - CTRL+9
+-14:27:16.233 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Restart - CTRL+R
+-14:27:16.235 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Toggle Debug Camera - CTRL+7
+-14:27:16.245 [JavaFX Application Thread] DEBUG LoopRunner           - Starting loop
+-14:27:16.245 [JavaFX Application Thread] DEBUG LoopRunner           - Initializing JavaFX AnimationTimerLoop
+-14:27:16.252 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:27:16.268 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLStartupScene and adding to FXGLMainMenuDummyScene
+-14:27:16.269 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLStartupScene -> FXGLMainMenuDummyScene
+-14:27:16.269 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: LoginScene
+-14:27:16.270 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:27:16.345 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLMainMenuDummyScene and adding to LoginScene
+-14:27:16.346 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLMainMenuDummyScene -> LoginScene
+-14:27:16.846 [FXGL Background Thread 2 ] INFO  UpdaterService       - Your current version:  21+dev-SNAPSHOT
+-14:27:16.847 [FXGL Background Thread 2 ] INFO  UpdaterService       - Latest stable version: 21.1
+-14:27:18.999 [FXGL Background Thread 3 ] DEBUG Engine               - Logging environment variables
+-14:27:18.999 [FXGL Background Thread 3 ] DEBUG Engine               - achievements: []
+-14:27:18.999 [FXGL Background Thread 3 ] DEBUG Engine               - actualHeight: 720.0
+-14:27:18.999 [FXGL Background Thread 3 ] DEBUG Engine               - actualHeightProperty: ReadOnlyDoubleProperty [value: 720.0]
+-14:27:18.999 [FXGL Background Thread 3 ] DEBUG Engine               - actualWidth: 1280.0
+-14:27:18.999 [FXGL Background Thread 3 ] DEBUG Engine               - actualWidthProperty: ReadOnlyDoubleProperty [value: 1280.0]
+-14:27:18.999 [FXGL Background Thread 3 ] DEBUG Engine               - appIcon: fxgl_icon.png
+-14:27:18.999 [FXGL Background Thread 3 ] DEBUG Engine               - applicationMode: DEVELOPER
+-14:27:19.000 [FXGL Background Thread 3 ] DEBUG Engine               - cSSList: [fxgl_dark.css]
+-14:27:19.000 [FXGL Background Thread 3 ] DEBUG Engine               - collisionDetectionStrategy: BRUTE_FORCE
+-14:27:19.000 [FXGL Background Thread 3 ] DEBUG Engine               - configClass: Optional.empty
+-14:27:19.000 [FXGL Background Thread 3 ] DEBUG Engine               - credits: []
+-14:27:19.002 [FXGL Background Thread 3 ] DEBUG Engine               - defaultCursor: CursorInfo(imageName=fxgl_default_cursor.png, hotspotX=7.0, hotspotY=6.0)
+-14:27:19.003 [FXGL Background Thread 3 ] DEBUG Engine               - devBBoxColorProperty: ObjectProperty [value: 0xff0000ff]
+-14:27:19.003 [FXGL Background Thread 3 ] DEBUG Engine               - devEnableDebugCameraProperty: BooleanProperty [value: false]
+-14:27:19.003 [FXGL Background Thread 3 ] DEBUG Engine               - devSensorColorProperty: ObjectProperty [value: 0xffff00ff]
+-14:27:19.003 [FXGL Background Thread 3 ] DEBUG Engine               - devShowBBoxProperty: BooleanProperty [value: false]
+-14:27:19.003 [FXGL Background Thread 3 ] DEBUG Engine               - devShowPositionProperty: BooleanProperty [value: false]
+-14:27:19.003 [FXGL Background Thread 3 ] DEBUG Engine               - enabledMenuItems: []
+-14:27:19.003 [FXGL Background Thread 3 ] DEBUG Engine               - engineServices: [class com.almasb.fxgl.app.services.FXGLAssetLoaderService, class com.almasb.fxgl.app.FXGLApplication$GameApplicationService, class com.almasb.fxgl.app.services.FXGLDialogService, class com.almasb.fxgl.app.services.IOTaskExecutorService, class com.almasb.fxgl.io.FileSystemService, class com.almasb.fxgl.localization.LocalizationService, class com.almasb.fxgl.app.services.SystemBundleService, class com.almasb.fxgl.profile.SaveLoadService, class com.almasb.fxgl.ui.FXGLUIFactoryServiceProvider, class com.almasb.fxgl.ui.FXGLDialogFactoryServiceProvider, class com.almasb.fxgl.audio.AudioPlayer, class com.almasb.fxgl.notification.impl.NotificationServiceProvider, class com.almasb.fxgl.achievement.AchievementService, class com.almasb.fxgl.cutscene.CutsceneService, class com.almasb.fxgl.minigames.MiniGameService, class com.almasb.fxgl.net.NetService, class com.almasb.fxgl.app.services.UpdaterService, class com.almasb.fxgl.dev.DevService]
+-14:27:19.003 [FXGL Background Thread 3 ] DEBUG Engine               - fontGame: Abel-Regular.ttf
+-14:27:19.003 [FXGL Background Thread 3 ] DEBUG Engine               - fontMono: TerminalLandMono-Regular.otf
+-14:27:19.003 [FXGL Background Thread 3 ] DEBUG Engine               - fontSizeScaleUI: 1.0
+-14:27:19.004 [FXGL Background Thread 3 ] DEBUG Engine               - fontText: Courier-Prime.ttf
+-14:27:19.004 [FXGL Background Thread 3 ] DEBUG Engine               - fontUI: VarelaRound-Regular.ttf
+-14:27:19.004 [FXGL Background Thread 3 ] DEBUG Engine               - fullScreen: BooleanProperty [value: false]
+-14:27:19.004 [FXGL Background Thread 3 ] DEBUG Engine               - gameDifficulty: MEDIUM
+-14:27:19.004 [FXGL Background Thread 3 ] DEBUG Engine               - gameDifficultyProperty: ObjectProperty [value: MEDIUM]
+-14:27:19.004 [FXGL Background Thread 3 ] DEBUG Engine               - globalMusicVolume: 0.5
+-14:27:19.004 [FXGL Background Thread 3 ] DEBUG Engine               - globalMusicVolumeProperty: DoubleProperty [value: 0.5]
+-14:27:19.004 [FXGL Background Thread 3 ] DEBUG Engine               - globalSoundVolume: 0.5
+-14:27:19.004 [FXGL Background Thread 3 ] DEBUG Engine               - globalSoundVolumeProperty: DoubleProperty [value: 0.5]
+-14:27:19.004 [FXGL Background Thread 3 ] DEBUG Engine               - height: 720
+-14:27:19.004 [FXGL Background Thread 3 ] DEBUG Engine               - is3D: false
+-14:27:19.004 [FXGL Background Thread 3 ] DEBUG Engine               - isAndroid: false
+-14:27:19.004 [FXGL Background Thread 3 ] DEBUG Engine               - isBrowser: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isClickFeedbackEnabled: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isCloseConfirmation: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isDesktop: true
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isDeveloperMenuEnabled: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isEmbedded: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isEntityPreloadEnabled: true
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isExperimentalTiledLargeMap: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isFileSystemWriteAllowed: true
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isFullScreenAllowed: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isFullScreenFromStart: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isGameMenuEnabled: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isIOS: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isIntroEnabled: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isLinux: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isMac: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isMainMenuEnabled: true
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isManualResizeEnabled: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isMobile: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isNative: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isPauseMusicWhenMinimized: true
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isPreserveResizeRatio: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isProfilingEnabled: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isScaleAffectedOnResize: true
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isSingleStep: false
+-14:27:19.005 [FXGL Background Thread 3 ] DEBUG Engine               - isUserProfileEnabled: false
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - isWindows: true
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - language: ObjectProperty [value: ENGLISH]
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - menuKey: ESCAPE
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - mouseSensitivity: 0.2
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - notificationViewClass: class com.almasb.fxgl.notification.view.XboxNotificationView
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - pixelsPerMeter: 50.0
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - platform: WINDOWS
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - prefHeightProperty: ReadOnlyDoubleProperty [value: 720.0]
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - prefWidthProperty: ReadOnlyDoubleProperty [value: 1280.0]
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - profileDir: profiles/
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - profileName: StringProperty [value: DEFAULT]
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - randomSeed: -1
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - runtimeInfo: RuntimeInfo(platform=WINDOWS, version=21+dev-SNAPSHOT, build=26.03.2024 21.04)
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - saveFileExt: sav
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - scaledHeightProp$fxgl: DoubleProperty [bound, value: 720.0]
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - scaledWidthProp$fxgl: DoubleProperty [bound, value: 1280.0]
+-14:27:19.007 [FXGL Background Thread 3 ] DEBUG Engine               - sceneFactory: org.example.core.GameApp$1@3310dd3e
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - secondsIn24h: 60
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - soundMenuBack: menu/back.wav
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - soundMenuPress: menu/press.wav
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - soundMenuSelect: menu/select.wav
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - soundNotification: core/notification.wav
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - stageStyle: DECORATED
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - supportedLanguages: [ENGLISH, FRENCH, GERMAN, HUNGARIAN, RUSSIAN]
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - ticksPerSecond: -1
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - title: Prototype Game
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - urlGithub: https://github.com/AlmasB/FXGL
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - urlLeaderboard: http://fxgl-top.herokuapp.com/
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - urlPOM: https://raw.githubusercontent.com/AlmasB/FXGL/release/README.md
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - userAppClass: class org.example.core.GameApp
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - version: 0.1.5
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - versionCheckDays: 7
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - width: 1280
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - Logging services
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.FXGLAssetLoaderService
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.FXGLApplication$GameApplicationService
+-14:27:19.008 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.FXGLDialogService
+-14:27:19.009 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.IOTaskExecutorService
+-14:27:19.009 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.io.FileSystemService
+-14:27:19.009 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.localization.LocalizationService
+-14:27:19.009 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.SystemBundleService
+-14:27:19.009 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.profile.SaveLoadService
+-14:27:19.009 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.ui.FXGLUIFactoryServiceProvider
+-14:27:19.009 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.ui.FXGLDialogFactoryServiceProvider
+-14:27:19.009 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.audio.AudioPlayer
+-14:27:19.009 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.notification.impl.NotificationServiceProvider
+-14:27:19.009 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.achievement.AchievementService
+-14:27:19.009 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.cutscene.CutsceneService
+-14:27:19.009 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.minigames.MiniGameService
+-14:27:19.009 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.net.NetService
+-14:27:19.009 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.UpdaterService
+-14:27:19.009 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.dev.DevService
+-14:27:27.199 [JavaFX Application Thread] DEBUG FXGLApplication      - Exiting FXGL
+-14:27:27.199 [JavaFX Application Thread] DEBUG LoopRunner           - Stopping loop
+-14:27:27.199 [JavaFX Application Thread] DEBUG SystemBundleService  - Saving FXGL system data
+-14:27:27.201 [JavaFX Application Thread] DEBUG FileSystemAccess     - Writing to: C:\Users\ginac\IdeaProjects\TheOnlyException3\system\fxgl.bundle
+-14:27:27.205 [JavaFX Application Thread] DEBUG Async                - Shutting down background threads
+-14:27:27.205 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Closing main window
+-14:27:27.230 [JavaFX Application Thread] DEBUG Logger               - Closing Logger
+Index: logs/FXGL-10-May-2025-14.32.16.log
+===================================================================
+diff --git a/logs/FXGL-10-May-2025-14.32.16.log b/logs/FXGL-10-May-2025-14.32.16.log
+deleted file mode 100644
+--- a/logs/FXGL-10-May-2025-14.32.16.log	(revision ad4bd3a6e0e4260b2fa6efd6bef37033ca5784a4)
++++ /dev/null	(revision ad4bd3a6e0e4260b2fa6efd6bef37033ca5784a4)
+@@ -1,496 +0,0 @@
+-14:27:30.730 [main                     ] DEBUG Logger               - Configured Logger
+-14:27:30.737 [main                     ] DEBUG GameApplication      - Logging settings
+-Title: Prototype Game
+-Version: 0.1.5
+-Width: 1280
+-Height: 720
+-Fullscreen: false
+-Intro: false
+-Profiling: false
+-Single step:false
+-App Mode: DEVELOPER
+-Menu Key: ESCAPE
+-Stage Style: DECORATED
+-Scene Factory: class org.example.core.GameApp$1
+-
+-14:27:30.953 [JavaFX Application Thread] DEBUG FXGLApplication      - Initializing FXGL
+-14:27:30.957 [JavaFX Application Thread] INFO  Engine               - FXGL-21+dev-SNAPSHOT (26.03.2024 21.04) on WINDOWS (J:24 FX:21.0.1)
+-14:27:30.958 [JavaFX Application Thread] DEBUG Engine               - JRE Vendor Name: Oracle Corporation
+-14:27:30.958 [JavaFX Application Thread] DEBUG Engine               - Running on OS: Windows 11 version 10.0
+-14:27:30.958 [JavaFX Application Thread] DEBUG Engine               - Architecture: amd64
+-14:27:30.958 [JavaFX Application Thread] INFO  Engine               - Source code and latest versions at: https://github.com/AlmasB/FXGL
+-14:27:30.958 [JavaFX Application Thread] INFO  Engine               -       Ask questions and discuss at: https://github.com/AlmasB/FXGL/discussions
+-14:27:30.958 [JavaFX Application Thread] INFO  Engine               -              Join the FXGL chat at: https://gitter.im/AlmasB/FXGL
+-14:27:31.195 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Creating a JavaFX scene
+-14:27:31.278 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Target settings size: 1280.0 x 720.0
+-14:27:31.279 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled scene size:    1280.0 x 720.0
+-14:27:31.279 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled ratio: (1.0, 1.0)
+-14:27:31.280 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Set initial scene to FXGLStartupScene
+-14:27:31.288 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Opening main window
+-14:27:31.444 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Window border size: (14.4000244140625, 37.5999755859375)
+-14:27:31.444 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled size: 1280.0 x 720.0
+-14:27:31.445 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled ratio: (1.0, 1.0)
+-14:27:31.445 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scene size: 1280.0 x 720.0
+-14:27:31.445 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Stage size: 1294.4000244140625 x 757.5999755859375
+-14:27:31.465 [FXGL Background Thread 1 ] DEBUG Engine               - Initializing environment variables
+-14:27:31.538 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - User app class for loading assets: class org.example.core.GameApp
+-14:27:31.538 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Applying CSS: fxgl_dark.css
+-14:27:31.540 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/ui/css/fxgl_dark.css
+-14:27:31.624 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Initializing application scenes
+-14:27:31.682 [FXGL Background Thread 1 ] DEBUG GameWorld            - Game world initialized
+-14:27:31.796 [FXGL Background Thread 1 ] DEBUG PhysicsWorld         - Physics world initialized: appHeight=720, physics.ppm=50.0
+-14:27:31.797 [FXGL Background Thread 1 ] DEBUG PhysicsWorld         - Using strategy: BRUTE_FORCE
+-14:27:31.802 [FXGL Background Thread 1 ] DEBUG GameScene            - Game scene initialized: 1280x720
+-14:27:32.249 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Application scenes initialized
+-14:27:32.281 [FXGL Background Thread 1 ] DEBUG SystemBundleService  - Loading FXGL system data
+-14:27:32.282 [FXGL Background Thread 1 ] DEBUG FileSystemAccess     - Reading from: C:\Users\ginac\IdeaProjects\TheOnlyException3\system\fxgl.bundle
+-14:27:32.287 [FXGL Background Thread 1 ] DEBUG SystemBundleService  - Bundle FXGL: {}
+-14:27:32.287 [FXGL Background Thread 1 ] DEBUG UpdaterService       - Checking for updates
+-14:27:32.310 [FXGL Background Thread 4 ] DEBUG FXGLApplication      - Loading fonts
+-14:27:32.310 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl-samples/21.1/fxgl-samples-21.1.jar!/assets/ui/fonts/VarelaRound-Regular.ttf
+-14:27:32.311 [FXGL Background Thread 1 ] DEBUG FXGLApplication      - Loading default localization
+-14:27:32.314 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/languages/english.lang
+-14:27:32.324 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/ui/fonts/Abel-Regular.ttf
+-14:27:32.341 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/ui/fonts/TerminalLandMono-Regular.otf
+-14:27:32.356 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/ui/fonts/Courier-Prime.ttf
+-14:27:32.393 [JavaFX Application Thread] DEBUG FXGLApplication      - Registering font factories with UI factory
+-14:27:32.419 [FXGL Background Thread 1 ] INFO  FXGLApplication      - FXGL initialization took: 0.954 sec
+-14:27:32.436 [JavaFX Application Thread] DEBUG Input                - Registered new binding: action0 - A
+-14:27:32.437 [JavaFX Application Thread] DEBUG Input                - Registered new binding: action1 - D
+-14:27:32.438 [JavaFX Application Thread] DEBUG Input                - Registered new binding: action2 - W
+-14:27:32.439 [JavaFX Application Thread] DEBUG Input                - Registered new binding: action3 - S
+-14:27:32.440 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/textures/fxgl_icon.png
+-14:27:32.563 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/textures/fxgl_default_cursor.png
+-14:27:32.568 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Screenshot - CTRL+8
+-14:27:32.569 [JavaFX Application Thread] DEBUG Input                - Registered new binding: System info dump - CTRL+9
+-14:27:32.570 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Restart - CTRL+R
+-14:27:32.571 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Toggle Debug Camera - CTRL+7
+-14:27:32.578 [JavaFX Application Thread] DEBUG LoopRunner           - Starting loop
+-14:27:32.578 [JavaFX Application Thread] DEBUG LoopRunner           - Initializing JavaFX AnimationTimerLoop
+-14:27:32.584 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:27:32.596 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLStartupScene and adding to FXGLMainMenuDummyScene
+-14:27:32.596 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLStartupScene -> FXGLMainMenuDummyScene
+-14:27:32.596 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: LoginScene
+-14:27:32.597 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:27:32.655 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLMainMenuDummyScene and adding to LoginScene
+-14:27:32.657 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLMainMenuDummyScene -> LoginScene
+-14:27:33.129 [FXGL Background Thread 2 ] INFO  UpdaterService       - Your current version:  21+dev-SNAPSHOT
+-14:27:33.129 [FXGL Background Thread 2 ] INFO  UpdaterService       - Latest stable version: 21.1
+-14:27:35.308 [FXGL Background Thread 3 ] DEBUG Engine               - Logging environment variables
+-14:27:35.308 [FXGL Background Thread 3 ] DEBUG Engine               - achievements: []
+-14:27:35.309 [FXGL Background Thread 3 ] DEBUG Engine               - actualHeight: 720.0
+-14:27:35.309 [FXGL Background Thread 3 ] DEBUG Engine               - actualHeightProperty: ReadOnlyDoubleProperty [value: 720.0]
+-14:27:35.309 [FXGL Background Thread 3 ] DEBUG Engine               - actualWidth: 1280.0
+-14:27:35.309 [FXGL Background Thread 3 ] DEBUG Engine               - actualWidthProperty: ReadOnlyDoubleProperty [value: 1280.0]
+-14:27:35.309 [FXGL Background Thread 3 ] DEBUG Engine               - appIcon: fxgl_icon.png
+-14:27:35.309 [FXGL Background Thread 3 ] DEBUG Engine               - applicationMode: DEVELOPER
+-14:27:35.309 [FXGL Background Thread 3 ] DEBUG Engine               - cSSList: [fxgl_dark.css]
+-14:27:35.310 [FXGL Background Thread 3 ] DEBUG Engine               - collisionDetectionStrategy: BRUTE_FORCE
+-14:27:35.310 [FXGL Background Thread 3 ] DEBUG Engine               - configClass: Optional.empty
+-14:27:35.310 [FXGL Background Thread 3 ] DEBUG Engine               - credits: []
+-14:27:35.313 [FXGL Background Thread 3 ] DEBUG Engine               - defaultCursor: CursorInfo(imageName=fxgl_default_cursor.png, hotspotX=7.0, hotspotY=6.0)
+-14:27:35.314 [FXGL Background Thread 3 ] DEBUG Engine               - devBBoxColorProperty: ObjectProperty [value: 0xff0000ff]
+-14:27:35.314 [FXGL Background Thread 3 ] DEBUG Engine               - devEnableDebugCameraProperty: BooleanProperty [value: false]
+-14:27:35.314 [FXGL Background Thread 3 ] DEBUG Engine               - devSensorColorProperty: ObjectProperty [value: 0xffff00ff]
+-14:27:35.314 [FXGL Background Thread 3 ] DEBUG Engine               - devShowBBoxProperty: BooleanProperty [value: false]
+-14:27:35.314 [FXGL Background Thread 3 ] DEBUG Engine               - devShowPositionProperty: BooleanProperty [value: false]
+-14:27:35.314 [FXGL Background Thread 3 ] DEBUG Engine               - enabledMenuItems: []
+-14:27:35.314 [FXGL Background Thread 3 ] DEBUG Engine               - engineServices: [class com.almasb.fxgl.app.services.FXGLAssetLoaderService, class com.almasb.fxgl.app.FXGLApplication$GameApplicationService, class com.almasb.fxgl.app.services.FXGLDialogService, class com.almasb.fxgl.app.services.IOTaskExecutorService, class com.almasb.fxgl.io.FileSystemService, class com.almasb.fxgl.localization.LocalizationService, class com.almasb.fxgl.app.services.SystemBundleService, class com.almasb.fxgl.profile.SaveLoadService, class com.almasb.fxgl.ui.FXGLUIFactoryServiceProvider, class com.almasb.fxgl.ui.FXGLDialogFactoryServiceProvider, class com.almasb.fxgl.audio.AudioPlayer, class com.almasb.fxgl.notification.impl.NotificationServiceProvider, class com.almasb.fxgl.achievement.AchievementService, class com.almasb.fxgl.cutscene.CutsceneService, class com.almasb.fxgl.minigames.MiniGameService, class com.almasb.fxgl.net.NetService, class com.almasb.fxgl.app.services.UpdaterService, class com.almasb.fxgl.dev.DevService]
+-14:27:35.314 [FXGL Background Thread 3 ] DEBUG Engine               - fontGame: Abel-Regular.ttf
+-14:27:35.314 [FXGL Background Thread 3 ] DEBUG Engine               - fontMono: TerminalLandMono-Regular.otf
+-14:27:35.314 [FXGL Background Thread 3 ] DEBUG Engine               - fontSizeScaleUI: 1.0
+-14:27:35.314 [FXGL Background Thread 3 ] DEBUG Engine               - fontText: Courier-Prime.ttf
+-14:27:35.314 [FXGL Background Thread 3 ] DEBUG Engine               - fontUI: VarelaRound-Regular.ttf
+-14:27:35.314 [FXGL Background Thread 3 ] DEBUG Engine               - fullScreen: BooleanProperty [value: false]
+-14:27:35.314 [FXGL Background Thread 3 ] DEBUG Engine               - gameDifficulty: MEDIUM
+-14:27:35.314 [FXGL Background Thread 3 ] DEBUG Engine               - gameDifficultyProperty: ObjectProperty [value: MEDIUM]
+-14:27:35.316 [FXGL Background Thread 3 ] DEBUG Engine               - globalMusicVolume: 0.5
+-14:27:35.316 [FXGL Background Thread 3 ] DEBUG Engine               - globalMusicVolumeProperty: DoubleProperty [value: 0.5]
+-14:27:35.316 [FXGL Background Thread 3 ] DEBUG Engine               - globalSoundVolume: 0.5
+-14:27:35.316 [FXGL Background Thread 3 ] DEBUG Engine               - globalSoundVolumeProperty: DoubleProperty [value: 0.5]
+-14:27:35.316 [FXGL Background Thread 3 ] DEBUG Engine               - height: 720
+-14:27:35.316 [FXGL Background Thread 3 ] DEBUG Engine               - is3D: false
+-14:27:35.316 [FXGL Background Thread 3 ] DEBUG Engine               - isAndroid: false
+-14:27:35.316 [FXGL Background Thread 3 ] DEBUG Engine               - isBrowser: false
+-14:27:35.316 [FXGL Background Thread 3 ] DEBUG Engine               - isClickFeedbackEnabled: false
+-14:27:35.316 [FXGL Background Thread 3 ] DEBUG Engine               - isCloseConfirmation: false
+-14:27:35.316 [FXGL Background Thread 3 ] DEBUG Engine               - isDesktop: true
+-14:27:35.316 [FXGL Background Thread 3 ] DEBUG Engine               - isDeveloperMenuEnabled: false
+-14:27:35.316 [FXGL Background Thread 3 ] DEBUG Engine               - isEmbedded: false
+-14:27:35.316 [FXGL Background Thread 3 ] DEBUG Engine               - isEntityPreloadEnabled: true
+-14:27:35.317 [FXGL Background Thread 3 ] DEBUG Engine               - isExperimentalTiledLargeMap: false
+-14:27:35.317 [FXGL Background Thread 3 ] DEBUG Engine               - isFileSystemWriteAllowed: true
+-14:27:35.317 [FXGL Background Thread 3 ] DEBUG Engine               - isFullScreenAllowed: false
+-14:27:35.317 [FXGL Background Thread 3 ] DEBUG Engine               - isFullScreenFromStart: false
+-14:27:35.317 [FXGL Background Thread 3 ] DEBUG Engine               - isGameMenuEnabled: false
+-14:27:35.317 [FXGL Background Thread 3 ] DEBUG Engine               - isIOS: false
+-14:27:35.317 [FXGL Background Thread 3 ] DEBUG Engine               - isIntroEnabled: false
+-14:27:35.317 [FXGL Background Thread 3 ] DEBUG Engine               - isLinux: false
+-14:27:35.317 [FXGL Background Thread 3 ] DEBUG Engine               - isMac: false
+-14:27:35.318 [FXGL Background Thread 3 ] DEBUG Engine               - isMainMenuEnabled: true
+-14:27:35.318 [FXGL Background Thread 3 ] DEBUG Engine               - isManualResizeEnabled: false
+-14:27:35.318 [FXGL Background Thread 3 ] DEBUG Engine               - isMobile: false
+-14:27:35.318 [FXGL Background Thread 3 ] DEBUG Engine               - isNative: false
+-14:27:35.318 [FXGL Background Thread 3 ] DEBUG Engine               - isPauseMusicWhenMinimized: true
+-14:27:35.318 [FXGL Background Thread 3 ] DEBUG Engine               - isPreserveResizeRatio: false
+-14:27:35.318 [FXGL Background Thread 3 ] DEBUG Engine               - isProfilingEnabled: false
+-14:27:35.318 [FXGL Background Thread 3 ] DEBUG Engine               - isScaleAffectedOnResize: true
+-14:27:35.318 [FXGL Background Thread 3 ] DEBUG Engine               - isSingleStep: false
+-14:27:35.318 [FXGL Background Thread 3 ] DEBUG Engine               - isUserProfileEnabled: false
+-14:27:35.319 [FXGL Background Thread 3 ] DEBUG Engine               - isWindows: true
+-14:27:35.319 [FXGL Background Thread 3 ] DEBUG Engine               - language: ObjectProperty [value: ENGLISH]
+-14:27:35.319 [FXGL Background Thread 3 ] DEBUG Engine               - menuKey: ESCAPE
+-14:27:35.319 [FXGL Background Thread 3 ] DEBUG Engine               - mouseSensitivity: 0.2
+-14:27:35.319 [FXGL Background Thread 3 ] DEBUG Engine               - notificationViewClass: class com.almasb.fxgl.notification.view.XboxNotificationView
+-14:27:35.319 [FXGL Background Thread 3 ] DEBUG Engine               - pixelsPerMeter: 50.0
+-14:27:35.319 [FXGL Background Thread 3 ] DEBUG Engine               - platform: WINDOWS
+-14:27:35.319 [FXGL Background Thread 3 ] DEBUG Engine               - prefHeightProperty: ReadOnlyDoubleProperty [value: 720.0]
+-14:27:35.319 [FXGL Background Thread 3 ] DEBUG Engine               - prefWidthProperty: ReadOnlyDoubleProperty [value: 1280.0]
+-14:27:35.319 [FXGL Background Thread 3 ] DEBUG Engine               - profileDir: profiles/
+-14:27:35.320 [FXGL Background Thread 3 ] DEBUG Engine               - profileName: StringProperty [value: DEFAULT]
+-14:27:35.320 [FXGL Background Thread 3 ] DEBUG Engine               - randomSeed: -1
+-14:27:35.320 [FXGL Background Thread 3 ] DEBUG Engine               - runtimeInfo: RuntimeInfo(platform=WINDOWS, version=21+dev-SNAPSHOT, build=26.03.2024 21.04)
+-14:27:35.320 [FXGL Background Thread 3 ] DEBUG Engine               - saveFileExt: sav
+-14:27:35.320 [FXGL Background Thread 3 ] DEBUG Engine               - scaledHeightProp$fxgl: DoubleProperty [bound, value: 720.0]
+-14:27:35.320 [FXGL Background Thread 3 ] DEBUG Engine               - scaledWidthProp$fxgl: DoubleProperty [bound, value: 1280.0]
+-14:27:35.320 [FXGL Background Thread 3 ] DEBUG Engine               - sceneFactory: org.example.core.GameApp$1@2f338beb
+-14:27:35.320 [FXGL Background Thread 3 ] DEBUG Engine               - secondsIn24h: 60
+-14:27:35.320 [FXGL Background Thread 3 ] DEBUG Engine               - soundMenuBack: menu/back.wav
+-14:27:35.320 [FXGL Background Thread 3 ] DEBUG Engine               - soundMenuPress: menu/press.wav
+-14:27:35.320 [FXGL Background Thread 3 ] DEBUG Engine               - soundMenuSelect: menu/select.wav
+-14:27:35.320 [FXGL Background Thread 3 ] DEBUG Engine               - soundNotification: core/notification.wav
+-14:27:35.320 [FXGL Background Thread 3 ] DEBUG Engine               - stageStyle: DECORATED
+-14:27:35.320 [FXGL Background Thread 3 ] DEBUG Engine               - supportedLanguages: [ENGLISH, FRENCH, GERMAN, HUNGARIAN, RUSSIAN]
+-14:27:35.320 [FXGL Background Thread 3 ] DEBUG Engine               - ticksPerSecond: -1
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - title: Prototype Game
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - urlGithub: https://github.com/AlmasB/FXGL
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - urlLeaderboard: http://fxgl-top.herokuapp.com/
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - urlPOM: https://raw.githubusercontent.com/AlmasB/FXGL/release/README.md
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - userAppClass: class org.example.core.GameApp
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - version: 0.1.5
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - versionCheckDays: 7
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - width: 1280
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - Logging services
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.FXGLAssetLoaderService
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.FXGLApplication$GameApplicationService
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.FXGLDialogService
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.IOTaskExecutorService
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.io.FileSystemService
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.localization.LocalizationService
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.SystemBundleService
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.profile.SaveLoadService
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.ui.FXGLUIFactoryServiceProvider
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.ui.FXGLDialogFactoryServiceProvider
+-14:27:35.321 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.audio.AudioPlayer
+-14:27:35.323 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.notification.impl.NotificationServiceProvider
+-14:27:35.323 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.achievement.AchievementService
+-14:27:35.323 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.cutscene.CutsceneService
+-14:27:35.323 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.minigames.MiniGameService
+-14:27:35.323 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.net.NetService
+-14:27:35.323 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.UpdaterService
+-14:27:35.323 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.dev.DevService
+-14:27:53.838 [JavaFX Application Thread] DEBUG GameWorld            - Game world initialized
+-14:27:53.839 [JavaFX Application Thread] DEBUG PhysicsWorld         - Physics world initialized: appHeight=720, physics.ppm=50.0
+-14:27:53.839 [JavaFX Application Thread] DEBUG PhysicsWorld         - Using strategy: BRUTE_FORCE
+-14:27:53.841 [JavaFX Application Thread] DEBUG GameScene            - Game scene initialized: 1280x720
+-14:27:53.895 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: MainMenuScene
+-14:27:53.910 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:27:53.915 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from LoginScene and adding to MainMenuScene
+-14:27:53.915 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - LoginScene -> MainMenuScene
+-14:27:53.926 [JavaFX Application Thread] DEBUG GameWorld            - Game world initialized
+-14:27:53.932 [JavaFX Application Thread] DEBUG PhysicsWorld         - Physics world initialized: appHeight=720, physics.ppm=50.0
+-14:27:53.932 [JavaFX Application Thread] DEBUG PhysicsWorld         - Using strategy: BRUTE_FORCE
+-14:27:53.934 [JavaFX Application Thread] DEBUG GameScene            - Game scene initialized: 1280x720
+-14:27:53.984 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: MainMenuScene
+-14:27:54.000 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:27:54.004 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from MainMenuScene and adding to MainMenuScene
+-14:27:54.004 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - MainMenuScene -> MainMenuScene
+-14:27:55.294 [JavaFX Application Thread] DEBUG GameApplicationServi - Starting new game
+-14:27:55.296 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: MainMenuScene
+-14:27:55.296 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:27:55.298 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from MainMenuScene and adding to MainMenuScene
+-14:27:55.299 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - MainMenuScene <- MainMenuScene
+-14:27:55.299 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: MainMenuScene
+-14:27:55.299 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:27:55.299 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from MainMenuScene and adding to LoginScene
+-14:27:55.300 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - LoginScene <- MainMenuScene
+-14:27:55.562 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: LoginScene
+-14:27:55.562 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:27:55.562 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from LoginScene and adding to FXGLMainMenuDummyScene
+-14:27:55.562 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLMainMenuDummyScene <- LoginScene
+-14:27:55.563 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:27:55.595 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLMainMenuDummyScene and adding to FXGLLoadingScene
+-14:27:55.595 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLMainMenuDummyScene -> FXGLLoadingScene
+-14:27:55.595 [JavaFX Application Thread] DEBUG GameApplicationServi - Clearing previous game
+-14:27:55.595 [JavaFX Application Thread] DEBUG GameScene            - Clearing game scene
+-14:27:55.596 [JavaFX Application Thread] DEBUG GameWorld            - Clearing game world
+-14:27:55.596 [JavaFX Application Thread] DEBUG PhysicsWorld         - Clearing physics world
+-14:27:55.600 [FXGL Background Thread 2 ] DEBUG FXGLApplication      - Initializing game
+-14:27:55.631 [FXGL Background Thread 2 ] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/dasd.png
+-14:27:55.679 [FXGL Background Thread 2 ] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/player-scaled.png
+-14:27:55.874 [FXGL Background Thread 2 ] INFO  FXGLApplication      - Game initialization took: 0.275 sec
+-14:27:55.892 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:27:55.935 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLLoadingScene and adding to GameScene
+-14:27:55.935 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLLoadingScene -> GameScene
+-14:27:56.596 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/MaggotWalk-scaled.png
+-14:27:56.609 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/BeetleMove-scaled.png
+-14:27:56.615 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/MantisMove-scaled.png
+-14:27:56.624 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/BeeMove-scaled.png
+-14:27:56.628 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/GiantFly.png
+-14:27:56.631 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/DragonFly.png
+-14:28:05.451 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+-14:28:05.451 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:28:05.457 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+-14:28:05.457 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+-14:28:06.800 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+-14:28:06.800 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:28:06.800 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+-14:28:06.800 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+-14:28:06.812 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+-14:28:06.813 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:28:13.233 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+-14:28:13.233 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:28:13.234 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+-14:28:13.235 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+-14:28:13.953 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+-14:28:13.953 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:28:13.954 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+-14:28:13.954 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+-14:28:22.527 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+-14:28:22.528 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:28:34.578 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+-14:28:34.578 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:28:34.579 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+-14:28:34.579 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+-14:28:36.127 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+-14:28:36.127 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:28:36.127 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+-14:28:36.128 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+-14:28:39.166 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+-14:28:39.167 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:28:41.232 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:28:41.232 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:28:45.140 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+-14:28:45.140 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:28:45.141 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+-14:28:45.141 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+-14:28:46.051 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+-14:28:46.051 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:28:46.051 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+-14:28:46.051 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+-14:28:47.119 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:28:47.119 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:28:51.379 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/lightning_strike.png
+-14:28:52.271 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:28:52.272 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:28:55.151 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+-14:28:55.151 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:28:57.278 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:28:57.279 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:29:02.288 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:29:02.288 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:29:07.311 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:29:07.311 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:29:10.191 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+-14:29:10.191 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:29:12.319 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:29:12.319 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:29:16.469 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+-14:29:16.469 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:29:16.470 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+-14:29:16.470 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+-14:29:17.643 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+-14:29:17.643 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:29:17.643 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+-14:29:17.643 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+-14:29:18.480 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:29:18.480 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:29:23.567 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:29:23.567 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:29:26.430 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+-14:29:26.431 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:29:28.591 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:29:28.592 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:29:33.599 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:29:33.599 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:29:38.624 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:29:38.624 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:29:41.423 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+-14:29:41.423 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:29:43.632 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:29:43.632 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:29:47.441 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+-14:29:47.441 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:29:47.441 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+-14:29:47.441 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+-14:29:51.742 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+-14:29:51.742 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:29:51.743 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+-14:29:51.743 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+-14:29:52.992 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:29:52.992 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:29:58.095 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:29:58.096 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:29:58.896 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:29:58.896 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:00.878 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+-14:30:00.879 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:30:00.910 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:00.911 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:02.926 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:02.927 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:03.104 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:30:03.104 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:04.943 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:04.944 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:06.960 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:06.960 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:08.127 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:30:08.127 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:08.975 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:08.976 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:10.991 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:10.992 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:13.006 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:13.006 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:13.135 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:30:13.136 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:15.022 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:15.022 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:15.870 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+-14:30:15.871 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:30:17.039 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:17.039 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:18.160 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:30:18.160 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:19.054 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:19.055 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:21.070 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:21.071 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:21.414 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/glassparticle.png" was not found!
+-14:30:21.414 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:30:23.087 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:23.088 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:23.167 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:30:23.167 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:25.102 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:25.103 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:27.119 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:27.120 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:28.191 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:30:28.191 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:29.135 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:29.135 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:30.862 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+-14:30:30.863 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:30:31.151 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:31.152 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:33.166 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:33.167 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:33.198 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:30:33.198 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:35.183 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:35.183 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:37.199 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:37.199 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:38.223 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:30:38.223 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:39.215 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:39.215 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:41.230 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:41.231 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:41.840 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+-14:30:41.840 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:30:41.841 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+-14:30:41.841 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+-14:30:45.632 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+-14:30:45.632 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:30:45.632 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+-14:30:45.632 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+-14:30:47.135 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:30:47.135 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:47.151 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:47.151 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:48.880 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/glassparticle.png" was not found!
+-14:30:48.881 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:30:49.232 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:49.232 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:49.855 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+-14:30:49.855 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:30:51.246 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:51.246 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:52.223 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:30:52.223 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:53.246 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:53.247 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:55.263 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:55.263 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:57.231 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:30:57.232 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:57.279 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:57.279 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:30:58.287 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/glassparticle.png" was not found!
+-14:30:58.287 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:30:59.295 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:30:59.295 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:01.311 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:01.312 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:02.256 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:31:02.256 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:03.327 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:03.327 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:04.846 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+-14:31:04.846 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:31:05.343 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:05.343 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:07.262 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:31:07.263 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:07.374 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:07.376 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:09.406 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:09.407 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:11.422 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:11.423 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:12.303 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:31:12.303 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:13.439 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:13.439 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:15.454 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:15.455 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:17.311 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:31:17.311 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:17.472 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:17.472 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:19.487 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:19.487 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:19.870 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+-14:31:19.870 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+-14:31:21.502 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:21.502 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:22.335 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:31:22.335 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:23.519 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:23.519 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:25.535 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:25.535 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:27.343 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:31:27.343 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:27.552 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:27.552 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:29.566 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:29.567 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:31.583 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+-14:31:31.583 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:32.367 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+-14:31:32.367 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+-14:31:32.817 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+-14:31:32.818 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+-14:31:32.818 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+-14:31:32.818 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+-14:32:16.286 [JavaFX Application Thread] DEBUG FXGLApplication      - Exiting FXGL
+-14:32:16.287 [JavaFX Application Thread] DEBUG LoopRunner           - Stopping loop
+-14:32:16.287 [JavaFX Application Thread] DEBUG SystemBundleService  - Saving FXGL system data
+-14:32:16.290 [JavaFX Application Thread] DEBUG FileSystemAccess     - Writing to: C:\Users\ginac\IdeaProjects\TheOnlyException3\system\fxgl.bundle
+-14:32:16.294 [JavaFX Application Thread] DEBUG Async                - Shutting down background threads
+-14:32:16.294 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Closing main window
+-14:32:16.317 [JavaFX Application Thread] DEBUG Logger               - Closing Logger
+Index: Test/target/classes/css/styles.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/* Base Styles */\r\n.app-root {\r\n    -fx-background-color: #121212;\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n}\r\n\r\n/* Overlay Container */\r\n.overlay-container {\r\n    -fx-background-color: rgba(0, 0, 0, 0.5);\r\n    -fx-alignment: center;\r\n}\r\n\r\n/* Game Over Specific Styles */\r\n.game-over-pane {\r\n    -fx-background-color: rgba(0, 0, 0, 0.7);\r\n    -fx-border-width: 1px;\r\n    -fx-border-color: #FF4040;\r\n    -fx-border-radius: 10px;\r\n    -fx-background-radius: 10px;\r\n    -fx-effect: dropshadow(gaussian, #FF4040, 15, 0.5, 0, 0);\r\n    -fx-animation: glow 3s infinite;\r\n}\r\n\r\n.game-over-box {\r\n    -fx-background-color: transparent;\r\n}\r\n\r\n.game-over-title-label {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 55px;\r\n    -fx-text-fill: #FF4040;\r\n    -fx-stroke: #FFFFFF;\r\n    -fx-stroke-width: 0.5;\r\n    -fx-effect: innershadow(gaussian, #FF4040, 8, 0.8, 0, 0);\r\n    -fx-alignment: center;\r\n}\r\n\r\n.game-over-stats-label {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 25px;\r\n    -fx-text-fill: white;\r\n    -fx-alignment: center;\r\n    -fx-wrap-text: true;\r\n}\r\n\r\n.game-over-action-button {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: semibold;\r\n    -fx-font-size: 15px;\r\n    -fx-background-color: #8B0000;\r\n    -fx-text-fill: white;\r\n    -fx-padding: 12px 25px;\r\n    -fx-background-radius: 5px;\r\n    -fx-effect: dropshadow(gaussian, #FF4040, 10, 0.5, 0, 0);\r\n    -fx-cursor: hand;\r\n}\r\n\r\n.game-over-action-button:hover {\r\n    -fx-background-color: #FF4040;\r\n    -fx-effect: dropshadow(gaussian, #FF4040, 15, 0.7, 0, 0);\r\n    -fx-scale-x: 1.05;\r\n    -fx-scale-y: 1.05;\r\n}\r\n\r\n/* Animations */\r\n@keyframes glow {\r\n    0% { -fx-effect: innershadow(gaussian, #FF4040, 6, 0.6, 0, 0); }\r\n    50% { -fx-effect: innershadow(gaussian, #FF4040, 10, 0.9, 0, 0); }\r\n    100% { -fx-effect: innershadow(gaussian, #FF4040, 6, 0.6, 0, 0); }\r\n}\r\n\r\n/* Login Specific Styles */\r\n.login-pane {\r\n    -fx-background-color: rgba(0, 0, 0, 0.7);\r\n    -fx-border-width: 1px;\r\n    -fx-border-color: #18b7e7;\r\n    -fx-border-radius: 10px;\r\n    -fx-background-radius: 10px;\r\n    -fx-effect: dropshadow(gaussian, #18b7e7, 15, 0.5, 0, 0);\r\n    -fx-animation: glow 3s infinite;\r\n}\r\n\r\n.login-box {\r\n    -fx-background-color: transparent;\r\n}\r\n\r\n.login-title-label {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 50px;\r\n    -fx-text-fill: white;\r\n    -fx-effect: dropshadow(gaussian, #18b7e7, 15, 0.7, 0, 0);\r\n    -fx-alignment: center;\r\n}\r\n\r\n.login-error-label {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 14px;\r\n    -fx-text-fill: #ff6363;\r\n    -fx-alignment: center;\r\n    -fx-wrap-text: true;\r\n}\r\n\r\n.login-text-field {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: semibold;\r\n    -fx-font-size: 16px;\r\n    -fx-background-color: rgba(30, 30, 30, 0.8);\r\n    -fx-text-fill: white;\r\n    -fx-padding: 12px;\r\n    -fx-border-color: #18b7e7;\r\n    -fx-border-width: 1.5px;\r\n    -fx-border-radius: 5px;\r\n    -fx-background-radius: 5px;\r\n    -fx-prompt-text-fill: #a0a0a0;\r\n}\r\n\r\n.login-text-field:focused {\r\n    -fx-border-color: #ffffff;\r\n    -fx-effect: dropshadow(gaussian, #18b7e7, 10, 0.5, 0, 0);\r\n    -fx-background-color: rgba(40, 40, 40, 0.8);\r\n}\r\n\r\n.login-action-button {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: semibold;\r\n    -fx-font-size: 18px;\r\n    -fx-background-color: #177bdf;\r\n    -fx-text-fill: white;\r\n    -fx-padding: 12px 25px;\r\n    -fx-background-radius: 5px;\r\n    -fx-effect: dropshadow(gaussian, #18b7e7, 10, 0.5, 0, 0);\r\n    -fx-cursor: hand;\r\n}\r\n\r\n.login-action-button:hover {\r\n    -fx-background-color: #18b7e7;\r\n    -fx-effect: dropshadow(gaussian, #18b7e7, 15, 0.7, 0, 0);\r\n    -fx-scale-x: 1.05;\r\n    -fx-scale-y: 1.05;\r\n}\r\n\r\n.login-switch-button {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 14px;\r\n    -fx-background-color: transparent;\r\n    -fx-text-fill: #18b7e7;\r\n    -fx-underline: true;\r\n    -fx-cursor: hand;\r\n}\r\n\r\n.login-switch-button:hover {\r\n    -fx-text-fill: white;\r\n    -fx-effect: dropshadow(gaussian, #18b7e7, 8, 0.4, 0, 0);\r\n}\r\n\r\n/* Registration Styles */\r\n.register-pane {\r\n    -fx-background-color: rgba(0, 0, 0, 0.7);\r\n    -fx-border-width: 1px;\r\n    -fx-border-color: #ff3333;\r\n    -fx-border-radius: 10px;\r\n    -fx-background-radius: 10px;\r\n    -fx-effect: dropshadow(gaussian, #ff3333, 15, 0.5, 0, 0);\r\n    -fx-animation: glow 3s infinite;\r\n}\r\n\r\n.register-title-label {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 35px;\r\n    -fx-text-fill: white;\r\n    -fx-effect: dropshadow(gaussian, #ff3333, 15, 0.7, 0, 0);\r\n    -fx-alignment: center;\r\n}\r\n\r\n.register-error-label {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 14px;\r\n    -fx-text-fill: #ff6363;\r\n    -fx-alignment: center;\r\n    -fx-wrap-text: true;\r\n}\r\n\r\n.register-text-field {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: semibold;\r\n    -fx-font-size: 16px;\r\n    -fx-background-color: rgba(30, 30, 30, 0.8);\r\n    -fx-text-fill: white;\r\n    -fx-padding: 12px;\r\n    -fx-border-color: #ff3333;\r\n    -fx-border-width: 1.5px;\r\n    -fx-border-radius: 5px;\r\n    -fx-background-radius: 5px;\r\n    -fx-prompt-text-fill: #a0a0a0;\r\n}\r\n\r\n.register-text-field:focused {\r\n    -fx-border-color: #ffffff;\r\n    -fx-effect: dropshadow(gaussian, #ff3333, 10, 0.5, 0, 0);\r\n    -fx-background-color: rgba(40, 40, 40, 0.8);\r\n}\r\n\r\n.register-action-button {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: semibold;\r\n    -fx-font-size: 18px;\r\n    -fx-background-color: #e71818;\r\n    -fx-text-fill: white;\r\n    -fx-padding: 12px 25px;\r\n    -fx-background-radius: 5px;\r\n    -fx-effect: dropshadow(gaussian, #ff3333, 10, 0.5, 0, 0);\r\n    -fx-cursor: hand;\r\n}\r\n\r\n.register-action-button:hover {\r\n    -fx-background-color: #ff3333;\r\n    -fx-effect: dropshadow(gaussian, #ff3333, 15, 0.7, 0, 0);\r\n    -fx-scale-x: 1.05;\r\n    -fx-scale-y: 1.05;\r\n}\r\n\r\n.register-switch-button {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 14px;\r\n    -fx-background-color: transparent;\r\n    -fx-text-fill: #ff3333;\r\n    -fx-underline: true;\r\n    -fx-cursor: hand;\r\n}\r\n\r\n.register-switch-button:hover {\r\n    -fx-text-fill: white;\r\n    -fx-effect: dropshadow(gaussian, #ff3333, 8, 0.4, 0, 0);\r\n}\r\n\r\n.menu-box {\r\n    -fx-spacing: 20px;\r\n    -fx-alignment: center;\r\n}\r\n\r\n/* HUD Panel */\r\n.hud-panel {\r\n    -fx-background-color: rgba(0, 0, 0, 0.7);\r\n    -fx-border-color: #18b7e7;\r\n    -fx-border-width: 1;\r\n    -fx-border-radius: 5;\r\n    -fx-background-radius: 5;\r\n}\r\n\r\n/* Text Styles */\r\n.wave-text {\r\n    -fx-font-family: 'Pixelify Sans';\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 24px;\r\n}\r\n\r\n.name-text {\r\n    -fx-font-family: 'Pixelify Sans';\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 20px;\r\n}\r\n\r\n.health-text {\r\n    -fx-font-family: 'Pixelify Sans';\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 24px;\r\n}\r\n\r\n.timer-text {\r\n    -fx-font-family: 'Pixelify Sans';\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 24px;\r\n}\r\n\r\n.level-text {\r\n    -fx-font-family: 'Pixelify Sans';\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 24px;\r\n}\r\n\r\n.exp-text {\r\n    -fx-font-family: 'Pixelify Sans';\r\n    -fx-font-weight: bold;\r\n    -fx-font-size: 24px;\r\n}\r\n\r\n.exp-progress-text {\r\n    -fx-font-family: 'Pixelify Sans';\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 18px;\r\n}\r\n\r\n/* EXP Bar Styles */\r\n.exp-bar-background {\r\n    -fx-fill: rgba(30, 30, 30, 0.8);\r\n    -fx-stroke: #007fa7;\r\n    -fx-stroke-width: 2;\r\n    -fx-arc-width: 10;\r\n    -fx-arc-height: 10;\r\n}\r\n\r\n.exp-bar-fill {\r\n    -fx-fill: #fff943;\r\n    -fx-arc-width: 10;\r\n    -fx-arc-height: 10;\r\n}\r\n/* Checkbox Styles */\r\n.login-checkbox {\r\n    -fx-font-family: 'Pixelify Sans', 'Verdana', sans-serif;\r\n    -fx-font-weight: medium;\r\n    -fx-font-size: 14px;\r\n    -fx-text-fill: white;\r\n    -fx-padding: 5px;\r\n}\r\n\r\n.login-checkbox .box {\r\n    -fx-background-color: rgba(30, 30, 30, 0.8);\r\n    -fx-border-color: #18b7e7;\r\n    -fx-border-width: 1.5px;\r\n    -fx-border-radius: 3px;\r\n}\r\n\r\n.login-checkbox:selected .mark {\r\n    -fx-background-color: #18b7e7;\r\n}\r\n\r\n.login-checkbox:hover .box {\r\n    -fx-background-color: rgba(40, 40, 40, 0.8);\r\n    -fx-effect: dropshadow(gaussian, #18b7e7, 8, 0.4, 0, 0);\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Test/target/classes/css/styles.css b/Test/target/classes/css/styles.css
+--- a/Test/target/classes/css/styles.css	(revision ad4bd3a6e0e4260b2fa6efd6bef37033ca5784a4)
++++ b/Test/target/classes/css/styles.css	(date 1746861369872)
+@@ -335,4 +335,7 @@
+ .login-checkbox:hover .box {
+     -fx-background-color: rgba(40, 40, 40, 0.8);
+     -fx-effect: dropshadow(gaussian, #18b7e7, 8, 0.4, 0, 0);
+-}
+\ No newline at end of file
++}
++
++
++

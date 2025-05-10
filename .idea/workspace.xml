@@ -4,7 +4,52 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a6e27113-e10b-4f4b-824e-63578634f0bd" name="Changes" comment="merging to main" />
+    <list default="true" id="a6e27113-e10b-4f4b-824e-63578634f0bd" name="Changes" comment="merging to main">
+      <change afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/GameOverController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/src/main/resources/fonts/PixelifySans_Bold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/src/main/resources/fonts/PixelifySans_Medium.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/src/main/resources/fonts/PixelifySans_Regular.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/src/main/resources/fonts/PixelifySans_SemiBold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/src/main/resources/fxml/GameOverScene.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/target/classes/fonts/PixelifySans_Bold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/target/classes/fonts/PixelifySans_Medium.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/target/classes/fonts/PixelifySans_Regular.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/target/classes/fonts/PixelifySans_SemiBold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/target/classes/fxml/GameOverScene.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/GameOverController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameEntityFactory.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager$SpawnCommand.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logs/FXGL-10-May-2025-14.27.27.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logs/FXGL-10-May-2025-14.32.16.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/components/EnemyComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/components/EnemyComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/components/PlayerComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/components/PlayerComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/RegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/RegisterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/core/GameApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/core/GameApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/core/GameEntityFactor.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/core/GameEntityFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/core/WaveManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/core/WaveManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/resources/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/resources/css/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/resources/fxml/LoginScene.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/resources/fxml/LoginScene.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/resources/fxml/MainMenuScene.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/resources/fxml/MainMenuScene.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/css/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/fxml/LoginScene.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/fxml/LoginScene.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/fxml/MainMenuScene.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/fxml/MainMenuScene.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/EnemyComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/EnemyComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/PlayerComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/PlayerComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/LoginController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/RegisterController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/RegisterController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$MainMenuController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$MainMenuController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameEntityFactor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-14.44.56.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-14.50.05.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-14.52.15.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-15.04.03.log" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,39 +58,50 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="merging-kurts-works" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "martianK3jC"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;martianK3jC&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/fictionithink/TheOnlyException.git",
-    "accountId": "de2de1d3-1d90-4114-b492-14306097a5e4"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/fictionithink/TheOnlyException.git&quot;,
+    &quot;accountId&quot;: &quot;de2de1d3-1d90-4114-b492-14306097a5e4&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/tmp_3_GameEntityFactory.class" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/tmp_4_GameEntityFactory.class" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/tmp_9_GameEntityFactory.class" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2wtdBOe00uSnVDirkfojhmYzygv" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.GameApp.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "merging-works",
+    "git-widget-placeholder": "#55 on Merging merging-works",
     "last_opened_file_path": "C:/Users/ginac/Downloads/TheOnlyException/TheOnlyException",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.editor.code.editing",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" styleClass="overlay-container" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+    <stylesheets>
+        <URL value="@/css/styles.css" />
+    </stylesheets>
+    <children>
+        <Pane maxHeight="350.0" maxWidth="400" minHeight="350.0" prefHeight="350.0" styleClass="game-over-pane">
+            <VBox alignment="CENTER" maxHeight="350.0" maxWidth="400.0" minHeight="350.0" minWidth="400.0" prefHeight="350.0" prefWidth="400.0" spacing="15" styleClass="game-over-box">
+                <padding>
+                    <Insets bottom="25" left="35" right="35" top="25" />
+                </padding>
+                <Label fx:id="gameOverLabel" styleClass="game-over-title-label" text="Game Over" />
+                <Label fx:id="statsLabel" styleClass="game-over-stats-label" wrapText="true" />
+                <Button fx:id="backToMenuButton" maxHeight="45.0" maxWidth="330.0" minHeight="45.0" minWidth="330.0" onAction="#handleBackToMenu" prefHeight="45.0" prefWidth="330.0" styleClass="game-over-action-button" text="BACK TO MAIN MENU">
+                    <VBox.margin>
+                        <Insets top="20" />
+                    </VBox.margin>
+                </Button>
+            </VBox>
+        </Pane>
+    </children>
+</StackPane>

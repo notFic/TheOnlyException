@@ -11,6 +11,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 import org.example.core.GameApp;
+import org.example.scenes.LoginScene;
 import org.example.utils.DatabaseManager;
 import org.example.utils.PasswordUtils;
 import org.example.utils.ResourceLoader;
@@ -127,10 +128,7 @@ public class RegisterController {
         errorLabel.setText("Registration successful! Redirecting to Main Menu...");
         errorLabel.setStyle("-fx-text-fill: #4CAF50;");
 
-        // Stop the media player before transitioning
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-        }
+        LoginScene.stopLoginMusic();
 
         PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
         pause.setOnFinished(event -> {
