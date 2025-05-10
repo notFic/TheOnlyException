@@ -6,25 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="a6e27113-e10b-4f4b-824e-63578634f0bd" name="Changes" comment="merging to main">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/components/EnemyComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/components/EnemyComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/core/GameApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/core/GameApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/AutoHealComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/AutoHealComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/LightningStrikeComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/LightningStrikeComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/ShieldComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/ShieldComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LoginScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LoginScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/EnemyComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/EnemyComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/LoginController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/PauseController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/PauseController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$MainMenuController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$MainMenuController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/AutoHealComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/AutoHealComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/LightningStrikeComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/LightningStrikeComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ShieldComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ShieldComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LoginScene.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LoginScene.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.20.38.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.23.56.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.32.43.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.32.57.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.35.08.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.36.46.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.45.42.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.47.33.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.48.16.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-22.03.11.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-22.05.52.log" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
