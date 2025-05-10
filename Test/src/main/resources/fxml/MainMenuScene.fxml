@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.media.MediaView?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Text?>
-<?import java.net.URL?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.media.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<?import javafx.geometry.Insets?>
-<StackPane fx:id="root" prefHeight="720.0" prefWidth="1280.0"
-           xmlns="http://javafx.com/javafx/21.0.1"
-           xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="org.example.controllers.MainMenuController"
-           styleClass="overlay-container">
+<StackPane fx:id="root" prefHeight="720.0" prefWidth="1280.0" styleClass="overlay-container" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controllers.MainMenuController">
 
     <stylesheets>
         <URL value="@/css/styles.css" />
@@ -24,40 +18,55 @@
     <MediaView fx:id="backgroundMediaView" fitHeight="720.0" fitWidth="1280.0" preserveRatio="true" />
 
     <!-- Semi-transparent Overlay -->
-    <Rectangle fx:id="overlay" height="720.0" width="1280.0" fill="#00000080" />
+    <Rectangle fx:id="overlay" fill="#00000080" height="720.0" width="1280.0" />
 
     <!-- Centered Menu Pane -->
-    <Pane maxHeight="450" maxWidth="400" styleClass="login-pane">
-        <VBox alignment="CENTER" maxHeight="450.0" maxWidth="400.0" minHeight="450.0" minWidth="400.0" prefHeight="450.0" prefWidth="400.0" spacing="15" styleClass="login-box">
+    <Pane maxHeight="470.0" maxWidth="400" minHeight="470.0" prefHeight="470.0" styleClass="login-pane">
+        <VBox alignment="CENTER" maxHeight="450.0" maxWidth="400.0" minHeight="450.0" minWidth="400.0" prefHeight="450.0" prefWidth="400.0" spacing="10.0" styleClass="login-box">
             <padding>
-                <Insets bottom="25" left="35" right="35" top="25" />
+                <Insets bottom="25.0" left="40.0" right="40.0" top="25.0" />
             </padding>
 
-            <Text fx:id="title" styleClass="login-title-label" text="Main Menu" />
+            <Text fx:id="title" fill="WHITE" styleClass="login-title-label" text="Main Menu" />
             <Button fx:id="startButton" maxHeight="45.0" maxWidth="330.0" minHeight="45.0" minWidth="330.0" onAction="#startGame" prefHeight="45.0" prefWidth="330.0" styleClass="login-action-button" text="Start">
                 <VBox.margin>
                     <Insets top="20" />
                 </VBox.margin>
+            <font>
+               <Font size="21.0" />
+            </font>
             </Button>
             <Button fx:id="settingsButton" maxHeight="45.0" maxWidth="330.0" minHeight="45.0" minWidth="330.0" onAction="#showSettings" prefHeight="45.0" prefWidth="330.0" styleClass="login-action-button" text="Settings">
                 <VBox.margin>
                     <Insets top="10" />
                 </VBox.margin>
+            <font>
+               <Font size="21.0" />
+            </font>
             </Button>
             <Button fx:id="leaderboardButton" maxHeight="45.0" maxWidth="330.0" minHeight="45.0" minWidth="330.0" onAction="#showLeaderboard" prefHeight="45.0" prefWidth="330.0" styleClass="login-action-button" text="Leaderboard">
                 <VBox.margin>
                     <Insets top="10" />
                 </VBox.margin>
+            <font>
+               <Font size="21.0" />
+            </font>
             </Button>
             <Button fx:id="exitButton" maxHeight="45.0" maxWidth="330.0" minHeight="45.0" minWidth="330.0" onAction="#exitGame" prefHeight="45.0" prefWidth="330.0" styleClass="login-action-button" text="Exit">
                 <VBox.margin>
                     <Insets top="10" />
                 </VBox.margin>
+            <font>
+               <Font size="21.0" />
+            </font>
             </Button>
             <Button fx:id="logoutButton" maxHeight="45.0" maxWidth="330.0" minHeight="45.0" minWidth="330.0" onAction="#logout" prefHeight="45.0" prefWidth="330.0" styleClass="login-action-button" text="Logout">
                 <VBox.margin>
                     <Insets top="10" />
                 </VBox.margin>
+            <font>
+               <Font size="21.0" />
+            </font>
             </Button>
         </VBox>
     </Pane>
