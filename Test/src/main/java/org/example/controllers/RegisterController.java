@@ -11,6 +11,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 import org.example.core.GameApp;
+import org.example.scenes.LoginScene;
 import org.example.utils.DatabaseManager;
 import org.example.utils.PasswordUtils;
 import org.example.utils.ResourceLoader;
@@ -84,6 +85,7 @@ public class RegisterController {
     }
 
     public void setSwitchToMainMenuCallback(Runnable callback) {
+        LoginScene.stopLoginMusic();
         this.switchToMainMenuCallback = callback;
     }
 
