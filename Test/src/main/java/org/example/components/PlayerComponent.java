@@ -41,7 +41,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 
 // Component controlling player movement, animations, health, and game progress
 public class PlayerComponent extends Component {
-    private double speed = 1.7; // Player movement speed
+    private double speed = 1.6; // Player movement speed
     private int health = 200; // Current health
     private int maxHealth = 200; // Maximum health, increases on level-up
     private int level = 1; // Current level
