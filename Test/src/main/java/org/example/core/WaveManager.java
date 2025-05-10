@@ -1,4 +1,3 @@
-
 //TRIED TO MAKE IT LESS LAGGY(?)
 package org.example.core;
 
@@ -40,13 +39,13 @@ public class WaveManager {
 
     // Wave configuration parameters
     private final int WAVE_DURATION_SECONDS = 60; // Each wave lasts 60 seconds
-    private final int BASE_ENEMIES_PER_WAVE = 20; // Base enemies for wave 1
-    private final double ENEMY_INCREASE_FACTOR = 1.2; // Further reduced from 1.3 to 1.2
-    private final double BASE_SPAWN_INTERVAL = 2.0; // Increased from 1.5 to 2.0
-    private final double MIN_SPAWN_INTERVAL = 0.3; // Increased from 0.15 to 0.3
+    private final int BASE_ENEMIES_PER_WAVE = 30; // Increased from 20 to 30
+    private final double ENEMY_INCREASE_FACTOR = 1.3; // Increased from 1.2 to 1.3
+    private final double BASE_SPAWN_INTERVAL = 1.2; // Decreased from 2.0 to 1.2
+    private final double MIN_SPAWN_INTERVAL = 0.15; // Decreased from 0.3 to 0.15
 
     // Optimization parameters
-    private final int MAX_ENEMIES_HARD_CAP = 150; // Hard cap on total enemies regardless of wave
+    private final int MAX_ENEMIES_HARD_CAP = 250; // Increased from 150 to 250
     private final int CLEANUP_FREQUENCY_MS = 2000; // Check for distant enemies every 2 seconds
     private boolean cleanupScheduled = false;
     private long lastCleanupTime = 0;
@@ -154,13 +153,13 @@ public class WaveManager {
             if (wave >= 6) enemyPool.add("giantFlyEnemy");
             waveEnemyPools.put(wave, enemyPool);
 
-            // Slower spawn rates for better performance
-            double spawnInterval = Math.max(BASE_SPAWN_INTERVAL * Math.pow(0.9, wave - 1), MIN_SPAWN_INTERVAL);
+            // Faster spawn rates for more challenge
+            double spawnInterval = Math.max(BASE_SPAWN_INTERVAL * Math.pow(0.85, wave - 1), MIN_SPAWN_INTERVAL);
             waveSpawnRates.put(wave, spawnInterval);
 
-            // Fewer enemies per wave for better performance
+            // More enemies per wave
             int maxEnemies = (int)(BASE_ENEMIES_PER_WAVE * Math.pow(ENEMY_INCREASE_FACTOR, wave - 1));
-            maxEnemies = Math.min(maxEnemies, MAX_ENEMIES_HARD_CAP); // Hard cap regardless of wave
+            maxEnemies = Math.min(maxEnemies, MAX_ENEMIES_HARD_CAP);
             waveMaxEnemies.put(wave, maxEnemies);
 
             if (wave % 5 == 0) {
