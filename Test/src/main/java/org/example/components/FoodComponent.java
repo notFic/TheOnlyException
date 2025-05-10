@@ -4,22 +4,10 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.example.core.EntityType;
 
 public class FoodComponent extends Component {
-    private final Color[] RED_SHADES = {
-            Color.RED,
-            Color.DARKRED,
-            Color.CRIMSON,
-            Color.FIREBRICK,
-            Color.INDIANRED
-    };
-
-    private int currentColorIndex = 0;
-    private Rectangle foodVisual;
     private Entity player;
     private final double MAGNET_RANGE = 150.0;
     private final double MOVE_SPEED = 2.5;
@@ -32,17 +20,7 @@ public class FoodComponent extends Component {
                 .findFirst()
                 .orElse(null);
 
-        if (entity.getViewComponent().getChildren().get(0) instanceof Rectangle) {
-            foodVisual = (Rectangle) entity.getViewComponent().getChildren().get(0);
-
-            FXGL.getGameTimer().runAtInterval(() -> {
-                if (entity != null && entity.isActive()) {
-                    currentColorIndex = (currentColorIndex + 1) % RED_SHADES.length;
-                    foodVisual.setFill(RED_SHADES[currentColorIndex]);
-                }
-            }, Duration.seconds(0.2));
-        }
-
+        // Set timeout for food to disappear after 20 seconds
         FXGL.getGameTimer().runOnceAfter(() -> {
             if (entity != null && entity.isActive()) {
                 entity.removeFromWorld();

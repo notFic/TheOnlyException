@@ -1,30 +1,33 @@
 package org.example.components;
 
-import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
 
-public class BulletComponent extends Component {
+public class BulletComponent extends GameComponent {
     private Point2D direction;
-    private final double speed = 5;
-    private int damage;
     private int pierceCount = 0;
     private int enemiesHit = 0;
 
     public BulletComponent() {
         this.damage = 10; // Base damage at level 1
+        this.speed = 5.0; // Set the speed inherited from GameComponent
+    }
+
+    @Override
+    protected void initialize() {
+        // Component-specific initialization
+        // This replaces the need for custom onAdded method
+    }
+
+    @Override
+    protected void updateComponent(double tpf) {
+        // Move in the current direction
+        if (direction != null) {
+            entity.translate(direction);
+        }
     }
 
     public void setDirection(Point2D direction) {
         this.direction = direction.normalize().multiply(speed);
-    }
-
-    @Override
-    public void onUpdate(double tpf) {
-        entity.translate(direction);
-    }
-
-    public int getDamage() {
-        return damage;
     }
 
     public void setPierceCount(int count) {
@@ -37,9 +40,5 @@ public class BulletComponent extends Component {
 
     public void incrementEnemiesHit() {
         enemiesHit++;
-    }
-
-    public void setDamage(int damage) {
-        this.damage = damage;
     }
 }
