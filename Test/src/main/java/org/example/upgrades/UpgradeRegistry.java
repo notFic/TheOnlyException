@@ -139,7 +139,8 @@ public class UpgradeRegistry {
     private boolean isMaxed(String upgradeId, int currentLevel) {
         return switch (upgradeId) {
             case "shield", "auto_heal" -> currentLevel >= 5;
-            case "gun", "lightning", "poison", "fire_trail", "explosive_mines" -> currentLevel >= 7;
+            case "explosive_mines" -> currentLevel >= 6;
+            case "gun", "lightning", "poison", "fire_trail" -> currentLevel >= 7;
             default -> false;
         };
     }

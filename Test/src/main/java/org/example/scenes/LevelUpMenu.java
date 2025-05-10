@@ -181,9 +181,29 @@ public class LevelUpMenu {
         int currentLevel = playerComponent.getWeaponLevel(option.getId());
         int nextLevel = currentLevel + 1;
         
-        Text levelText = new Text(currentLevel == 0 ? "NEW!" : "Level " + nextLevel);
+        // Check if the next level would be the maximum level
+        boolean isNextLevelMax = false;
+        if ("gun".equals(option.getId()) || "lightning".equals(option.getId()) || 
+            "poison".equals(option.getId()) || "fire_trail".equals(option.getId())) {
+            isNextLevelMax = nextLevel == 7;
+        } else if ("explosive_mines".equals(option.getId())) {
+            isNextLevelMax = nextLevel == 6;
+        } else if ("shield".equals(option.getId()) || "auto_heal".equals(option.getId())) {
+            isNextLevelMax = nextLevel == 5;
+        }
+        
+        Text levelText = new Text();
+        if (currentLevel == 0) {
+            levelText.setText("NEW!");
+            levelText.setFill(Color.GOLD);
+        } else if (isNextLevelMax) {
+            levelText.setText("MAX");
+            levelText.setFill(Color.RED);
+        } else {
+            levelText.setText("Level " + nextLevel);
+            levelText.setFill(Color.LIGHTGREEN);
+        }
         levelText.setFont(Font.font("Verdana", 14));
-        levelText.setFill(currentLevel == 0 ? Color.GOLD : Color.LIGHTGREEN);
 
         // Create the icon (image or fallback placeholder)
         StackPane iconPane;
@@ -279,6 +299,14 @@ public class LevelUpMenu {
             } else {
                 // Show only the next level description
                 description = org.example.powerups.FireTrailComponent.getLevelDescription(currentLevel, true);
+            }
+        } else if ("explosive_mines".equals(option.getId())) {
+            // If at max level, show maxed out message
+            if (currentLevel >= 6) {
+                description = "MAXED OUT";
+            } else {
+                // Show only the next level description
+                description = org.example.powerups.ExplosiveMinesComponent.getLevelDescription(currentLevel, true);
             }
         }
 
