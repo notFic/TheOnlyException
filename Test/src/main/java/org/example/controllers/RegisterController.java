@@ -85,7 +85,6 @@ public class RegisterController {
     }
 
     public void setSwitchToMainMenuCallback(Runnable callback) {
-        LoginScene.stopLoginMusic();
         this.switchToMainMenuCallback = callback;
     }
 
@@ -129,10 +128,7 @@ public class RegisterController {
         errorLabel.setText("Registration successful! Redirecting to Main Menu...");
         errorLabel.setStyle("-fx-text-fill: #4CAF50;");
 
-        // Stop the media player before transitioning
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-        }
+        LoginScene.stopLoginMusic();
 
         PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
         pause.setOnFinished(event -> {
