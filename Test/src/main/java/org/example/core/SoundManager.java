@@ -71,8 +71,8 @@ public class SoundManager {
         // Load common sound effects
         loadSound("button_click", "/assets/sounds/button_click.wav");
         loadSoundAsMedia("btn_click", "/assets/sounds/btn.mp3"); // Use Media for mp3 files
-        loadSound("level_up", "/assets/sounds/level_up.mp3");
-        loadSound("error", "/assets/sounds/error.mp3");
+        //("level_up", "/assets/sounds/level_up.mp3");
+        //loadSound("error", "/assets/sounds/error.mp3");
         loadSound("shoot", "/assets/sounds/SHOOT.mp3");
         loadSound("explosion", "/assets/sounds/EXPLOSION.mp3");
         loadSound("hit", "/assets/sounds/HIT.mp3");
