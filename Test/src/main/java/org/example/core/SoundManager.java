@@ -38,29 +38,30 @@ public class SoundManager {
      */
     public static void playButtonSound() {
         try {
-            // Try to use the file directly
-            File soundFile = new File("F:/my files/School/2nd year 2nd sem/TheOnlyException/Test/src/main/resources/assets/sounds/btn.mp3");
-
-            if (soundFile.exists()) {
-                System.out.println("Sound file exists at: " + soundFile.getAbsolutePath());
+            // Try to use the resource
+            java.net.URL soundUrl = SoundManager.class.getResource("/assets/sounds/btn.mp3");
+            
+            if (soundUrl != null) {
+                System.out.println("Sound resource found at: " + soundUrl);
 
                 // Create Media and MediaPlayer directly
-                Media media = new Media(soundFile.toURI().toString());
+                Media media = new Media(soundUrl.toExternalForm());
                 MediaPlayer mediaPlayer = new MediaPlayer(media);
                 mediaPlayer.setVolume(1.0); // Full volume for testing
                 mediaPlayer.play();
 
-                System.out.println("Playing direct sound from file");
+                System.out.println("Playing direct sound from resource");
 
                 // No need to clean up - the MediaPlayer will be garbage collected
             } else {
-                System.err.println("Sound file doesn't exist at: " + soundFile.getAbsolutePath());
+                System.err.println("Sound resource not found: /assets/sounds/btn.mp3");
 
                 // Try built-in JavaFX alert sound
                 java.awt.Toolkit.getDefaultToolkit().beep();
             }
         } catch (Exception e) {
             System.err.println("Error playing direct button sound: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -122,21 +123,25 @@ public class SoundManager {
                 System.out.println("Loaded sound effect as Media: " + name + " from " + path);
             } else {
                 System.err.println("Sound effect file not found: " + path);
-                // Try with absolute path if resource path fails
+                // Try with alternate approach
                 try {
-                    if (path.equals("/assets/sounds/btn.mp3")) {
-                        String absolutePath = "file:///F:/my files/School/2nd year 2nd sem/TheOnlyException/Test/src/main/resources/assets/sounds/btn.mp3";
-                        Media media = new Media(absolutePath);
+                    // Try the ClassLoader approach as fallback
+                    java.net.URL classLoaderUrl = SoundManager.class.getClassLoader().getResource("assets/sounds/btn.mp3");
+                    if (classLoaderUrl != null && name.equals("btn_click")) {
+                        Media media = new Media(classLoaderUrl.toExternalForm());
                         MediaPlayer mediaPlayer = new MediaPlayer(media);
                         mediaPlayer.setOnEndOfMedia(() -> {
                             mediaPlayer.stop();
                             mediaPlayer.seek(Duration.ZERO);
                         });
                         soundEffects.put(name, mediaPlayer);
-                        System.out.println("Loaded sound effect using absolute path: " + name);
+                        System.out.println("Loaded sound effect using ClassLoader: " + name);
+                    } else {
+                        System.err.println("Sound file not found with ClassLoader either: " + (path.startsWith("/") ? path.substring(1) : path));
                     }
                 } catch (Exception e2) {
-                    System.err.println("Also failed with absolute path: " + e2.getMessage());
+                    System.err.println("Also failed with ClassLoader approach: " + e2.getMessage());
+                    e2.printStackTrace();
                 }
             }
         } catch (Exception e) {
