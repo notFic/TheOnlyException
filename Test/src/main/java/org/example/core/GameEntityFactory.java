@@ -120,7 +120,7 @@ public class GameEntityFactory implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(hitbox)
-                .with(new EnemyComponent(player, 1.5, 25, 3, "bee"))
+                .with(new EnemyComponent(player, 1.5, 15, 3, "bee"))
                 .collidable()
                 .build();
     }
@@ -148,7 +148,7 @@ public class GameEntityFactory implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(hitbox)
-                .with(new EnemyComponent(player, 1.5, 50, 5, "maggot"))
+                .with(new EnemyComponent(player, 1.5, 15, 5, "maggot"))
                 .collidable()
                 .build();
     }
@@ -200,7 +200,7 @@ public class GameEntityFactory implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(hitbox)
-                .with(new EnemyComponent(player, 1.5, 150, 20, "giantfly"))
+                .with(new EnemyComponent(player, 1.5, 120, 20, "giantfly"))
                 .collidable()
                 .build();
     }
@@ -224,7 +224,7 @@ public class GameEntityFactory implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(hitbox)
-                .with(new EnemyComponent(player, 1.5, 40, 8, "dragonfly"))
+                .with(new EnemyComponent(player, 1.5, 50, 8, "dragonfly"))
                 .collidable()
                 .build();
     }
@@ -252,7 +252,7 @@ public class GameEntityFactory implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(hitbox)
-                .with(new EnemyComponent(player, 1.5, 100, 15, "mantis"))
+                .with(new EnemyComponent(player, 1.5, 60, 15, "mantis"))
                 .collidable()
                 .build();
     }
