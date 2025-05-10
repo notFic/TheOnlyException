@@ -16,6 +16,8 @@ public class LoginScene extends FXGLMenu {
     public LoginScene() {
         super(MenuType.MAIN_MENU);
         System.out.println("Constructing LoginScene...");
+        // Stop any existing login music first to prevent overlap
+        stopLoginMusic();
         loadLoginUI();
         playLoginMusic();
     }

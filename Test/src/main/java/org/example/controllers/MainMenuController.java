@@ -164,13 +164,14 @@ public class MainMenuController {
         String currentUsername = GameApp.getStoredPlayerName();
         LeaderboardUI leaderboardUI = new LeaderboardUI(currentUsername);
         isLeaderboardOpen = true;
-        FXGL.getDialogService().showBox("Leaderboard", leaderboardUI.getContainer(), leaderboardUI.getCloseButton());
-        leaderboardUI.getCloseButton().setOnAction(e -> {
+        
+        // The button will automatically close the dialog when clicked
+        Button closeButton = leaderboardUI.getCloseButton();
+        closeButton.setOnAction(e -> {
             isLeaderboardOpen = false;
-            // Refresh the scene to clear the overlay
-            FXGL.getSceneService().popSubScene();
-            FXGL.getSceneService().pushSubScene(new MainMenuScene());
         });
+        
+        FXGL.getDialogService().showBox("Leaderboard", leaderboardUI.getContainer(), closeButton);
     }
 
     @FXML
@@ -182,6 +183,8 @@ public class MainMenuController {
     @FXML
     private void logout() {
         stopMedia();
+        // Make sure to stop any existing login music before creating a new login scene
+        org.example.scenes.LoginScene.stopLoginMusic();
         FXGL.getSceneService().popSubScene();
         FXGL.getSceneService().pushSubScene(new LoginScene());
         GameApp gameApp = (GameApp) FXGL.getAppCast();
