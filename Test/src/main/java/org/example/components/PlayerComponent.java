@@ -41,7 +41,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 
 // Component controlling player movement, animations, health, and game progress
 public class PlayerComponent extends Component {
-    private double speed = 1.5; // Player movement speed
+    private double speed = 1.7; // Player movement speed
     private int health = 200; // Current health
     private int maxHealth = 200; // Maximum health, increases on level-up
     private int level = 1; // Current level
@@ -178,6 +178,9 @@ public class PlayerComponent extends Component {
         if (weaponLevels == null) {
             weaponLevels = new HashMap<>();
         }
+
+        // Initialize gun at level 1
+        weaponLevels.put("gun", 1);
 
         // Initialize available powerups based on acquired weapons
         initializeAcquiredPowerups();
@@ -373,16 +376,39 @@ public class PlayerComponent extends Component {
         Point2D mouseWorldPos = new Point2D(mouseScreenPos.getX() + viewportX, mouseScreenPos.getY() + viewportY);
         Point2D bulletSpawnPoint = new Point2D(entity.getX(), entity.getY());
         Point2D direction = mouseWorldPos.subtract(bulletSpawnPoint).normalize();
-        spawnBulletWithAngle(bulletSpawnPoint, direction, 0); // Center
-        spawnBulletWithAngle(bulletSpawnPoint, direction, -10); // Left
-        spawnBulletWithAngle(bulletSpawnPoint, direction, 10); // Right
+        
+        // Get weapon level
+        int weaponLevel = getWeaponLevel("gun");
+        
+        // Set damage based on level
+        int damage = 10; // Base damage at level 1
+        if (weaponLevel >= 2) damage = 20; // Level 2: +100% damage
+        if (weaponLevel >= 5) damage = 40; // Level 5: +100% damage
+        
+        // Set pierce count based on level
+        int pierceCount = 0;
+        if (weaponLevel >= 3) pierceCount = 1; // Level 3: Can pierce once
+        if (weaponLevel >= 6) pierceCount = 3; // Level 6: Can pierce 3 times
+        
+        // Set cooldown based on level
+        double cooldown = 0.75; // Base cooldown at level 1
+        if (weaponLevel >= 4) cooldown = 0.50; // Level 4: Reduced cooldown
+        if (weaponLevel >= 7) cooldown = 0.30; // Level 7: Further reduced cooldown
+        
+        // Spawn bullets
+        spawnBulletWithAngle(bulletSpawnPoint, direction, 0, damage, pierceCount); // Center
+        spawnBulletWithAngle(bulletSpawnPoint, direction, -10, damage, pierceCount); // Left
+        spawnBulletWithAngle(bulletSpawnPoint, direction, 10, damage, pierceCount); // Right
     }
 
     // Spawn a bullet with an angle offset
-    private void spawnBulletWithAngle(Point2D spawnPoint, Point2D direction, double angleDegrees) {
+    private void spawnBulletWithAngle(Point2D spawnPoint, Point2D direction, double angleDegrees, int damage, int pierceCount) {
         Point2D rotatedDirection = rotate(direction, angleDegrees);
         Entity bullet = FXGL.spawn("bullet", spawnPoint);
-        bullet.getComponent(BulletComponent.class).setDirection(rotatedDirection);
+        BulletComponent bulletComponent = bullet.getComponent(BulletComponent.class);
+        bulletComponent.setDirection(rotatedDirection);
+        bulletComponent.setDamage(damage);
+        bulletComponent.setPierceCount(pierceCount);
     }
 
     // Rotate a vector by an angle

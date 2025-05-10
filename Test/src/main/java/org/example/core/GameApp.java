@@ -599,15 +599,8 @@ public class GameApp extends GameApplication {
         System.out.println("Resetting game timers to prevent speed-up");
         isTimerRunning = false;
 
-        // Cancel existing survival timer if it exists
-        if (survivalTimerAction != null) {
-            survivalTimerAction.expire();
-            survivalTimerAction = null;
-            System.out.println("Existing survival timer cancelled");
-        }
-
         // Recreate survival time timer
-        survivalTimerAction = FXGL.getGameTimer().runAtInterval(() -> {
+        FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) {
                 int currentTime = getWorldProperties().getInt("survivalTime");
                 getWorldProperties().setValue("survivalTime", currentTime + 1);
@@ -616,11 +609,17 @@ public class GameApp extends GameApplication {
 
         // Recreate weapon timers
         if (userType.equals("Gun")) {
+            PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+            int weaponLevel = playerComponent.getWeaponLevel("gun");
+            double cooldown = 0.75; // Base cooldown at level 1
+            if (weaponLevel >= 4) cooldown = 0.50; // Level 4: Reduced cooldown
+            if (weaponLevel >= 7) cooldown = 0.30; // Level 7: Further reduced cooldown
+            
             FXGL.getGameTimer().runAtInterval(() -> {
                 if (isTimerRunning) {
-                    player.getComponent(PlayerComponent.class).shootTripleBurst();
+                    playerComponent.shootTripleBurst();
                 }
-            }, Duration.seconds(0.2));
+            }, Duration.seconds(cooldown));
         } else if (userType.equals("Sword")) {
             FXGL.getGameTimer().runAtInterval(() -> {
                 if (isTimerRunning) {
@@ -645,7 +644,7 @@ public class GameApp extends GameApplication {
             }, Duration.seconds(.5));
         }
 
-        // Ensure WaveManager timers are preserved and restarted
+        // CHANGED: Ensure WaveManager timers are preserved and restarted
         if (waveManager == null) {
             waveManager = WaveManager.getInstance();
             System.out.println("WaveManager initialized in resetTimers");
@@ -665,85 +664,6 @@ public class GameApp extends GameApplication {
         isTimerRunning = true;
         System.out.println("All game timers reset successfully");
     }
-
-//    public void resetTimers() {
-//        System.out.println("Resetting game timers to prevent speed-up");
-//        isTimerRunning = false;
-//        // CHANGED: Avoid clearing all timers to preserve WaveManager timers
-//        // FXGL.getGameTimer().clear();
-//
-//        // Recreate survival time timer
-//        FXGL.getGameTimer().runAtInterval(() -> {
-//            if (isTimerRunning) {
-//                int currentTime = getWorldProperties().getInt("survivalTime");
-//                getWorldProperties().setValue("survivalTime", currentTime + 1);
-//            }
-//        }, Duration.seconds(1));
-//
-//        // REMOVED: Redundant enemy spawn timers that conflict with WaveManager
-//        /*
-//        FXGL.getGameTimer().runAtInterval(() -> {
-//            if (isTimerRunning) spawnEnemyOutsideViewport("enemy");
-//        }, Duration.seconds(1));
-//        FXGL.getGameTimer().runAtInterval(() -> {
-//            if (isTimerRunning) spawnEnemyOutsideViewport("fastEnemy");
-//        }, Duration.seconds(2));
-//        FXGL.getGameTimer().runAtInterval(() -> {
-//            if (isTimerRunning) spawnEnemyOutsideViewport("tankEnemy");
-//        }, Duration.seconds(3));
-//        */
-//
-//        // Recreate weapon timers
-//        if (userType.equals("Gun")) {
-//            FXGL.getGameTimer().runAtInterval(() -> {
-//                if (isTimerRunning) {
-//                    player.getComponent(PlayerComponent.class).shootTripleBurst();
-//                }
-//            }, Duration.seconds(0.2));
-//        } else if (userType.equals("Sword")) {
-//            FXGL.getGameTimer().runAtInterval(() -> {
-//                if (isTimerRunning) {
-//                    player.getComponent(PlayerComponent.class).swordSlash();
-//                }
-//            }, Duration.seconds(0.5));
-//        } else if (userType.equals("Laser")) {
-//            FXGL.runOnce(() -> {
-//                player.getComponent(PlayerComponent.class).shootLaser();
-//            }, Duration.seconds(0.2));
-//
-//            FXGL.getGameTimer().runAtInterval(() -> {
-//                if (isTimerRunning) {
-//                    player.getComponent(PlayerComponent.class).shootLaser();
-//                }
-//            }, Duration.seconds(.5));
-//        } else {
-//            FXGL.getGameTimer().runAtInterval(() -> {
-//                if (isTimerRunning) {
-//                    player.getComponent(PlayerComponent.class).shootVoltChain();
-//                }
-//            }, Duration.seconds(.5));
-//        }
-//
-//        // CHANGED: Ensure WaveManager timers are preserved and restarted
-//        if (waveManager == null) {
-//            waveManager = WaveManager.getInstance();
-//            System.out.println("WaveManager initialized in resetTimers");
-//        }
-//
-//        if (!waveManager.isActive() && player != null) {
-//            waveManager.start(player);
-//            System.out.println("WaveManager restarted in resetTimers");
-//        } else {
-//            System.out.println("WaveManager already active or player null, skipping restart");
-//        }
-//
-//        // Reinitialize player powerup timers
-//        if (player != null && player.hasComponent(PlayerComponent.class)) {
-//            player.getComponent(PlayerComponent.class).reinitializeAfterPause();
-//        }
-//        isTimerRunning = true;
-//        System.out.println("All game timers reset successfully");
-//    }
 
     private void spawnEnemyOutsideViewport(String enemyType) {
         double viewMinX = getGameScene().getViewport().getX();
@@ -794,7 +714,13 @@ public class GameApp extends GameApplication {
                 FXGL.getWorldProperties().increment("kills", 1);
                 playerComponent.addExp(10); // Add 10 EXP per kill
             }
-            bullet.removeFromWorld();
+            
+            // Handle piercing
+            if (bulletComponent.canPierce()) {
+                bulletComponent.incrementEnemiesHit();
+            } else {
+                bullet.removeFromWorld();
+            }
         });
 
         onCollision(EntityType.PLAYER, EntityType.ENEMY, (player, enemy) -> {
