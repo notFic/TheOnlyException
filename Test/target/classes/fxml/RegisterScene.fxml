@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.media.*?>
+
+<StackPane maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" styleClass="overlay-container" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controllers.RegisterController">
+
+    <stylesheets>
+        <URL value="@/css/styles.css" />
+    </stylesheets>
+
+    <children>
+        <MediaView fx:id="backgroundMediaView" fitHeight="720.0" fitWidth="1280.0" preserveRatio="true" />
+
+        <Pane maxHeight="450" maxWidth="400" styleClass="register-pane">
+            <VBox alignment="CENTER" maxHeight="450.0" maxWidth="400.0" minHeight="450.0" minWidth="400.0" prefHeight="450.0" prefWidth="400.0" spacing="15" styleClass="login-box">
+                <padding>
+                    <Insets bottom="25" left="35" right="35" top="25" />
+                </padding>
+
+                <Label fx:id="titleLabel" styleClass="register-title-label" text="Create Account" />
+                <Label fx:id="errorLabel" styleClass="register-error-label" wrapText="true" />
+
+                <TextField fx:id="userField" promptText="Username" styleClass="register-text-field">
+                    <VBox.margin>
+                        <Insets top="10" />
+                    </VBox.margin>
+                </TextField>
+
+                <PasswordField fx:id="passField" promptText="Password" styleClass="register-text-field">
+                    <VBox.margin>
+                        <Insets top="5" />
+                    </VBox.margin>
+                </PasswordField>
+
+                <Button fx:id="registerButton" maxHeight="45.0" maxWidth="330.0" minHeight="45.0" minWidth="330.0" onAction="#handleRegister" prefHeight="45.0" prefWidth="330.0" styleClass="register-action-button" text="REGISTER">
+                    <VBox.margin>
+                        <Insets top="20" />
+                    </VBox.margin>
+                </Button>
+
+                <Button fx:id="switchButton" onAction="#switchToLogin" styleClass="register-switch-button" text="Already have an account? Login">
+                    <VBox.margin>
+                        <Insets top="15" />
+                    </VBox.margin>
+                </Button>
+            </VBox>
+        </Pane>
+    </children>
+</StackPane>
