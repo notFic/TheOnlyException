@@ -36,6 +36,13 @@
                     </VBox.margin>
                 </PasswordField>
 
+                <!-- Add Remember Me Checkbox -->
+                <CheckBox fx:id="rememberMeCheckBox" text="Remember Me" styleClass="login-checkbox">
+                    <VBox.margin>
+                        <Insets top="10" />
+                    </VBox.margin>
+                </CheckBox>
+
                 <Button fx:id="loginButton" maxHeight="45.0" maxWidth="330.0" minHeight="45.0" minWidth="330.0" onAction="#handleLogin" prefHeight="45.0" prefWidth="330.0" styleClass="login-action-button" text="LOGIN">
                     <VBox.margin>
                         <Insets top="20" />
