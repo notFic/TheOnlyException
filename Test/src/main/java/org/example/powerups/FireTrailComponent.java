@@ -11,6 +11,7 @@ import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 import org.example.components.EnemyComponent;
+import org.example.components.PlayerComponent;
 import org.example.core.EntityType;
 
 import java.util.ArrayList;
@@ -24,15 +25,12 @@ import java.util.stream.Collectors;
 public class FireTrailComponent extends Component {
 
     private static final double TRAIL_SPAWN_DISTANCE = 20; // Distance between trail segments
-    private static final double TRAIL_LIFETIME = 3.0; // Duration each segment lasts
     private static final double TRAIL_SIZE = 40; // Size of each trail segment (hitbox size)
 
     private static final double TRAIL_OFFSET_X = 25.0; // X offset for trail segments
     private static final double TRAIL_OFFSET_Y = 30.0; // Y offset for trail segments
 
-    private static final double DIRECT_DAMAGE = 4.0; // Damage when in trail
     private static final double DIRECT_DAMAGE_INTERVAL = 0.5; // Damage every 0.5 seconds
-    private static final double BURN_DURATION = 3.0; // Duration of burn effect
     private static final double BURN_TICK_INTERVAL = 1.0; // Burn damage every 1 second
     private static final double BURN_TICK_DAMAGE = 2.0; // Damage per burn tick
 
@@ -42,6 +40,13 @@ public class FireTrailComponent extends Component {
     private Point2D lastTrailSpawnPosition;
     private double directDamageTimer = 0.0; // Timer for direct damage
     private double burnTickTimer = 0.0; // Timer for burn damage ticks
+    
+    private PlayerComponent playerComponent;
+    
+    // Default values (Level 1)
+    private double trailLifetime = 3.0; // Duration each segment lasts
+    private double directDamage = 7.0; // Damage when in trail
+    private double burnDuration = 3.0; // Duration of burn effect
 
     // Tracks enemy states: inHitbox (true/false), burnTimeRemaining (seconds)
     private final Map<Entity, EnemyState> enemyStates = new HashMap<>();
@@ -58,13 +63,68 @@ public class FireTrailComponent extends Component {
 
     @Override
     public void onAdded() {
+        playerComponent = entity.getComponent(PlayerComponent.class);
         activatePowerUp(); // For testing
     }
 
     public void activatePowerUp() {
         if (isActive) return;
+        
+        // Update values based on current level
+        updateLevelValues();
+        
         isActive = true;
         lastTrailSpawnPosition = entity.getCenter();
+    }
+
+    private void updateLevelValues() {
+        if (playerComponent == null) return;
+        
+        int level = playerComponent.getWeaponLevel("fire_trail");
+        if (level <= 0) return;
+        
+        System.out.println("FireTrail activated at level: " + level);
+        System.out.println("Previous damage value: " + directDamage);
+        
+        // Update values based on level
+        switch (level) {
+            case 1:
+                trailLifetime = 3.0;
+                directDamage = 7.0;
+                burnDuration = 3.0;
+                break;
+            case 2:
+                trailLifetime = 3.0;
+                directDamage = 14.0;
+                burnDuration = 3.0;
+                break;
+            case 3:
+                trailLifetime = 5.0;
+                directDamage = 14.0;
+                burnDuration = 5.0;
+                break;
+            case 4:
+                trailLifetime = 5.0;
+                directDamage = 20.0;
+                burnDuration = 5.0;
+                break;
+            case 5:
+                trailLifetime = 7.0;
+                directDamage = 20.0;
+                burnDuration = 7.0;
+                break;
+            default:
+                // If level > 5, cap at level 5
+                if (level > 5) {
+                    trailLifetime = 7.0;
+                    directDamage = 20.0;
+                    burnDuration = 7.0;
+                }
+                break;
+        }
+        
+        System.out.println("Updated FireTrail values - Level: " + level + ", Damage: " + directDamage + 
+                           ", Lifetime: " + trailLifetime + ", Burn Duration: " + burnDuration);
     }
 
     public void deactivatePowerUp() {
@@ -81,6 +141,10 @@ public class FireTrailComponent extends Component {
 
     public void resumePowerUp() {
         if (!isActive || !isGamePaused) return;
+        
+        // Update values based on current level before resuming
+        updateLevelValues();
+        
         isGamePaused = false;
         lastTrailSpawnPosition = entity.getCenter();
     }
@@ -89,6 +153,11 @@ public class FireTrailComponent extends Component {
     public void onUpdate(double tpf) {
         if (!isActive || isGamePaused) return;
 
+        // Periodically check if level values need updating
+        if (playerComponent != null) {
+            updateLevelValues();
+        }
+        
         // Spawn trail segments
         Point2D currentPosition = entity.getCenter();
         double distanceMoved = currentPosition.distance(lastTrailSpawnPosition);
@@ -167,7 +236,7 @@ public class FireTrailComponent extends Component {
                     }, Duration.ZERO);
                 }
             }
-        }, (long) (TRAIL_LIFETIME * 1000));
+        }, (long) (trailLifetime * 1000));
     }
 
     private void updateEnemyStates() {
@@ -194,8 +263,8 @@ public class FireTrailComponent extends Component {
                 // Enemy is not in hitbox
                 if (state.inHitbox) {
                     // Enemy just exited hitbox, start burn effect
-                    state.burnTimeRemaining = BURN_DURATION;
-                    System.out.println("FireTrail: Enemy exited hitbox, starting burn effect for " + BURN_DURATION + " seconds");
+                    state.burnTimeRemaining = burnDuration;
+                    System.out.println("FireTrail: Enemy exited hitbox, starting burn effect for " + burnDuration + " seconds");
                 }
                 state.inHitbox = false;
             }
@@ -209,6 +278,13 @@ public class FireTrailComponent extends Component {
         if (directDamageTimer < DIRECT_DAMAGE_INTERVAL) return;
 
         directDamageTimer = 0.0; // Reset timer
+        
+        // Debug print current level and damage
+        if (playerComponent != null) {
+            int currentLevel = playerComponent.getWeaponLevel("fire_trail");
+            System.out.println("FireTrail applying damage - Current level: " + currentLevel + 
+                              ", Current damage value: " + directDamage);
+        }
 
         for (Map.Entry<Entity, EnemyState> entry : enemyStates.entrySet()) {
             Entity enemy = entry.getKey();
@@ -217,8 +293,8 @@ public class FireTrailComponent extends Component {
             if (state.inHitbox) {
                 enemy.getComponentOptional(EnemyComponent.class)
                         .ifPresent(ec -> {
-                            ec.damage(DIRECT_DAMAGE, enemy.getCenter());
-                            System.out.println("FireTrail: Dealt " + DIRECT_DAMAGE + " direct damage to enemy");
+                            ec.damage(directDamage, enemy.getCenter());
+                            System.out.println("FireTrail: Dealt " + directDamage + " direct damage to enemy");
                         });
             }
         }
@@ -251,5 +327,24 @@ public class FireTrailComponent extends Component {
     private void clearTrail() {
         new ArrayList<>(trailSegments).forEach(Entity::removeFromWorld);
         trailSegments.clear();
+    }
+    
+    /**
+     * Returns the description for the current level or next level if nextLevel is true
+     * @param level Current level
+     * @param nextLevel Whether to get next level description
+     * @return Description string for the level
+     */
+    public static String getLevelDescription(int level, boolean nextLevel) {
+        if (nextLevel) level++;
+        
+        switch (level) {
+            case 1: return "Leave trail lasts 3 secs deals 7 dmg";
+            case 2: return "Deals 14 dmg";
+            case 3: return "Trail lasts 5 secs";
+            case 4: return "Deals 20 dmg";
+            case 5: return "Lasts 7 secs";
+            default: return level > 5 ? "MAXED OUT" : "Leaves a trail of fire behind the player";
+        }
     }
 }

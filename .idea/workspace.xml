@@ -7,11 +7,18 @@
     <list default="true" id="a6e27113-e10b-4f4b-824e-63578634f0bd" name="Changes" comment="merging to main">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/components/PlayerComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/components/PlayerComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/core/WaveManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/core/WaveManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/FireTrailComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/FireTrailComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LevelUpMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LevelUpMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/PlayerComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/PlayerComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-22.39.17.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-22.43.21.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/FireTrailComponent$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/FireTrailComponent$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/FireTrailComponent$EnemyState.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/FireTrailComponent$EnemyState.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/FireTrailComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/FireTrailComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LevelUpMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LevelUpMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-22.50.30.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-23.28.12.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-23.28.59.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-23.29.16.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-23.29.19.log" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

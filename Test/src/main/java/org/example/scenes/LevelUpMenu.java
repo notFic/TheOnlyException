@@ -266,6 +266,14 @@ public class LevelUpMenu {
                 // Show only the next level description
                 description = org.example.powerups.AutoHealComponent.getLevelDescription(currentLevel, true);
             }
+        } else if ("fire_trail".equals(option.getId())) {
+            // If at max level, show maxed out message
+            if (currentLevel >= 5) {
+                description = "MAXED OUT";
+            } else {
+                // Show only the next level description
+                description = org.example.powerups.FireTrailComponent.getLevelDescription(currentLevel, true);
+            }
         }
 
         Text descriptionText = new Text(description);
