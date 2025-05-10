@@ -13,6 +13,7 @@ import javafx.util.Duration;
 import org.example.components.EnemyComponent;
 import org.example.components.PlayerComponent;
 import org.example.core.EntityType;
+import org.example.core.SoundManager;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,6 +68,7 @@ public class LightningStrikeComponent extends Component {
             EnemyComponent enemyComponent = enemy.getComponent(EnemyComponent.class);
 
             showLightningStrike(enemy.getCenter());
+            SoundManager.getInstance().playSound("lightning"); // Play hit sound
             enemyComponent.damage(baseDamage, enemy.getCenter());
 
             // Remove from list to avoid damaging same enemy twice
@@ -94,22 +96,22 @@ public class LightningStrikeComponent extends Component {
 
         double strikeHeight = position.getY();
         lightning.setScaleY(strikeHeight / frameHeight);
-        cameraShake();
+//        cameraShake();
 
         FXGL.getGameTimer().runOnceAfter(lightning::removeFromWorld, Duration.seconds(0.5));
     }
 
-    void cameraShake(){
-        Node root = FXGL.getGameScene().getRoot();
-
-        TranslateTransition shake = new TranslateTransition(Duration.seconds(0.1), root);
-        shake.setFromY(-3);
-        shake.setToY(3);
-        shake.setCycleCount(4);
-        shake.setAutoReverse(true);
-        shake.setOnFinished(e -> root.setTranslateY(0)); // reset just in case
-        shake.play();
-    }
+//    void cameraShake(){
+//        Node root = FXGL.getGameScene().getRoot();
+//
+//        TranslateTransition shake = new TranslateTransition(Duration.seconds(0.1), root);
+//        shake.setFromY(-3);
+//        shake.setToY(3);
+//        shake.setCycleCount(4);
+//        shake.setAutoReverse(true);
+//        shake.setOnFinished(e -> root.setTranslateY(0)); // reset just in case
+//        shake.play();
+//    }
     
     /**
      * Returns the description for the current level or next level if nextLevel is true
