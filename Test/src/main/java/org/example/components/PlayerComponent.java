@@ -856,6 +856,20 @@ public class PlayerComponent extends Component {
                 poisonaura.activatePowerUp(); // This will update the stats based on the new level
             }
         }
+        // For already acquired fire trail, update it when upgrading to any level
+        else if ("fire_trail".equals(weaponId) && newLevel > 1) {
+            System.out.println("Updating Fire Trail to level " + newLevel);
+            if (firetrail != null) {
+                firetrail.activatePowerUp(); // This will update the stats based on the new level
+            }
+        }
+        // For already acquired explosive mines, update it when upgrading to any level
+        else if ("explosive_mines".equals(weaponId) && newLevel > 1) {
+            System.out.println("Updating Explosive Mines to level " + newLevel);
+            if (explosiveMines != null) {
+                explosiveMines.activatePowerUp(); // This will update the stats based on the new level
+            }
+        }
     }
 
     // Handle weapon selection from level-up menu
