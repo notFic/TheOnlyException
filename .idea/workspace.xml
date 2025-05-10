@@ -5,18 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6e27113-e10b-4f4b-824e-63578634f0bd" name="Changes" comment="merging to main">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/ExplosiveMinesComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/ExplosiveMinesComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/resources/assets/sounds/EXPLOSION.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/resources/assets/sounds/EXPLOSION.mp3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/resources/assets/sounds/SHOOT .mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/GameOverController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/GameOverController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/MainMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/MainMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/PauseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/PauseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/RegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/RegisterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/SettingsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/SettingsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/core/SoundManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/core/SoundManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LeaderboardUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LeaderboardUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LevelUpMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LevelUpMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/PlayerComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/PlayerComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/GameOverController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/GameOverController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/LoginController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/MainMenuController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/MainMenuController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/PauseController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/PauseController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/RegisterController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/RegisterController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/SettingsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/SettingsController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/SoundManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/SoundManager.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ExplosiveMinesComponent$MineBehaviorComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ExplosiveMinesComponent$MineBehaviorComponent.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ExplosiveMinesComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ExplosiveMinesComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/upgrades/UpgradeRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/upgrades/UpgradeRegistry.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-23.49.28.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-23.53.17.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-11-May-2025-00.04.34.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LeaderboardUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LeaderboardUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LevelUpMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LevelUpMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-23.42.14.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-11-May-2025-00.15.57.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-11-May-2025-00.17.23.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-11-May-2025-00.22.08.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-11-May-2025-00.25.11.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-11-May-2025-00.27.03.log" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,12 +54,12 @@
     &quot;assignee&quot;: &quot;martianK3jC&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/fictionithink/TheOnlyException.git",
-    "accountId": "39af587a-5829-4bac-bc14-0998e4cb53db"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/fictionithink/TheOnlyException.git&quot;,
+    &quot;accountId&quot;: &quot;39af587a-5829-4bac-bc14-0998e4cb53db&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/AppData/Local/Temp/tmp_3_GameEntityFactory.class" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/AppData/Local/Temp/tmp_4_GameEntityFactory.class" root0="FORCE_HIGHLIGHTING" />
@@ -65,7 +82,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "hahaha-nabuang-nako",
+    "git-widget-placeholder": ",",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/ginac/Downloads/TheOnlyException/TheOnlyException",
     "node.js.selected.package.tslint": "(autodetect)",

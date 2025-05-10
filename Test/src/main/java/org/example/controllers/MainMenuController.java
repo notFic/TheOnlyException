@@ -12,6 +12,7 @@ import javafx.scene.media.MediaView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import org.example.core.GameApp;
+import org.example.core.ButtonSoundHelper;
 import org.example.scenes.LeaderboardUI;
 import org.example.scenes.LoginScene;
 import org.example.scenes.MainMenuScene;
@@ -43,6 +44,11 @@ public class MainMenuController {
         addHoverEffect(leaderboardButton);
         addHoverEffect(exitButton);
         addHoverEffect(logoutButton);
+        
+        // Add button click sounds to all buttons
+        ButtonSoundHelper.addClickSoundToAll(
+            startButton, settingsButton, leaderboardButton, exitButton, logoutButton
+        );
 
         // Create volume listener to be used when music player is created
         volumeListener = (obs, oldVal, newVal) -> {

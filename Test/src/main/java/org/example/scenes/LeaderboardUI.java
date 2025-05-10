@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
+import org.example.core.ButtonSoundHelper;
 import org.example.data.LeaderboardDatabase;
 import org.example.model.Player;
 
@@ -123,6 +124,9 @@ public class LeaderboardUI {
         closeButton.setStyle("-fx-font-size: 16; -fx-background-color: #177bdf; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-effect: dropshadow(gaussian, #18b7e7, 10, 0.5, 0, 0);");
         closeButton.setOnMouseEntered(e -> closeButton.setStyle("-fx-font-size: 16; -fx-background-color: #18b7e7; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-effect: dropshadow(gaussian, #18b7e7, 15, 0.7, 0, 0);"));
         closeButton.setOnMouseExited(e -> closeButton.setStyle("-fx-font-size: 16; -fx-background-color: #177bdf; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-effect: dropshadow(gaussian, #18b7e7, 10, 0.5, 0, 0);"));
+        
+        // Add click sound to close button
+        ButtonSoundHelper.addClickSound(closeButton);
 
         // Load data
         loadLeaderboardData();

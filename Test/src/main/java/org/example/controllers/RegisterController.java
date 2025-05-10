@@ -10,6 +10,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
+import org.example.core.ButtonSoundHelper;
 import org.example.core.GameApp;
 import org.example.scenes.LoginScene;
 import org.example.utils.DatabaseManager;
@@ -38,6 +39,10 @@ public class RegisterController {
     private void initialize() {
         initializeBackgroundVideo();
         errorLabel.setText("");
+        
+        // Add button click sounds
+        ButtonSoundHelper.addClickSoundToAll(registerButton, switchButton);
+        
         backgroundMediaView.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 newScene.getStylesheets().add(ResourceLoader.getResource("/css/styles.css").toExternalForm());

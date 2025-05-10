@@ -3,6 +3,7 @@ package org.example.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import org.example.core.ButtonSoundHelper;
 import org.example.core.GameApp;
 
 public class GameOverController {
@@ -26,6 +27,11 @@ public class GameOverController {
         System.out.println("backToMenuButton: " + (backToMenuButton != null ? "not null" : "null"));
         if (gameOverLabel != null) {
             System.out.println("gameOverLabel font: " + gameOverLabel.getFont().getName());
+        }
+        
+        // Add button click sound
+        if (backToMenuButton != null) {
+            ButtonSoundHelper.addClickSound(backToMenuButton);
         }
     }
 
