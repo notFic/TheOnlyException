@@ -11,10 +11,9 @@ import org.example.core.EntityType;
 public class DropComponent extends Component {
 
     private Entity player;
-    private final double MAGNET_RANGE = 150.0;
-    private final double MOVE_SPEED = 2.5;
+    private final double MAGNET_RANGE = 70.0;
+    private final double MOVE_SPEED = 6.5;
     private final int EXP_VALUE = 50;
-    private final double SPRITE_SIZE = 16.0; // Size of memorychip.png (16x16)
     private final double GLOW_LEVEL = 0.6; // Base glow intensity (0.0 to 1.0)
     private double elapsedTime = 0.0; // Custom time counter for pulsing
 

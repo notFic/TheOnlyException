@@ -34,7 +34,8 @@ public class SoundManager {
         loadSound("error", "/assets/sounds/error.mp3");
         loadSound("shoot", "/assets/sounds/SHOOT.mp3"); // Added gunshot sound
         loadSound("explosion", "/assets/sounds/EXPLOSION.mp3"); // Added gunshot sound
-
+        loadSound("hit", "/assets/sounds/HIT.mp3"); // Added gunshot sound
+        loadSound("lightning", "/assets/sounds/LIGHTNING.mp3"); // Added gunshot sound
         // If sound files don't exist yet, create a default one
         if (soundEffects.isEmpty()) {
             createDefaultSound("button_click");
