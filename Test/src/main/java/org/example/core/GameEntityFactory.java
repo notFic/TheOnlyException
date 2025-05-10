@@ -120,7 +120,7 @@ public class GameEntityFactory implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(hitbox)
-                .with(new EnemyComponent(player, 3.5, 25, 3, "bee"))
+                .with(new EnemyComponent(player, 1.5, 25, 3, "bee"))
                 .collidable()
                 .build();
     }
@@ -148,7 +148,7 @@ public class GameEntityFactory implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(hitbox)
-                .with(new EnemyComponent(player, 1.5, 50, 5, "maggot")) // NORMAL
+                .with(new EnemyComponent(player, 1.5, 50, 5, "maggot"))
                 .collidable()
                 .build();
     }
@@ -176,7 +176,7 @@ public class GameEntityFactory implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(hitbox)
-                .with(new EnemyComponent(player, 3.0, 30, 10, "beetle")) // FAST nis
+                .with(new EnemyComponent(player, 1.5, 30, 10, "beetle"))
                 .collidable()
                 .build();
     }
@@ -200,7 +200,7 @@ public class GameEntityFactory implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(hitbox)
-                .with(new EnemyComponent(player, 0.9, 500, 20, "giantfly")) // slow, tanky, strong
+                .with(new EnemyComponent(player, 1.5, 150, 20, "giantfly"))
                 .collidable()
                 .build();
     }
@@ -209,10 +209,10 @@ public class GameEntityFactory implements EntityFactory {
     public Entity newDragonflyEnemy(SpawnData data) {
         Entity player = (Entity) data.get("player");
 
-        Rectangle hitbox = new Rectangle(45, 20); // match size
+        Rectangle hitbox = new Rectangle(50, 50);
 
         if (showHitbox) {
-            hitbox.setFill(Color.color(0.4, 1.0, 1.0, 0.3));
+            hitbox.setFill(Color.color(0.5, 0.5, 0.5, 0.3));
             hitbox.setStroke(Color.BLACK);
             hitbox.setStrokeWidth(2);
         } else {
@@ -224,7 +224,7 @@ public class GameEntityFactory implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(hitbox)
-                .with(new EnemyComponent(player, 2.8, 80, 12, "dragonfly")) // moderate stats
+                .with(new EnemyComponent(player, 1.5, 40, 8, "dragonfly"))
                 .collidable()
                 .build();
     }
@@ -233,15 +233,15 @@ public class GameEntityFactory implements EntityFactory {
     public Entity newTankEnemy(SpawnData data) {
         Entity player = (Entity) data.getData().getOrDefault("player", null);
         // HITBOX SIZE
-        double width = 45;
-        double height = 50;
+        double width = 60;
+        double height = 60;
 
         Rectangle hitbox = new Rectangle(width, height);
 
         if (showHitbox) {
             // VISIBLE HITBOX FOR DEBUGGING
-            hitbox.setFill(Color.color(1, 0, 0, 0.3)); // SEMI-TRANSPARENT RED
-            hitbox.setStroke(Color.GREEN);
+            hitbox.setFill(Color.color(0.7, 0.7, 0.7, 0.3));
+            hitbox.setStroke(Color.BLACK);
             hitbox.setStrokeWidth(2);
         } else {
             hitbox.setFill(Color.TRANSPARENT);
@@ -252,7 +252,7 @@ public class GameEntityFactory implements EntityFactory {
                 .type(EntityType.ENEMY)
                 .from(data)
                 .viewWithBBox(hitbox)
-                .with(new EnemyComponent(player, 1.0, 300, 15, "mantis")) // SLOW nis
+                .with(new EnemyComponent(player, 1.5, 100, 15, "mantis"))
                 .collidable()
                 .build();
     }

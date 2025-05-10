@@ -23,6 +23,7 @@ public class UpgradeRegistry {
     private UpgradeRegistry() {
         allUpgrades = Arrays.asList(
 // Weapons
+                new UpgradeOption("gun", "Main Weapon", "Your primary weapon that shoots bursts of bullets", Color.WHITE, OptionType.WEAPON, "gun.png"),
                 new UpgradeOption("lightning", "Short Circuit", "Strikes random enemies with volts", Color.BLUE, OptionType.WEAPON, "shortcircuit.png"),
                 new UpgradeOption("poison", "Real-Time Defense", "Damages enemies within range", Color.GREENYELLOW, OptionType.WEAPON, "realtimedefense.png"),
                 new UpgradeOption("fire_trail", "Smolder Protocol", "Damages enemies standing on the trail over time", Color.RED, OptionType.WEAPON, "smolderprotocol.png"),
@@ -72,6 +73,12 @@ public class UpgradeRegistry {
 
         for (UpgradeOption option : allOptions) {
             int upgradeLevel = playerComponent.getWeaponLevel(option.getId());
+            
+            // Skip maxed upgrades
+            if (isMaxed(option.getId(), upgradeLevel)) {
+                continue;
+            }
+            
             if (upgradeLevel > 0) {
                 playerUpgrades.add(option);
             } else {
@@ -126,5 +133,14 @@ public class UpgradeRegistry {
         Collections.shuffle(result, new Random());
 
         return result;
+    }
+
+    // Helper method to check if an upgrade is maxed
+    private boolean isMaxed(String upgradeId, int currentLevel) {
+        return switch (upgradeId) {
+            case "shield", "auto_heal" -> currentLevel >= 5;
+            case "gun", "lightning", "poison", "fire_trail", "explosive_mines" -> currentLevel >= 7;
+            default -> false;
+        };
     }
 }

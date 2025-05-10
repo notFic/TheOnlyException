@@ -18,7 +18,7 @@ public class PoisonAuraComponent extends Component {
 
     // Base stats at level 1
     private static final double BASE_RADIUS = 100;
-    private static final double BASE_DAMAGE_PER_SECOND = 7; // Base damage per second
+    private static final double BASE_DAMAGE_PER_SECOND = 14; // Base damage per second (7 damage per 0.5s tick)
     private static final double BASE_DAMAGE_INTERVAL = 0.5;
 
     private double radius = BASE_RADIUS;
@@ -148,14 +148,14 @@ public class PoisonAuraComponent extends Component {
         if (nextLevel) level++;
 
         return switch (level) {
-            case 1 -> "Damages enemies within 100 range for ~3-4 damage per 0.5s";
+            case 1 -> "Damages enemies within 100 range for 7 damage per 0.5s";
             case 2 -> "Increase radius by 30% to 130";
-            case 3 -> "Increase damage by 100% to ~7 damage per 0.5s";
-            case 4 -> "Decrease cooldown by 60% to 0.2s and increase damage by 150% to ~7 damage per 0.2s";
+            case 3 -> "Increase damage by 100% to 14 damage per 0.5s";
+            case 4 -> "Decrease cooldown by 60% to 0.2s and increase damage by 150% to 14 damage per 0.2s";
             case 5 -> "Increase radius by 30% to 169";
-            case 6 -> "Increase damage by 100% to ~14 damage per 0.2s";
+            case 6 -> "Increase damage by 100% to 28 damage per 0.2s";
             case 7 -> "Increase radius by 30% to 220";
-            default -> level > 7 ? "MAXED OUT" : "Damages enemies within 100 range for ~3-4 damage per 0.5s";
+            default -> level > 7 ? "MAXED OUT" : "Damages enemies within 100 range for 7 damage per 0.5s";
         };
     }
 }

@@ -174,6 +174,7 @@ public class LevelUpMenu {
         // Show the next level instead of current level
         int currentLevel = playerComponent.getWeaponLevel(option.getId());
         int nextLevel = currentLevel + 1;
+        
         Text levelText = new Text(currentLevel == 0 ? "NEW!" : "Level " + nextLevel);
         levelText.setFont(Font.font("Verdana", 14));
         levelText.setFill(currentLevel == 0 ? Color.GOLD : Color.LIGHTGREEN);
@@ -217,7 +218,23 @@ public class LevelUpMenu {
 
         // Create upgrade description with next level info for specific upgrades
         String description = option.getDescription();
-        if ("lightning".equals(option.getId())) {
+        if ("gun".equals(option.getId())) {
+            // If at max level, show maxed out message
+            if (currentLevel >= 7) {
+                description = "MAXED OUT";
+            } else {
+                // Show only the next level description
+                switch (currentLevel + 1) {
+                    case 1: description = "Shoot 3 bullets every 0.75s (10 damage each)"; break;
+                    case 2: description = "Increase damage by 100% (20 damage each)"; break;
+                    case 3: description = "Can pierce through 1 enemy"; break;
+                    case 4: description = "Decrease cooldown to 0.50s"; break;
+                    case 5: description = "Increase damage by 100% (40 damage each)"; break;
+                    case 6: description = "Can pierce through 3 enemies"; break;
+                    case 7: description = "Decrease cooldown to 0.30s"; break;
+                }
+            }
+        } else if ("lightning".equals(option.getId())) {
             // If at max level, show maxed out message
             if (currentLevel >= 7) {
                 description = "MAXED OUT";
