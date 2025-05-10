@@ -12,33 +12,35 @@ import java.util.Map;
 public class SoundManager {
     private static SoundManager instance;
     private Map<String, AudioClip> soundEffects;
-    
+
     private SoundManager() {
         soundEffects = new HashMap<>();
         loadSoundEffects();
     }
-    
+
     public static SoundManager getInstance() {
         if (instance == null) {
             instance = new SoundManager();
         }
         return instance;
     }
-    
+
     private void loadSoundEffects() {
         System.out.println("Loading sound effects...");
-        
+
         // Load common sound effects
         loadSound("button_click", "/assets/sounds/button_click.wav");
         loadSound("level_up", "/assets/sounds/level_up.mp3");
         loadSound("error", "/assets/sounds/error.mp3");
-        
+        loadSound("shoot", "/assets/sounds/SHOOT.mp3"); // Added gunshot sound
+        loadSound("explosion", "/assets/sounds/EXPLOSION.mp3"); // Added gunshot sound
+
         // If sound files don't exist yet, create a default one
         if (soundEffects.isEmpty()) {
             createDefaultSound("button_click");
         }
     }
-    
+
     private void loadSound(String name, String path) {
         try {
             java.net.URL soundUrl = getClass().getResource(path);
@@ -54,7 +56,7 @@ public class SoundManager {
             e.printStackTrace();
         }
     }
-    
+
     private void createDefaultSound(String name) {
         // Create a default sound if no sounds are available
         // This is a temporary solution until proper sound files are added
@@ -73,7 +75,7 @@ public class SoundManager {
             e.printStackTrace();
         }
     }
-    
+
     public void playSound(String name) {
         AudioClip clip = soundEffects.get(name);
         if (clip != null) {
@@ -85,17 +87,17 @@ public class SoundManager {
             System.err.println("Sound effect not found: " + name);
         }
     }
-    
+
     public void stopSound(String name) {
         AudioClip clip = soundEffects.get(name);
         if (clip != null) {
             clip.stop();
         }
     }
-    
+
     public void stopAllSounds() {
         for (AudioClip clip : soundEffects.values()) {
             clip.stop();
         }
     }
-} 
+}

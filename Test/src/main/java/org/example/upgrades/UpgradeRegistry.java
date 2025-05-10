@@ -23,7 +23,7 @@ public class UpgradeRegistry {
     private UpgradeRegistry() {
         allUpgrades = Arrays.asList(
 // Weapons
-                new UpgradeOption("gun", "Main Weapon", "Your primary weapon that shoots bursts of bullets", Color.WHITE, OptionType.WEAPON, "gun.png"),
+                new UpgradeOption("gun", "Null Blaster", "Your primary weapon that shoots bursts of bullets", Color.WHITE, OptionType.WEAPON, "nullblaster.png"),
                 new UpgradeOption("lightning", "Short Circuit", "Strikes random enemies with volts", Color.BLUE, OptionType.WEAPON, "shortcircuit.png"),
                 new UpgradeOption("poison", "Real-Time Defense", "Damages enemies within range", Color.GREENYELLOW, OptionType.WEAPON, "realtimedefense.png"),
                 new UpgradeOption("fire_trail", "Smolder Protocol", "Damages enemies standing on the trail over time", Color.RED, OptionType.WEAPON, "smolderprotocol.png"),

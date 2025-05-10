@@ -23,6 +23,7 @@ import org.example.powerups.FireTrailComponent;
 import org.example.powerups.LightningStrikeComponent;
 import org.example.powerups.PoisonAuraComponent;
 import org.example.powerups.ShieldComponent;
+import org.example.core.SoundManager; // Added import for SoundManager
 
 import java.sql.*;
 import java.util.HashMap;
@@ -365,6 +366,7 @@ public class PlayerComponent extends Component {
         Point2D direction = mouseWorldPos.subtract(bulletSpawnPoint).normalize();
         Entity bullet = FXGL.spawn("bullet", bulletSpawnPoint);
         bullet.getComponent(BulletComponent.class).setDirection(direction);
+        SoundManager.getInstance().playSound("shoot"); // Play gunshot sound
     }
 
     // Shoot three bullets in a spread
@@ -376,29 +378,30 @@ public class PlayerComponent extends Component {
         Point2D mouseWorldPos = new Point2D(mouseScreenPos.getX() + viewportX, mouseScreenPos.getY() + viewportY);
         Point2D bulletSpawnPoint = new Point2D(entity.getX(), entity.getY());
         Point2D direction = mouseWorldPos.subtract(bulletSpawnPoint).normalize();
-        
+
         // Get weapon level
         int weaponLevel = getWeaponLevel("gun");
-        
+
         // Set damage based on level
         int damage = 10; // Base damage at level 1
         if (weaponLevel >= 2) damage = 20; // Level 2: +100% damage
         if (weaponLevel >= 5) damage = 40; // Level 5: +100% damage
-        
+
         // Set pierce count based on level
         int pierceCount = 0;
         if (weaponLevel >= 3) pierceCount = 1; // Level 3: Can pierce once
         if (weaponLevel >= 6) pierceCount = 3; // Level 6: Can pierce 3 times
-        
+
         // Set cooldown based on level
         double cooldown = 0.75; // Base cooldown at level 1
         if (weaponLevel >= 4) cooldown = 0.50; // Level 4: Reduced cooldown
         if (weaponLevel >= 7) cooldown = 0.30; // Level 7: Further reduced cooldown
-        
+
         // Spawn bullets
         spawnBulletWithAngle(bulletSpawnPoint, direction, 0, damage, pierceCount); // Center
         spawnBulletWithAngle(bulletSpawnPoint, direction, -10, damage, pierceCount); // Left
         spawnBulletWithAngle(bulletSpawnPoint, direction, 10, damage, pierceCount); // Right
+        SoundManager.getInstance().playSound("shoot"); // Play gunshot sound
     }
 
     // Spawn a bullet with an angle offset
@@ -494,7 +497,7 @@ public class PlayerComponent extends Component {
             int actualHeal = health - oldHealth; // Calculate actual amount healed
             FXGL.getWorldProperties().setValue("health", health);
             updateHealthBar();
-            
+
             // Show healing text
             showHealingText(actualHeal);
             return;
@@ -587,8 +590,8 @@ public class PlayerComponent extends Component {
 
         // Create a timeline for managing the timing of both animations
         javafx.animation.Timeline timeline = new javafx.animation.Timeline(
-            new javafx.animation.KeyFrame(javafx.util.Duration.ZERO, e -> pathTransition.play()),
-            new javafx.animation.KeyFrame(javafx.util.Duration.seconds(0.4), e -> fadeTransition.play())
+                new javafx.animation.KeyFrame(javafx.util.Duration.ZERO, e -> pathTransition.play()),
+                new javafx.animation.KeyFrame(javafx.util.Duration.seconds(0.4), e -> fadeTransition.play())
         );
 
         // Remove entity when animations are done
@@ -720,8 +723,8 @@ public class PlayerComponent extends Component {
 
         // Create a timeline for managing the timing of both animations
         javafx.animation.Timeline timeline = new javafx.animation.Timeline(
-            new javafx.animation.KeyFrame(javafx.util.Duration.ZERO, e -> pathTransition.play()),
-            new javafx.animation.KeyFrame(javafx.util.Duration.seconds(0.4), e -> fadeTransition.play())
+                new javafx.animation.KeyFrame(javafx.util.Duration.ZERO, e -> pathTransition.play()),
+                new javafx.animation.KeyFrame(javafx.util.Duration.seconds(0.4), e -> fadeTransition.play())
         );
 
         // Remove entity when animations are done
@@ -850,13 +853,6 @@ public class PlayerComponent extends Component {
             System.out.println("Updating Poison Aura to level " + newLevel);
             if (poisonaura != null) {
                 poisonaura.activatePowerUp(); // This will update the stats based on the new level
-            }
-        }
-        // For already acquired fire trail, update it when upgrading to any level
-        else if ("fire_trail".equals(weaponId) && newLevel > 1) {
-            System.out.println("Updating Fire Trail to level " + newLevel);
-            if (firetrail != null) {
-                firetrail.activatePowerUp(); // This will update the stats based on the new level
             }
         }
     }

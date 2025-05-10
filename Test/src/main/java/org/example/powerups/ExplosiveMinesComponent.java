@@ -20,6 +20,7 @@ import javafx.util.Duration;
 import org.example.components.EnemyComponent;
 import org.example.core.EntityType;
 import org.example.components.PlayerComponent;
+import org.example.core.SoundManager;
 
 public class ExplosiveMinesComponent extends Component {
     private static final double SPAWN_INTERVAL = 2.0; // Seconds between mine spawns
@@ -28,7 +29,7 @@ public class ExplosiveMinesComponent extends Component {
     private static final double EXPLOSION_RADIUS_UPGRADED = 150.0; // With Heap Overflow
     private static final double EXPLOSION_DAMAGE = 40.0; // Damage dealt by explosion
     private static final double EXPLOSION_VISUAL_DURATION = 0.5; // Seconds for visual effect
-    private static final boolean DEBUG_VISUALIZER = false; // Toggle debug radius visualizer
+//    private static final boolean DEBUG_VISUALIZER = false; // Toggle debug radius visualizer
 
     private boolean isActive = false;
     private double spawnTimer = 0.0;
@@ -64,6 +65,7 @@ public class ExplosiveMinesComponent extends Component {
 
     private void spawnMine() {
         Point2D playerCenter = entity.getCenter();
+        SoundManager.getInstance().playSound("explosion"); // Play gunshot sound
 
         // Load datawipemine.png and create animated texture
         AnimationChannel mineChannel = new AnimationChannel(
@@ -142,18 +144,18 @@ public class ExplosiveMinesComponent extends Component {
                     .buildAndAttach();
             FXGL.getGameTimer().runOnceAfter(explosionEntity::removeFromWorld, Duration.seconds(EXPLOSION_VISUAL_DURATION));
 
-            // Debug radius visualizer (optional)
-            if (DEBUG_VISUALIZER) {
-                Circle debugCircle = new Circle(radius, Color.TRANSPARENT);
-                debugCircle.setStroke(Color.RED);
-                debugCircle.setStrokeWidth(2.0);
-                Entity debugEntity = FXGL.entityBuilder()
-                        .at(center.subtract(radius, radius)) // Center circle
-                        .view(debugCircle)
-                        .zIndex(1001)
-                        .buildAndAttach();
-                FXGL.getGameTimer().runOnceAfter(debugEntity::removeFromWorld, Duration.seconds(EXPLOSION_VISUAL_DURATION));
-            }
+//            // Debug radius visualizer (optional)
+//            if (DEBUG_VISUALIZER) {
+//                Circle debugCircle = new Circle(radius, Color.TRANSPARENT);
+//                debugCircle.setStroke(Color.RED);
+//                debugCircle.setStrokeWidth(2.0);
+//                Entity debugEntity = FXGL.entityBuilder()
+//                        .at(center.subtract(radius, radius)) // Center circle
+//                        .view(debugCircle)
+//                        .zIndex(1001)
+//                        .buildAndAttach();
+//                FXGL.getGameTimer().runOnceAfter(debugEntity::removeFromWorld, Duration.seconds(EXPLOSION_VISUAL_DURATION));
+//            }
 
             // Particle effect for explosion
             ParticleEmitter emitter = ParticleEmitters.newExplosionEmitter(50);
