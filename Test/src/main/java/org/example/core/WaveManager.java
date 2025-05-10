@@ -38,14 +38,14 @@ public class WaveManager {
     private final AtomicInteger activeEnemyCount = new AtomicInteger(0); // Thread-safe counter
 
     // Wave configuration parameters
-    private final int WAVE_DURATION_SECONDS = 60; // Each wave lasts 60 seconds
-    private final int BASE_ENEMIES_PER_WAVE = 30; // Increased from 20 to 30
-    private final double ENEMY_INCREASE_FACTOR = 1.3; // Increased from 1.2 to 1.3
-    private final double BASE_SPAWN_INTERVAL = 1.2; // Decreased from 2.0 to 1.2
-    private final double MIN_SPAWN_INTERVAL = 0.15; // Decreased from 0.3 to 0.15
+    private final int WAVE_DURATION_SECONDS = 30; // Reduced from 45 to 30 seconds for faster progression
+    private final int BASE_ENEMIES_PER_WAVE = 45; // Increased from 30 to 45
+    private final double ENEMY_INCREASE_FACTOR = 1.5; // Increased from 1.3 to 1.5
+    private final double BASE_SPAWN_INTERVAL = 0.8; // Decreased from 1.2 to 0.8
+    private final double MIN_SPAWN_INTERVAL = 0.08; // Decreased from 0.15 to 0.08
 
     // Optimization parameters
-    private final int MAX_ENEMIES_HARD_CAP = 250; // Increased from 150 to 250
+    private final int MAX_ENEMIES_HARD_CAP = 350; // Increased from 250 to 350
     private final int CLEANUP_FREQUENCY_MS = 2000; // Check for distant enemies every 2 seconds
     private boolean cleanupScheduled = false;
     private long lastCleanupTime = 0;
@@ -128,10 +128,10 @@ public class WaveManager {
     private void initializeEnemyTypes() {
         availableEnemyTypes.add("enemy");        // Maggot - Basic enemy (Wave 1+)
         availableEnemyTypes.add("fastEnemy");    // Beetle - Fast enemy (Wave 2+)
-        availableEnemyTypes.add("tankEnemy");    // Mantis - Tank enemy (Wave 3+)
-        availableEnemyTypes.add("beeEnemy");     // Bee - Medium enemy (Wave 4+)
-        availableEnemyTypes.add("dragonflyEnemy"); // Dragonfly - Advanced enemy (Wave 5+)
-        availableEnemyTypes.add("giantFlyEnemy"); // Giant Fly - Mini boss (Wave 6+)
+        availableEnemyTypes.add("beeEnemy");     // Bee - Swarming enemy (Wave 3+)
+        availableEnemyTypes.add("dragonflyEnemy"); // Dragonfly - Advanced enemy (Wave 4+)
+        availableEnemyTypes.add("giantFlyEnemy"); // Giant Fly - Mini boss (Wave 5+)
+        availableEnemyTypes.add("tankEnemy");    // Mantis - Tank enemy (Wave 6+)
     }
 
     /**
@@ -147,23 +147,36 @@ public class WaveManager {
             List<String> enemyPool = new ArrayList<>();
             if (wave >= 1) enemyPool.add("enemy");
             if (wave >= 2) enemyPool.add("fastEnemy");
-            if (wave >= 3) enemyPool.add("tankEnemy");
-            if (wave >= 4) enemyPool.add("beeEnemy");
-            if (wave >= 5) enemyPool.add("dragonflyEnemy");
-            if (wave >= 6) enemyPool.add("giantFlyEnemy");
+            if (wave >= 3) enemyPool.add("beeEnemy");
+            if (wave >= 3) enemyPool.add("dragonflyEnemy"); // Earlier introduction (wave 3 instead of 4)
+            if (wave >= 4) enemyPool.add("giantFlyEnemy"); // Earlier introduction (wave 4 instead of 5)
+            if (wave >= 5) enemyPool.add("tankEnemy"); // Earlier introduction (wave 5 instead of 6)
             waveEnemyPools.put(wave, enemyPool);
 
-            // Faster spawn rates for more challenge
-            double spawnInterval = Math.max(BASE_SPAWN_INTERVAL * Math.pow(0.85, wave - 1), MIN_SPAWN_INTERVAL);
+            // Faster spawn rates for more challenge - Vampire Survivors style
+            double spawnInterval = Math.max(BASE_SPAWN_INTERVAL * Math.pow(0.80, wave - 1), MIN_SPAWN_INTERVAL);
+            
+            // Special case for wave 3 (bees) - make them spawn even more frequently
+            if (wave == 3) {
+                spawnInterval = Math.max(spawnInterval * 0.4, MIN_SPAWN_INTERVAL); // 60% faster spawn rate for bees
+            }
+            
             waveSpawnRates.put(wave, spawnInterval);
 
-            // More enemies per wave
+            // More enemies per wave - Vampire Survivors style
             int maxEnemies = (int)(BASE_ENEMIES_PER_WAVE * Math.pow(ENEMY_INCREASE_FACTOR, wave - 1));
+            
+            // Special case for wave 3 (bees) - increase their count
+            if (wave == 3) {
+                maxEnemies = (int)(maxEnemies * 2.5); // 2.5x bee count for overwhelming swarm
+            }
+            
             maxEnemies = Math.min(maxEnemies, MAX_ENEMIES_HARD_CAP);
             waveMaxEnemies.put(wave, maxEnemies);
 
-            if (wave % 5 == 0) {
-                String[] formations = {"circle", "line", "spiral"};
+            // More frequent special formations
+            if (wave % 3 == 0) { // Every 3rd wave instead of every 5th
+                String[] formations = {"circle", "line", "spiral", "pincer", "cross"};
                 waveFormations.put(wave, formations[wave % formations.length]);
             } else {
                 waveFormations.put(wave, "random");
@@ -244,12 +257,12 @@ public class WaveManager {
             }
 
             double spawnInterval = waveSpawnRates.getOrDefault(currentWave, BASE_SPAWN_INTERVAL);
-            double spawnChance = 0.5 / spawnInterval;
+            double spawnChance = 0.7 / spawnInterval; // Increased from 0.5 to 0.7
             int spawnCount = 1;
 
-            // Less frequent multi-spawns
-            if (currentWave > 5 && random.nextDouble() < 0.15) {
-                spawnCount = Math.min(currentWave / 5, 2); // Reduced count
+            // More frequent multi-spawns - Vampire Survivors style
+            if (currentWave > 3 && random.nextDouble() < 0.25) { // Increased from 0.15 to 0.25
+                spawnCount = Math.min(currentWave / 3, 3); // Increased from 2 to 3 maximum
             }
 
             if (random.nextDouble() < spawnChance) {
@@ -259,8 +272,8 @@ public class WaveManager {
             }
         };
 
-        // Reduced frequency - check every 0.8 seconds instead of 0.5
-        FXGL.getGameTimer().runAtInterval(spawnTask, Duration.seconds(0.8));
+        // Increased frequency - check every 0.5 seconds instead of 0.8
+        FXGL.getGameTimer().runAtInterval(spawnTask, Duration.seconds(0.5));
     }
 
     /**
@@ -276,10 +289,10 @@ public class WaveManager {
         String formation = waveFormations.getOrDefault(currentWave, "random");
 
         int baseMax = waveMaxEnemies.getOrDefault(currentWave, BASE_ENEMIES_PER_WAVE);
-        double timeScaling = 1.0 + (survivalTime / 900.0); // Reduced scaling
+        double timeScaling = 1.0 + (survivalTime / 600.0); // Increased scaling (900 to 600)
         int maxEnemies = (int)(baseMax * timeScaling);
         maxEnemies = Math.min(maxEnemies, MAX_ENEMIES_HARD_CAP);
-        int waveAllowance = Math.min(currentWave * 2, 20); // Reduced allowance
+        int waveAllowance = Math.min(currentWave * 3, 30); // Increased from 2 to 3, and 20 to 30
 
         // Skip spawn if we exceed the enemy cap
         if (activeEnemyCount.get() >= maxEnemies + waveAllowance) {
@@ -287,7 +300,13 @@ public class WaveManager {
         }
 
         String enemyType;
-        if (currentWave >= 6 && random.nextDouble() < 0.03 * (currentWave / 6.0)) { // Reduced boss chance
+        
+        // Special case for wave 3 - higher chance to spawn bees for swarming behavior
+        if (currentWave == 3 && enemyPool.contains("beeEnemy") && random.nextDouble() < 0.90) { // Increased from 0.85 to 0.90
+            enemyType = "beeEnemy";
+        }
+        // Special boss spawn logic with higher frequency - Vampire Survivors style
+        else if (currentWave >= 4 && random.nextDouble() < 0.05 * (currentWave / 4.0)) { // Increased from 0.03 to 0.05
             int bossIndex = Math.min(enemyPool.size() - 1, enemyPool.size() - 2);
             enemyType = enemyPool.get(Math.max(bossIndex, 0));
         } else {
@@ -348,13 +367,10 @@ public class WaveManager {
      * Announce a new wave with console prints and UI notifications
      */
     private void announceNewWave() {
-        FXGL.getNotificationService().pushNotification("Wave " + currentWave + " started!");
-
-        // Special wave handling
-        if (currentWave % 5 == 0) {
+        // Special wave handling - more frequent formations
+        if (currentWave % 3 == 0) { // Every 3rd wave instead of every 5th
             String formation = waveFormations.getOrDefault(currentWave, "random");
-            FXGL.getNotificationService().pushNotification("WARNING: Special " + formation + " formation incoming!");
-
+            
             // Delay special formation to let any frame drops recover
             FXGL.getGameTimer().runOnceAfter(() -> {
                 String enemyType = waveEnemyPools.get(currentWave).get(
@@ -362,12 +378,11 @@ public class WaveManager {
 
                 // Batch enemy formations to reduce individual entity creation overhead
                 batchSpawnFormation(enemyType, formation);
-            }, Duration.seconds(3));
+            }, Duration.seconds(2)); // Reduced from 3 to 2 seconds for faster pacing
         }
 
-        if (currentWave % 10 == 0) {
-            FXGL.getNotificationService().pushNotification("DANGER: Massive enemy wave approaching!");
-
+        // Milestone waves with multi-formations
+        if (currentWave % 6 == 0) { // Every 6th wave instead of 10th
             // Further delay to prevent lag by spacing out formation spawns
             FXGL.getGameTimer().runOnceAfter(() -> {
                 String enemyType = waveEnemyPools.get(currentWave).get(
@@ -375,7 +390,7 @@ public class WaveManager {
 
                 // Batch process first formation
                 batchSpawnFormation(enemyType, "circle");
-            }, Duration.seconds(4));
+            }, Duration.seconds(3)); // Reduced from 4 to 3 seconds
 
             // Add extra delay between formations to prevent lag spikes
             FXGL.getGameTimer().runOnceAfter(() -> {
@@ -384,7 +399,20 @@ public class WaveManager {
 
                 // Batch process second formation
                 batchSpawnFormation(secondEnemyType, "spiral");
-            }, Duration.seconds(8));
+            }, Duration.seconds(6)); // Reduced from 8 to 6 seconds
+            
+            // Add a third formation for milestone waves (Vampire Survivors style)
+            FXGL.getGameTimer().runOnceAfter(() -> {
+                // Pick a stronger enemy for the third formation
+                String thirdEnemyType = "giantFlyEnemy";
+                if (!waveEnemyPools.get(currentWave).contains("giantFlyEnemy")) {
+                    thirdEnemyType = waveEnemyPools.get(currentWave).get(
+                            random.nextInt(waveEnemyPools.get(currentWave).size()));
+                }
+                
+                // Batch process third formation
+                batchSpawnFormation(thirdEnemyType, "line");
+            }, Duration.seconds(9));
         }
     }
 
@@ -407,6 +435,14 @@ public class WaveManager {
             case "spiral":
                 prepareSpiralFormation(enemyType);
                 break;
+            case "pincer":
+                preparePincerFormation(enemyType); // New formation
+                break;
+            case "cross":
+                prepareCrossFormation(enemyType); // New formation
+                break;
+            default:
+                prepareCircleFormation(enemyType);
         }
 
         // Process spawn commands in batches to reduce overhead
@@ -456,8 +492,8 @@ public class WaveManager {
      */
     private void prepareCircleFormation(String enemyType) {
         double radius = 800;
-        // Limit count based on wave to prevent excessive spawns
-        final int count = Math.min(8 + Math.min((currentWave - 5), 6), 14);
+        // More enemies in formations - Vampire Survivors style
+        final int count = Math.min(10 + Math.min((currentWave - 3), 10), 20); // Increased from 14 to 20 max
 
         Point2D playerPos = player.getPosition();
         double viewMinX = FXGL.getGameScene().getViewport().getX();
@@ -477,7 +513,7 @@ public class WaveManager {
             }
 
             // Add to pending spawn commands instead of direct spawning
-            pendingSpawns.add(new SpawnCommand(enemyType, x, y, 150 * i));
+            pendingSpawns.add(new SpawnCommand(enemyType, x, y, 100 * i)); // Reduced from 150 to 100ms for faster spawns
         }
     }
 
@@ -487,9 +523,9 @@ public class WaveManager {
      */
     private void prepareLineFormation(String enemyType) {
         double distance = 800;
-        // Limit count based on wave to prevent excessive spawns
-        int count = Math.min(6 + Math.min((currentWave - 5), 3), 9);
-        double spacing = 100; // Increased spacing for fewer enemies
+        // More enemies in formations - Vampire Survivors style
+        int count = Math.min(8 + Math.min((currentWave - 3), 6), 14); // Increased from 9 to 14 max
+        double spacing = 80; // Decreased from 100 to 80 to pack enemies tighter
 
         int side = random.nextInt(4);
         double startX, startY, dirX = 0, dirY = 0;
@@ -532,7 +568,7 @@ public class WaveManager {
             double y = startY + dirY * spacing * i;
 
             // Add to pending spawn commands instead of direct spawning
-            pendingSpawns.add(new SpawnCommand(enemyType, x, y, 200 * i));
+            pendingSpawns.add(new SpawnCommand(enemyType, x, y, 150 * i)); // Reduced from 200 to 150ms for faster spawns
         }
     }
 
@@ -541,10 +577,10 @@ public class WaveManager {
      * @param enemyType The type of enemy to spawn
      */
     private void prepareSpiralFormation(String enemyType) {
-        // Limit count based on wave to prevent excessive spawns
-        final int count = Math.min(10 + Math.min((currentWave - 5), 6), 16);
-        double baseRadius = 700;
-        double radiusIncrement = 50; // Increased increment for wider spacing
+        // More enemies in formations - Vampire Survivors style
+        final int count = Math.min(12 + Math.min((currentWave - 3), 8), 20); // Increased from 16 to 20 max
+        double baseRadius = 600; // Reduced from 700 to 600 for tighter spiral
+        double radiusIncrement = 40; // Reduced from 50 to 40 for tighter spiral
 
         Point2D playerPos = player.getPosition();
         double viewMinX = FXGL.getGameScene().getViewport().getX();
@@ -565,7 +601,94 @@ public class WaveManager {
             }
 
             // Add to pending spawn commands instead of direct spawning
-            pendingSpawns.add(new SpawnCommand(enemyType, x, y, 200 * i));
+            pendingSpawns.add(new SpawnCommand(enemyType, x, y, 150 * i)); // Reduced from 200 to 150ms for faster spawns
+        }
+    }
+
+    /**
+     * Prepare a pincer formation that surrounds the player from two sides
+     * @param enemyType The type of enemy to spawn
+     */
+    private void preparePincerFormation(String enemyType) {
+        Point2D playerPos = player.getPosition();
+        double spacing = 80;
+        int count = Math.min(6 + currentWave / 2, 12);
+        
+        // Determine random axis (horizontal or vertical)
+        boolean isHorizontal = random.nextBoolean();
+        
+        double startX1, startY1, startX2, startY2;
+        double dirX = 0, dirY = 0;
+        
+        if (isHorizontal) {
+            // Left and right sides
+            startX1 = playerPos.getX() - 800;
+            startY1 = playerPos.getY() - (count * spacing) / 2;
+            startX2 = playerPos.getX() + 800;
+            startY2 = playerPos.getY() - (count * spacing) / 2;
+            dirX = 0;
+            dirY = 1;
+        } else {
+            // Top and bottom sides
+            startX1 = playerPos.getX() - (count * spacing) / 2;
+            startY1 = playerPos.getY() - 800;
+            startX2 = playerPos.getX() - (count * spacing) / 2;
+            startY2 = playerPos.getY() + 800;
+            dirX = 1;
+            dirY = 0;
+        }
+        
+        // First side of pincer
+        for (int i = 0; i < count; i++) {
+            double x = startX1 + dirX * spacing * i;
+            double y = startY1 + dirY * spacing * i;
+            pendingSpawns.add(new SpawnCommand(enemyType, x, y, 100 * i));
+        }
+        
+        // Second side of pincer
+        for (int i = 0; i < count; i++) {
+            double x = startX2 + dirX * spacing * i;
+            double y = startY2 + dirY * spacing * i;
+            pendingSpawns.add(new SpawnCommand(enemyType, x, y, 100 * i));
+        }
+    }
+
+    /**
+     * Prepare a cross formation that attacks from four directions
+     * @param enemyType The type of enemy to spawn
+     */
+    private void prepareCrossFormation(String enemyType) {
+        Point2D playerPos = player.getPosition();
+        double distance = 800;
+        int countPerArm = Math.min(4 + currentWave / 3, 8);
+        double spacing = 100;
+        
+        // Top arm
+        for (int i = 0; i < countPerArm; i++) {
+            double x = playerPos.getX();
+            double y = playerPos.getY() - distance + (i * spacing);
+            pendingSpawns.add(new SpawnCommand(enemyType, x, y, 150 * i));
+        }
+        
+        // Right arm
+        for (int i = 0; i < countPerArm; i++) {
+            double x = playerPos.getX() + distance - (i * spacing);
+            double y = playerPos.getY();
+            pendingSpawns.add(new SpawnCommand(enemyType, x, y, 150 * i));
+        }
+        
+        // Bottom arm
+        for (int i = 0; i < countPerArm; i++) {
+            double x = playerPos.getX();
+            double y = playerPos.getY() + distance - (i * spacing);
+            pendingSpawns.add(new SpawnCommand(enemyType, x, y, 150 * i));
+        }
+        
+        // Left arm
+        for (int i = 0; i < countPerArm; i++) {
+            double x = playerPos.getX() - distance + (i * spacing);
+            double y = playerPos.getY();
+            pendingSpawns.add(new SpawnCommand(enemyType, x, y, 150 * i));
         }
     }
 
