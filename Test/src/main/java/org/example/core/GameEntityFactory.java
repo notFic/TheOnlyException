@@ -10,6 +10,7 @@ import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
+import com.almasb.fxgl.texture.Texture;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -259,10 +260,14 @@ public class GameEntityFactory implements EntityFactory {
 
     @Spawns("bullet")
     public Entity newBullet(SpawnData data) {
+        // Load the bullet sprite using Texture
+        Texture bulletSprite = FXGL.texture("bullet.png", 10, 10); // Load and set size to 10x10
+
         return entityBuilder()
                 .type(EntityType.BULLET)
                 .from(data)
-                .viewWithBBox(new Rectangle(10, 10, Color.BLACK))
+                .view(bulletSprite)
+                .bbox(new HitBox(BoundingShape.box(10, 10))) // Set hitbox to 10x10
                 .with(new BulletComponent())
                 .with(new OffscreenCleanComponent())
                 .collidable()
