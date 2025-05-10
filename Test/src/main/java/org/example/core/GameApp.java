@@ -13,6 +13,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.scene.text.FontWeight;
 import javafx.animation.Timeline;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -47,6 +48,7 @@ import java.util.Map;
 import java.util.Random;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
+import static javafx.application.Application.launch;
 
 public class GameApp extends GameApplication {
 
