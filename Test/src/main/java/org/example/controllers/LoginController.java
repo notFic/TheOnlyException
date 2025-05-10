@@ -143,6 +143,9 @@ public class LoginController {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
         }
+        
+        // Make sure we stop the login music before transitioning
+        org.example.scenes.LoginScene.stopLoginMusic();
 
         gameApp.gotoNewMainMenu();
 
