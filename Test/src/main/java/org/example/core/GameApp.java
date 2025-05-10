@@ -369,6 +369,21 @@ public class GameApp extends GameApplication {
                 System.out.println("Player is null - cannot move down");
             }
         });
+        
+        // Add ESC key for pausing the game
+        onKeyDown(KeyCode.ESCAPE, () -> {
+            // Only show pause menu if we're in an active game (player exists)
+            if (player != null && isTimerRunning) {
+                try {
+                    System.out.println("Opening pause menu");
+                    FXGL.getSceneService().pushSubScene(new org.example.scenes.PauseScene(this));
+                } catch (Exception e) {
+                    System.err.println("Error showing pause menu: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        });
+        
         System.out.println("initInput completed");
     }
 
