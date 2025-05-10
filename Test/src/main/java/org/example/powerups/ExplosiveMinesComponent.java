@@ -65,7 +65,6 @@ public class ExplosiveMinesComponent extends Component {
 
     private void spawnMine() {
         Point2D playerCenter = entity.getCenter();
-        SoundManager.getInstance().playSound("explosion"); // Play gunshot sound
 
         // Load datawipemine.png and create animated texture
         AnimationChannel mineChannel = new AnimationChannel(
@@ -135,7 +134,7 @@ public class ExplosiveMinesComponent extends Component {
             );
             AnimatedTexture explosionTexture = new AnimatedTexture(explosionChannel);
             explosionTexture.play(); // Play once
-
+            SoundManager.getInstance().playSound("explosion"); // Play gunshot sound
             Entity explosionEntity = FXGL.entityBuilder()
                     .at(center.subtract(radius, radius)) // Center scaled sprite (200x200 or 300x300)
                     .view(explosionTexture)
