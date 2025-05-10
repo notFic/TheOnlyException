@@ -38,39 +38,39 @@ public class EnemyFlyweightFactory {
      */
     private void initializeAnimations() {
         // Maggot animations
-        animWalkLeftCache.put("maggot", new AnimationChannel(FXGL.image("MaggotWalk-scaled.png"), 4,
+        animWalkLeftCache.put("maggot", new AnimationChannel(FXGL.image("MaggotWalk-scaled-recolored.png"), 4,
                 64, 64, Duration.seconds(0.8), 4, 7));
-        animWalkRightCache.put("maggot", new AnimationChannel(FXGL.image("MaggotWalk-scaled.png"), 4,
+        animWalkRightCache.put("maggot", new AnimationChannel(FXGL.image("MaggotWalk-scaled-recolored.png"), 4,
                 64, 64, Duration.seconds(0.8), 8, 11));
         
         // Beetle animations
-        animWalkLeftCache.put("beetle", new AnimationChannel(FXGL.image("BeetleMove-scaled.png"), 4,
+        animWalkLeftCache.put("beetle", new AnimationChannel(FXGL.image("BeetleMove-scaled-recolored.png"), 4,
                 64, 64, Duration.seconds(0.4), 4, 7));
-        animWalkRightCache.put("beetle", new AnimationChannel(FXGL.image("BeetleMove-scaled.png"), 4,
+        animWalkRightCache.put("beetle", new AnimationChannel(FXGL.image("BeetleMove-scaled-recolored.png"), 4,
                 64, 64, Duration.seconds(0.4), 8, 11));
         
         // Mantis animations
-        animWalkLeftCache.put("mantis", new AnimationChannel(FXGL.image("MantisMove-scaled.png"), 4,
+        animWalkLeftCache.put("mantis", new AnimationChannel(FXGL.image("MantisMove-scaled-recolored.png"), 4,
                 64, 64, Duration.seconds(0.8), 8, 11));
-        animWalkRightCache.put("mantis", new AnimationChannel(FXGL.image("MantisMove-scaled.png"), 4,
+        animWalkRightCache.put("mantis", new AnimationChannel(FXGL.image("MantisMove-scaled-recolored.png"), 4,
                 64, 64, Duration.seconds(0.8), 4, 7));
         
         // Bee animations
-        animWalkLeftCache.put("bee", new AnimationChannel(FXGL.image("BeeMove-scaled.png"), 4,
+        animWalkLeftCache.put("bee", new AnimationChannel(FXGL.image("BeeMove-scaled-recolored.png"), 4,
                 64, 64, Duration.seconds(0.4), 4, 7));
-        animWalkRightCache.put("bee", new AnimationChannel(FXGL.image("BeeMove-scaled.png"), 4,
+        animWalkRightCache.put("bee", new AnimationChannel(FXGL.image("BeeMove-scaled-recolored.png"), 4,
                 64, 64, Duration.seconds(0.4), 8, 11));
         
         // Giant Fly animations
-        animWalkLeftCache.put("giantfly", new AnimationChannel(FXGL.image("GiantFly.png"), 4,
+        animWalkLeftCache.put("giantfly", new AnimationChannel(FXGL.image("GiantFly-recolored.png"), 4,
                 64, 64, Duration.seconds(0.6), 4, 7));
-        animWalkRightCache.put("giantfly", new AnimationChannel(FXGL.image("GiantFly.png"), 4,
+        animWalkRightCache.put("giantfly", new AnimationChannel(FXGL.image("GiantFly-recolored.png"), 4,
                 64, 64, Duration.seconds(0.6), 8, 11));
         
         // Dragonfly animations
-        animWalkLeftCache.put("dragonfly", new AnimationChannel(FXGL.image("DragonFly.png"), 4,
+        animWalkLeftCache.put("dragonfly", new AnimationChannel(FXGL.image("DragonFly-recolored.png"), 4,
                 64, 64, Duration.seconds(0.6), 4, 7));
-        animWalkRightCache.put("dragonfly", new AnimationChannel(FXGL.image("DragonFly.png"), 4,
+        animWalkRightCache.put("dragonfly", new AnimationChannel(FXGL.image("DragonFly-recolored.png"), 4,
                 64, 64, Duration.seconds(0.6), 8, 11));
     }
     

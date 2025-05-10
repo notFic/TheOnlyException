@@ -5,26 +5,59 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6e27113-e10b-4f4b-824e-63578634f0bd" name="Changes" comment="merging to main">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/components/EnemyComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/components/EnemyComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/core/GameApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/core/GameApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/AutoHealComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/AutoHealComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/LightningStrikeComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/LightningStrikeComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/ShieldComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/ShieldComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LoginScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LoginScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/EnemyComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/EnemyComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/LoginController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/core/EnemyFlyweightFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/core/EnemyFlyweightFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/ExplosiveMinesComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/ExplosiveMinesComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/BulletComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/BulletComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/DropComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/DropComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/FoodComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/FoodComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/LaserComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/LaserComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/PlayerComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/PlayerComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/SwordComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/SwordComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/VoltChainComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/VoltChainComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/GameOverController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/GameOverController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/MainMenuController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/MainMenuController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/PauseController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/PauseController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$MainMenuController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$MainMenuController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/AutoHealComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/AutoHealComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/LightningStrikeComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/LightningStrikeComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ShieldComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ShieldComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LoginScene.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LoginScene.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.20.38.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.23.56.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/RegisterController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/RegisterController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/SettingsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/SettingsController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/EnemyFlyweightFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/EnemyFlyweightFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/EntityType.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/EntityType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameEntityFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameEntityFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/SoundManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/SoundManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager$SpawnCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager$SpawnCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/data/LeaderboardDatabase.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/data/LeaderboardDatabase.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/model/OptionType.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/model/OptionType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/model/Player.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/model/Player.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/model/UpgradeOption.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/model/UpgradeOption.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ExplosiveMinesComponent$MineBehaviorComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ExplosiveMinesComponent$MineBehaviorComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ExplosiveMinesComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ExplosiveMinesComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/FireTrailComponent$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/FireTrailComponent$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/FireTrailComponent$EnemyState.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/FireTrailComponent$EnemyState.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/FireTrailComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/FireTrailComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/PoisonAuraComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/PoisonAuraComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LeaderboardUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LeaderboardUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LevelUpMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LevelUpMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/MainMenuScene.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/MainMenuScene.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/PauseScene.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/PauseScene.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/RegisterScene.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/RegisterScene.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/SettingsScene.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/SettingsScene.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/upgrades/UpgradeRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/upgrades/UpgradeRegistry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/utils/AuthManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/utils/AuthManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/utils/DatabaseManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/utils/DatabaseManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/utils/PasswordUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/utils/PasswordUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/utils/ResourceLoader.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/utils/ResourceLoader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/utils/UIAnimations.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/utils/UIAnimations.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.32.43.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.32.57.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.35.08.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.36.46.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.45.42.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.47.33.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-21.48.16.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-22.03.11.log" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +81,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/fictionithink/TheOnlyException.git&quot;,
-    &quot;accountId&quot;: &quot;de2de1d3-1d90-4114-b492-14306097a5e4&quot;
+    &quot;accountId&quot;: &quot;39af587a-5829-4bac-bc14-0998e4cb53db&quot;
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
@@ -73,7 +106,8 @@
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;a&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/ginac/Downloads/TheOnlyException/TheOnlyException&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
@@ -92,6 +126,7 @@
       </method>
     </configuration>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="a6e27113-e10b-4f4b-824e-63578634f0bd" name="Changes" comment="" />
