@@ -63,7 +63,7 @@ public class GameApp extends GameApplication {
             return;
         }
         System.out.println("showLeaderboard called");
-        LeaderboardUI leaderboardUI = new LeaderboardUI(storedPlayerName); // Restored storedPlayerName parameter
+        LeaderboardUI leaderboardUI = new LeaderboardUI(storedPlayerName);
         isLeaderboardOpen = true;
         FXGL.getDialogService().showBox("Leaderboard", leaderboardUI.getContainer(), leaderboardUI.getCloseButton());
         leaderboardUI.getCloseButton().setOnAction(e -> {
@@ -94,7 +94,6 @@ public class GameApp extends GameApplication {
                 });
                 loginScene.getLoginController().setSwitchToRegisterCallback(() -> {
                     System.out.println("Switching to RegisterScene...");
-                    LoginScene.stopLoginMusic();
                     RegisterScene registerScene = new RegisterScene();
                     registerScene.getRegisterController().setSwitchToMainMenuCallback(() -> {
                         System.out.println("Registration successful - transitioning to MainMenuScene");
@@ -197,6 +196,12 @@ public class GameApp extends GameApplication {
 
     @Override
     protected void initUI() {
+        Text waveText = getUIFactoryService().newText("", 24);
+        waveText.textProperty().bind(FXGL.getWorldProperties().intProperty("wave").asString("Wave: %d"));
+        waveText.setFill(Color.BLUE);
+        waveText.setStyle("-fx-font-weight: bold;");
+        addUINode(waveText, 20, 170);
+
         Text nameText = getUIFactoryService().newText("", 20);
         nameText.textProperty().bind(getWorldProperties().stringProperty("playerName").concat("'s Game"));
         nameText.setFill(Color.WHITE);
@@ -360,7 +365,7 @@ public class GameApp extends GameApplication {
         // Initialize the wave manager and start it
         waveManager = WaveManager.getInstance();
         waveManager.start(player);
-        System.out.println("Wave manager initialized and started");
+        System.out.println("WaveManager initialized and started in initGame");
 
         resetTimers();
     }
@@ -368,13 +373,11 @@ public class GameApp extends GameApplication {
     public void stopTimer() {
         isTimerRunning = false;
 
-        // Stop the wave manager
         if (waveManager != null) {
             waveManager.stop();
-            System.out.println("Wave manager stopped");
+            System.out.println("WaveManager stopped in stopTimer");
         }
 
-        // Stop the game music before showing the game over screen
         if (gameMusic != null) {
             gameMusic.stop();
             System.out.println("Game music stopped in stopTimer");
@@ -510,8 +513,10 @@ public class GameApp extends GameApplication {
     public void resetTimers() {
         System.out.println("Resetting game timers to prevent speed-up");
         isTimerRunning = false;
-        FXGL.getGameTimer().clear();
-        // Recreate time and score timers
+        // CHANGED: Avoid clearing all timers to preserve WaveManager timers
+        // FXGL.getGameTimer().clear();
+
+        // Recreate survival time timer
         FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) {
                 int currentTime = getWorldProperties().getInt("survivalTime");
@@ -519,11 +524,8 @@ public class GameApp extends GameApplication {
             }
         }, Duration.seconds(1));
 
-        FXGL.getGameTimer().runAtInterval(() -> {
-            if (isTimerRunning) {
-                player.getComponent(PlayerComponent.class).shootTripleBurst();
-            }
-        }, Duration.seconds(0.2));
+        // REMOVED: Redundant enemy spawn timers that conflict with WaveManager
+        /*
         FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) spawnEnemyOutsideViewport("enemy");
         }, Duration.seconds(1));
@@ -533,6 +535,7 @@ public class GameApp extends GameApplication {
         FXGL.getGameTimer().runAtInterval(() -> {
             if (isTimerRunning) spawnEnemyOutsideViewport("tankEnemy");
         }, Duration.seconds(3));
+        */
 
         // Recreate weapon timers
         if (userType.equals("Gun")) {
@@ -565,14 +568,17 @@ public class GameApp extends GameApplication {
             }, Duration.seconds(.5));
         }
 
-        // Ensure the wave manager is started
+        // CHANGED: Ensure WaveManager timers are preserved and restarted
         if (waveManager == null) {
             waveManager = WaveManager.getInstance();
+            System.out.println("WaveManager initialized in resetTimers");
         }
 
         if (!waveManager.isActive() && player != null) {
             waveManager.start(player);
-            System.out.println("Wave manager restarted");
+            System.out.println("WaveManager restarted in resetTimers");
+        } else {
+            System.out.println("WaveManager already active or player null, skipping restart");
         }
 
         // Reinitialize player powerup timers
@@ -694,7 +700,7 @@ public class GameApp extends GameApplication {
         System.out.println("Game state reset for new session - player set to null");
         if (waveManager != null) {
             waveManager.reset();
-            System.out.println("Wave manager reset");
+            System.out.println("WaveManager reset in resetGameState");
         }
         System.out.println("Game state reset complete");
     }
@@ -722,17 +728,17 @@ public class GameApp extends GameApplication {
         isTimerRunning = false;
         if (waveManager != null) {
             waveManager.stop();
-            System.out.println("Wave manager paused");
+            System.out.println("WaveManager paused in pauseGameTimers");
         }
     }
 
     public void resumeGameTimers() {
         isTimerRunning = true;
-        System.out.println("Game timers resumed");
+        System.out.println("Game timers resumed in resumeGameTimers");
         resetTimers();
         if (waveManager != null && player != null) {
             waveManager.start(player);
-            System.out.println("Wave manager resumed");
+            System.out.println("WaveManager resumed in resumeGameTimers");
         }
     }
 
