@@ -4,27 +4,21 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.effect.Glow;
 import javafx.util.Duration;
 import org.example.core.EntityType;
 
 public class DropComponent extends Component {
 
-    private final Color[] YELLOW_SHADES = {
-            Color.GOLD,
-            Color.YELLOW,
-            Color.LIGHTYELLOW,
-            Color.KHAKI,
-            Color.GOLDENROD
-    };
-
-    private int currentColorIndex = 0;
-    private Rectangle dropVisual;
     private Entity player;
     private final double MAGNET_RANGE = 150.0;
     private final double MOVE_SPEED = 2.5;
     private final int EXP_VALUE = 50;
+    private final double SPRITE_SIZE = 16.0; // Size of memorychip.png (16x16)
+    private final double GLOW_LEVEL = 0.6; // Base glow intensity (0.0 to 1.0)
+    private double elapsedTime = 0.0; // Custom time counter for pulsing
+
+    private Glow glow;
 
     @Override
     public void onAdded() {
@@ -33,17 +27,17 @@ public class DropComponent extends Component {
                 .findFirst()
                 .orElse(null);
 
-        if (entity.getViewComponent().getChildren().get(0) instanceof Rectangle) {
-            dropVisual = (Rectangle) entity.getViewComponent().getChildren().get(0);
+        // Load the memorychip.png sprite
+        var memoryChipSprite = FXGL.texture("memorychip.png");
 
-            FXGL.getGameTimer().runAtInterval(() -> {
-                if (entity != null && entity.isActive()) {
-                    currentColorIndex = (currentColorIndex + 1) % YELLOW_SHADES.length;
-                    dropVisual.setFill(YELLOW_SHADES[currentColorIndex]);
-                }
-            }, Duration.seconds(0.2));
-        }
+        // Apply a glow effect to the sprite
+        glow = new Glow(GLOW_LEVEL);
+        memoryChipSprite.setEffect(glow);
 
+        // Add the sprite directly as the entity's view
+        entity.getViewComponent().addChild(memoryChipSprite);
+
+        // Despawn after 20 seconds
         FXGL.getGameTimer().runOnceAfter(() -> {
             if (entity != null && entity.isActive()) {
                 entity.removeFromWorld();
@@ -72,5 +66,10 @@ public class DropComponent extends Component {
             Point2D direction = playerCenter.subtract(dropCenter).normalize();
             entity.translate(direction.multiply(MOVE_SPEED * tpf * 60));
         }
+
+        // Update elapsed time and animate glow
+        elapsedTime += tpf;
+        double pulse = 0.4 + 0.2 * Math.sin(elapsedTime * 5);
+        glow.setLevel(pulse);
     }
 }

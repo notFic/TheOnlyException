@@ -27,11 +27,8 @@ public class ExplosiveMinesComponent extends Component {
     private static final double EXPLOSION_RADIUS = 100.0; // Base explosion radius
     private static final double EXPLOSION_RADIUS_UPGRADED = 150.0; // With Heap Overflow
     private static final double EXPLOSION_DAMAGE = 40.0; // Damage dealt by explosion
-    private static final double BURN_ZONE_DURATION = 1.0; // Burn zone lifetime
-    private static final double BURN_ZONE_DAMAGE = 5.0; // Damage per tick
-    private static final double BURN_ZONE_TICK_INTERVAL = 0.5; // Seconds between ticks
     private static final double EXPLOSION_VISUAL_DURATION = 0.5; // Seconds for visual effect
-    private static final boolean DEBUG_VISUALIZER = true; // Toggle debug radius visualizer
+    private static final boolean DEBUG_VISUALIZER = false; // Toggle debug radius visualizer
 
     private boolean isActive = false;
     private double spawnTimer = 0.0;
