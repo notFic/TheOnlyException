@@ -7,6 +7,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.effect.Glow;
 import javafx.util.Duration;
 import org.example.core.EntityType;
+import org.example.core.SoundManager;
 
 public class DropComponent extends Component {
 
@@ -53,6 +54,7 @@ public class DropComponent extends Component {
         if (entity.isColliding(player)) {
             PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
             playerComponent.addExp(EXP_VALUE);
+            SoundManager.getInstance().playSound("pickup"); // Play hit sound
             entity.removeFromWorld();
             return;
         }

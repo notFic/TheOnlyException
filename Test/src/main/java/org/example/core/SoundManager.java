@@ -77,6 +77,7 @@ public class SoundManager {
         loadSound("explosion", "/assets/sounds/EXPLOSION.mp3");
         loadSound("hit", "/assets/sounds/HIT.mp3");
         loadSound("lightning", "/assets/sounds/LIGHTNING.mp3");
+        loadSound("pickup", "/assets/sounds/PICKUP.mp3");
 
         // Debug output - show all loaded sounds
         if (!soundEffects.isEmpty()) {

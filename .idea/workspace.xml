@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6e27113-e10b-4f4b-824e-63578634f0bd" name="Changes" comment="merging to main">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/core/SoundManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/core/SoundManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -54,7 +55,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "n",
+    "git-widget-placeholder": "ayuwoki",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/ginac/Downloads/TheOnlyException/TheOnlyException",
     "node.js.selected.package.tslint": "(autodetect)",
