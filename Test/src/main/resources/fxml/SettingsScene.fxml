@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane fx:id="root" prefHeight="720.0" prefWidth="1280.0" styleClass="overlay-container" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controllers.SettingsController">
+
+    <stylesheets>
+        <URL value="@/css/styles.css" />
+    </stylesheets>
+
+    <!-- Semi-transparent Overlay -->
+    <Rectangle fx:id="overlay" fill="#00000080" height="720.0" width="1280.0" />
+
+    <!-- Centered Settings Pane -->
+    <Pane maxHeight="470.0" maxWidth="400" minHeight="470.0" prefHeight="470.0" styleClass="login-pane">
+        <VBox alignment="CENTER" maxHeight="450.0" maxWidth="400.0" minHeight="450.0" minWidth="400.0" prefHeight="450.0" prefWidth="400.0" spacing="10.0" styleClass="login-box">
+            <padding>
+                <Insets bottom="25.0" left="40.0" right="40.0" top="25.0" />
+            </padding>
+
+            <Text fx:id="title" fill="WHITE" styleClass="login-title-label" text="Settings" />
+            
+            <!-- Music Volume -->
+            <HBox alignment="CENTER_LEFT" spacing="10" prefWidth="320.0">
+                <Label text="Music Volume:" textFill="WHITE" />
+                <Label fx:id="musicVolumeLabel" text="50%" textFill="WHITE" />
+            </HBox>
+            <Slider fx:id="musicVolumeSlider" min="0" max="1" value="0.5" prefWidth="320.0" />
+            
+            <Separator prefWidth="320.0">
+                <VBox.margin>
+                    <Insets top="10" bottom="10" />
+                </VBox.margin>
+            </Separator>
+            
+            <!-- Sound Effects Volume -->
+            <HBox alignment="CENTER_LEFT" spacing="10" prefWidth="320.0">
+                <Label text="Sound Effects:" textFill="WHITE" />
+                <Label fx:id="soundEffectsVolumeLabel" text="50%" textFill="WHITE" />
+            </HBox>
+            <Slider fx:id="soundEffectsVolumeSlider" min="0" max="1" value="0.5" prefWidth="320.0" />
+            
+            <Separator prefWidth="320.0">
+                <VBox.margin>
+                    <Insets top="10" bottom="10" />
+                </VBox.margin>
+            </Separator>
+            
+            <!-- Buttons -->
+            <HBox alignment="CENTER" spacing="20">
+                <Button fx:id="saveButton" onAction="#saveSettings" text="Save" styleClass="login-action-button" prefWidth="150.0" />
+                <Button fx:id="cancelButton" onAction="#cancel" text="Cancel" styleClass="login-action-button" prefWidth="150.0" />
+            </HBox>
+        </VBox>
+    </Pane>
+</StackPane> 

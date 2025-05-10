@@ -42,4 +42,24 @@ public class MainMenuScene extends GameSubScene {
             System.err.println("MainMenuController is null - media may not be started");
         }
     }
+
+    /**
+     * Stops all music played by this scene.
+     * This method is called when transitioning to the game.
+     */
+    public void stopMusic() {
+        if (controller != null) {
+            controller.stopMedia();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        
+        // Make sure controller cleans up resources if it exists
+        if (controller != null) {
+            controller.stopMedia();
+        }
+    }
 }

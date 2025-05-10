@@ -6,35 +6,51 @@
   <component name="ChangeListManager">
     <list default="true" id="a6e27113-e10b-4f4b-824e-63578634f0bd" name="Changes" comment="merging to main">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/components/BulletComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/components/BulletComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/components/PlayerComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/components/PlayerComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/MainMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/controllers/MainMenuController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/core/GameApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/core/GameApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/core/GameEntityFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/core/GameEntityFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/PoisonAuraComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/PoisonAuraComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LevelUpMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LevelUpMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/upgrades/UpgradeRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/upgrades/UpgradeRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LoginScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LoginScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/MainMenuScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/MainMenuScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/resources/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/resources/css/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/css/styles.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/BulletComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/BulletComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/LaserComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/LaserComponent.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/PlayerComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/PlayerComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/GameOverController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/GameOverController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/LoginController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/SwordComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/SwordComponent.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/MainMenuController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/MainMenuController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/RegisterController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/controllers/RegisterController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/EnemyFlyweightFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/EnemyFlyweightFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/EntityType.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/EntityType.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$MainMenuController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp$MainMenuController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameApp.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameEntityFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameEntityFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/PoisonAuraComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/PoisonAuraComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager$SpawnCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager$SpawnCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/data/LeaderboardDatabase.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/data/LeaderboardDatabase.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/model/OptionType.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/model/OptionType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/model/Player.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/model/Player.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/model/UpgradeOption.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/model/UpgradeOption.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LeaderboardUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LeaderboardUI.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LevelUpMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LevelUpMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LoginScene.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LoginScene.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/MainMenuScene.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/MainMenuScene.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/RegisterScene.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/RegisterScene.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/upgrades/UpgradeRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/upgrades/UpgradeRegistry.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-16.25.40.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-16.40.15.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-19.11.55.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-19.16.35.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-19.18.22.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-19.19.44.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-19.23.56.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-19.26.47.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-19.29.54.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/utils/AuthManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/utils/AuthManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/utils/DatabaseManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/utils/DatabaseManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/utils/PasswordUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/utils/PasswordUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/utils/ResourceLoader.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/utils/ResourceLoader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/utils/UIAnimations.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/utils/UIAnimations.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-19.40.12.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-19.43.09.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-19.43.46.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-19.54.49.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-19.55.22.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-20.03.18.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-20.05.09.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-20.07.46.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-20.16.42.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-10-May-2025-20.21.17.log" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,20 +93,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.GameApp.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "a",
-    "last_opened_file_path": "C:/Users/ginac/Downloads/TheOnlyException/TheOnlyException",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.editor.code.editing",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.GameApp.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;a&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/ginac/Downloads/TheOnlyException/TheOnlyException&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor.code.editing&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="GameApp" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="openjdk-24" />
@@ -101,14 +117,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.23774.435" />
-        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-IU-251.23774.435" />
-      </set>
-    </attachedChunks>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

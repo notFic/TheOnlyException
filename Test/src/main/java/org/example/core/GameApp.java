@@ -22,7 +22,8 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -56,7 +57,7 @@ public class GameApp extends GameApplication {
     private Random random = new Random();
     private boolean isTimerRunning = true;
     private boolean isLoggedIn = false;
-    private AudioClip gameMusic;
+    private MediaPlayer gameMusicPlayer;
     private String userType = "Gun";
 
     private TimerAction survivalTimerAction;
@@ -96,8 +97,10 @@ public class GameApp extends GameApplication {
         Font.loadFont(getClass().getResourceAsStream("/fonts/PixelifySans_SemiBold.ttf"), 24);
         Font.loadFont(getClass().getResourceAsStream("/fonts/PixelifySans_Medium.ttf"), 18);
         Font.loadFont(getClass().getResourceAsStream("/fonts/PixelifySans_Regular.ttf"), 16);
-        System.out.println("Pixelify Sans fonts loaded: Bold, SemiBold, Medium, Regular");settings.setMainMenuEnabled(true);
+        System.out.println("Pixelify Sans fonts loaded: Bold, SemiBold, Medium, Regular");
+        settings.setMainMenuEnabled(true);
         settings.setGameMenuEnabled(false);
+        
         settings.setSceneFactory(new SceneFactory() {
             @Override
             public FXGLMenu newMainMenu() {
@@ -203,10 +206,10 @@ public class GameApp extends GameApplication {
         System.out.println("Transitioning to MainMenuScene...");
         FXGL.getGameWorld().getEntitiesCopy().forEach(Entity::removeFromWorld);
         FXGL.getGameTimer().clear();
-        if (gameMusic != null) {
-            gameMusic.stop();
-            System.out.println("Game music stopped");
-            gameMusic = null;
+        if (gameMusicPlayer != null) {
+            gameMusicPlayer.stop();
+            gameMusicPlayer.dispose();
+            gameMusicPlayer = null;
         }
         isLoggedIn = true;
         System.out.println("Current isLoggedIn state: " + isLoggedIn);
@@ -378,6 +381,13 @@ public class GameApp extends GameApplication {
             return;
         }
 
+        // Stop any existing game music to ensure a fresh start
+        if (gameMusicPlayer != null) {
+            gameMusicPlayer.stop();
+            gameMusicPlayer.dispose();
+            gameMusicPlayer = null;
+        }
+        
         FXGL.getGameWorld().getEntities().forEach(Entity::removeFromWorld);
         FXGL.getGameTimer().clear();
         resetGameState();
@@ -414,24 +424,8 @@ public class GameApp extends GameApplication {
         getGameScene().getViewport().bindToEntity(player, getAppWidth() / 2, getAppHeight() / 2);
         getGameScene().getViewport().setBounds(0, 0, worldWidth, worldHeight);
 
-        if (gameMusic == null) {
-            try {
-                java.net.URL musicUrl = getClass().getResource("/assets/music/game_music.mp3");
-                if (musicUrl == null) {
-                    throw new IllegalStateException("Game music file not found at /assets/music/game_music.mp3.");
-                }
-                gameMusic = new AudioClip(musicUrl.toExternalForm());
-                gameMusic.setCycleCount(AudioClip.INDEFINITE);
-                gameMusic.setVolume(0.5);
-                gameMusic.play();
-                System.out.println("Game music loaded and playing successfully");
-            } catch (Exception e) {
-                System.err.println("Error loading game music: " + e.getMessage());
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Game music already loaded, skipping replay");
-        }
+        // Load game music with the current volume settings
+        loadGameMusic();
 
         isTimerRunning = true;
 
@@ -447,6 +441,36 @@ public class GameApp extends GameApplication {
         });
 
         resetTimers();
+    }
+
+    // Separate method for loading game music to improve code organization
+    private void loadGameMusic() {
+        try {
+            java.net.URL musicUrl = getClass().getResource("/assets/music/game_music.mp3");
+            if (musicUrl == null) {
+                throw new IllegalStateException("Game music file not found at /assets/music/game_music.mp3.");
+            }
+            
+            Media musicMedia = new Media(musicUrl.toExternalForm());
+            gameMusicPlayer = new MediaPlayer(musicMedia);
+            gameMusicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            
+            // Use the current global music volume
+            double volume = FXGL.getSettings().getGlobalMusicVolume();
+            gameMusicPlayer.setVolume(volume);
+            gameMusicPlayer.play();
+            
+            // Listen for changes to the global music volume
+            FXGL.getSettings().globalMusicVolumeProperty().addListener((obs, oldVal, newVal) -> {
+                if (gameMusicPlayer != null) {
+                    gameMusicPlayer.setVolume(newVal.doubleValue());
+                }
+            });
+            
+        } catch (Exception e) {
+            System.err.println("Error loading game music: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void stopTimer() {
@@ -572,16 +596,15 @@ public class GameApp extends GameApplication {
             controller.setBackToMenuCallback(() -> {
                 FXGL.getGameScene().clearUINodes();
                 FXGL.getGameController().resumeEngine();
-                if (gameMusic != null) {
-                    gameMusic.stop();
-                    System.out.println("Game music stopped in backToMenuCallback");
-                    gameMusic = null;
+                if (gameMusicPlayer != null) {
+                    gameMusicPlayer.stop();
+                    gameMusicPlayer.dispose();
+                    gameMusicPlayer = null;
                 }
                 gotoNewMainMenu();
             });
 
-            // Add root directly to game scene for debugging
-            System.out.println("Adding game over UI to game scene");
+            // Add root to game scene
             FXGL.getGameScene().addUINode(root);
         } catch (Exception e) {
             System.err.println("Error loading GameOverScene.fxml: " + e.getMessage());

@@ -1,11 +1,11 @@
 package org.example.controllers;
 
 import com.almasb.fxgl.dsl.FXGL;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -15,6 +15,7 @@ import org.example.core.GameApp;
 import org.example.scenes.LeaderboardUI;
 import org.example.scenes.LoginScene;
 import org.example.scenes.MainMenuScene;
+import org.example.scenes.SettingsScene;
 
 public class MainMenuController {
     private boolean isLeaderboardOpen = false;
@@ -30,8 +31,9 @@ public class MainMenuController {
     @FXML private Button exitButton;
     @FXML private Button logoutButton;
 
-    private MediaPlayer mediaPlayer;
-    private AudioClip menuMusic;
+    private MediaPlayer videoPlayer;
+    private MediaPlayer musicPlayer;
+    private ChangeListener<Number> volumeListener;
 
     @FXML
     private void initialize() {
@@ -41,6 +43,19 @@ public class MainMenuController {
         addHoverEffect(leaderboardButton);
         addHoverEffect(exitButton);
         addHoverEffect(logoutButton);
+
+        // Create volume listener to be used when music player is created
+        volumeListener = (obs, oldVal, newVal) -> {
+            if (musicPlayer != null && musicPlayer.getStatus() != MediaPlayer.Status.DISPOSED) {
+                try {
+                    double volume = newVal.doubleValue();
+                    musicPlayer.setVolume(volume);
+                } catch (Exception e) {
+                    // Silently ignore any errors when setting volume
+                    // This prevents NullPointerException when player is being disposed
+                }
+            }
+        };
 
         // Start the media
         startMedia();
@@ -52,45 +67,50 @@ public class MainMenuController {
 
         // Set up the video background
         try {
-            System.out.println("Attempting to load video for MainMenuScene...");
             java.net.URL videoUrl = getClass().getResource("/assets/images/mainmenubg_placeholder.mp4");
             if (videoUrl == null) {
                 throw new IllegalStateException("Video file not found at /assets/images/mainmenubg_placeholder.mp4.");
             }
 
             String videoPath = videoUrl.toExternalForm();
-            Media media = new Media(videoPath);
-            mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            mediaPlayer.setMute(true);
-            backgroundMediaView.setMediaPlayer(mediaPlayer);
-            mediaPlayer.play();
+            Media videoMedia = new Media(videoPath);
+            videoPlayer = new MediaPlayer(videoMedia);
+            videoPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            videoPlayer.setMute(true);
+            backgroundMediaView.setMediaPlayer(videoPlayer);
+            videoPlayer.play();
 
-            mediaPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
-                System.out.println("MainMenuScene MediaPlayer status: " + newValue);
+            videoPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue == MediaPlayer.Status.HALTED) {
-                    System.out.println("MainMenuScene MediaPlayer error: " + mediaPlayer.getError());
+                    System.err.println("Video player error: " + videoPlayer.getError());
                 }
             });
-
-            System.out.println("MainMenuScene background video loaded and playing successfully");
         } catch (Exception e) {
-            System.err.println("Error loading MainMenuScene video: " + e.getMessage());
+            System.err.println("Error loading video: " + e.getMessage());
             e.printStackTrace();
             root.setStyle("-fx-background-color: black;");
         }
 
-        // Load background music
+        // Load background music using MediaPlayer
         try {
             java.net.URL musicUrl = getClass().getResource("/assets/music/music2.mp3");
             if (musicUrl == null) {
                 throw new IllegalStateException("Menu music file not found at /assets/music/music2.mp3.");
             }
-            menuMusic = new AudioClip(musicUrl.toExternalForm());
-            menuMusic.setCycleCount(AudioClip.INDEFINITE);
-            menuMusic.setVolume(0.5);
-            menuMusic.play();
-            System.out.println("Menu music loaded and playing successfully");
+            
+            Media musicMedia = new Media(musicUrl.toExternalForm());
+            musicPlayer = new MediaPlayer(musicMedia);
+            musicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            
+            // Use the current global music volume
+            double volume = FXGL.getSettings().getGlobalMusicVolume();
+            musicPlayer.setVolume(volume);
+            musicPlayer.play();
+            
+            // Add the volume listener AFTER the player is fully initialized
+            FXGL.getSettings().globalMusicVolumeProperty().removeListener(volumeListener);
+            FXGL.getSettings().globalMusicVolumeProperty().addListener(volumeListener);
+            
         } catch (Exception e) {
             System.err.println("Error loading menu music: " + e.getMessage());
             e.printStackTrace();
@@ -98,7 +118,6 @@ public class MainMenuController {
     }
 
     public void onSceneShown() {
-        System.out.println("MainMenuScene shown - restarting media");
         startMedia();
     }
 
@@ -109,33 +128,40 @@ public class MainMenuController {
 
     @FXML
     private void startGame() {
-        System.out.println("Starting new game...");
-        stopMedia();
+        // Make sure we completely stop the menu music before starting the game
+        if (musicPlayer != null) {
+            musicPlayer.stop();
+            musicPlayer.dispose();
+            musicPlayer = null;
+        }
+        if (videoPlayer != null) {
+            videoPlayer.stop();
+            videoPlayer.dispose();
+            videoPlayer = null;
+        }
+        // Start the game with a clean audio state
         FXGL.getGameController().startNewGame();
     }
 
     @FXML
     private void showSettings() {
-        System.out.println("Settings button clicked - placeholder action");
-        FXGL.getDialogService().showMessageBox("Settings menu not yet implemented.");
+        // Don't stop the media, let the music continue playing
+        FXGL.getSceneService().pushSubScene(new SettingsScene(this));
     }
 
     @FXML
     private void showLeaderboard() {
         if (isLeaderboardOpen) {
-            System.out.println("Leaderboard dialog already open - ignoring request");
             return;
         }
-        System.out.println("Opening leaderboard dialog...");
+        
         String currentUsername = GameApp.getStoredPlayerName();
-        System.out.println("Passing currentUsername to LeaderboardUI: " + currentUsername);
         LeaderboardUI leaderboardUI = new LeaderboardUI(currentUsername);
         isLeaderboardOpen = true;
         FXGL.getDialogService().showBox("Leaderboard", leaderboardUI.getContainer(), leaderboardUI.getCloseButton());
         leaderboardUI.getCloseButton().setOnAction(e -> {
             isLeaderboardOpen = false;
-            System.out.println("Leaderboard dialog closed");
-            // Workaround: Refresh the scene to clear the overlay
+            // Refresh the scene to clear the overlay
             FXGL.getSceneService().popSubScene();
             FXGL.getSceneService().pushSubScene(new MainMenuScene());
         });
@@ -143,14 +169,12 @@ public class MainMenuController {
 
     @FXML
     private void exitGame() {
-        System.out.println("Exiting game...");
         stopMedia();
         FXGL.getGameController().exit();
     }
 
     @FXML
     private void logout() {
-        System.out.println("Logging out...");
         stopMedia();
         FXGL.getSceneService().popSubScene();
         FXGL.getSceneService().pushSubScene(new LoginScene());
@@ -158,14 +182,44 @@ public class MainMenuController {
         gameApp.setLoggedIn(false);
     }
 
-    private void stopMedia() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            System.out.println("MainMenuScene background video stopped");
+    /**
+     * Stops and disposes all media resources.
+     * Made public so it can be called during scene transitions.
+     */
+    public void stopMedia() {
+        // Remove the volume listener first to prevent NullPointerException
+        FXGL.getSettings().globalMusicVolumeProperty().removeListener(volumeListener);
+        
+        if (videoPlayer != null) {
+            try {
+                videoPlayer.stop();
+                videoPlayer.dispose();
+            } catch (Exception e) {
+                // Ignore errors during cleanup
+            }
+            videoPlayer = null;
         }
-        if (menuMusic != null) {
-            menuMusic.stop();
-            System.out.println("Menu music stopped");
+        if (musicPlayer != null) {
+            try {
+                musicPlayer.stop();
+                musicPlayer.dispose();
+            } catch (Exception e) {
+                // Ignore errors during cleanup
+            }
+            musicPlayer = null;
+        }
+    }
+
+    /**
+     * Directly updates the volume of the currently playing menu music.
+     */
+    public void updateMenuMusicVolume(double volume) {
+        if (musicPlayer != null && musicPlayer.getStatus() != MediaPlayer.Status.DISPOSED) {
+            try {
+                musicPlayer.setVolume(volume);
+            } catch (Exception e) {
+                // Silently ignore any errors when setting volume
+            }
         }
     }
 }
