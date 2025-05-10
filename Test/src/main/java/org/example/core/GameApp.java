@@ -263,12 +263,6 @@ public class GameApp extends GameApplication {
         levelText.textProperty().bind(getWorldProperties().intProperty("level").asString("Level: %d"));
         hudPanel.getChildren().add(levelText);
 
-        // EXP Text
-        Text expText = getUIFactoryService().newText("", Color.web("#87CEEB"), FontType.GAME, 24);
-        expText.setEffect(neonGlow);
-        expText.textProperty().bind(getWorldProperties().intProperty("exp").asString("EXP: %d"));
-        hudPanel.getChildren().add(expText);
-
         // Add HUD panel to scene
         addUINode(hudPanel);
 
