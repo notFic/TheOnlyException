@@ -108,7 +108,6 @@ public class GameApp extends GameApplication {
                 LoginScene loginScene = new LoginScene();
                 loginScene.getLoginController().setLoginSuccessCallback(() -> {
                     System.out.println("Login successful - transitioning to MainMenuScene");
-                    LoginScene.stopLoginMusic();
                     setLoggedIn(true);
                     gotoNewMainMenu();
                 });

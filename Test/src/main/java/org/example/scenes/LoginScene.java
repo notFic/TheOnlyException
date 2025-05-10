@@ -60,7 +60,9 @@ public class LoginScene extends FXGLMenu {
     }
 
     public static void stopLoginMusic() {
-        loginMusic.stop();
+        if (loginMusic != null) {
+            loginMusic.stop();
+        }
     }
 
     // Public method to access the controller
