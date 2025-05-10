@@ -16,7 +16,7 @@ import java.util.Map;
 public class SoundManager {
     private static SoundManager instance;
     private Map<String, Object> soundEffects; // Can hold either AudioClip or MediaPlayer
-    
+
     // Flag to check if sound effects are actually loaded
     private boolean soundsLoaded = false;
 
@@ -40,22 +40,22 @@ public class SoundManager {
         try {
             // Try to use the file directly
             File soundFile = new File("F:/my files/School/2nd year 2nd sem/TheOnlyException/Test/src/main/resources/assets/sounds/btn.mp3");
-            
+
             if (soundFile.exists()) {
                 System.out.println("Sound file exists at: " + soundFile.getAbsolutePath());
-                
+
                 // Create Media and MediaPlayer directly
                 Media media = new Media(soundFile.toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(media);
                 mediaPlayer.setVolume(1.0); // Full volume for testing
                 mediaPlayer.play();
-                
+
                 System.out.println("Playing direct sound from file");
-                
+
                 // No need to clean up - the MediaPlayer will be garbage collected
             } else {
                 System.err.println("Sound file doesn't exist at: " + soundFile.getAbsolutePath());
-                
+
                 // Try built-in JavaFX alert sound
                 java.awt.Toolkit.getDefaultToolkit().beep();
             }
@@ -72,6 +72,12 @@ public class SoundManager {
         loadSoundAsMedia("btn_click", "/assets/sounds/btn.mp3"); // Use Media for mp3 files
         loadSound("level_up", "/assets/sounds/level_up.mp3");
         loadSound("error", "/assets/sounds/error.mp3");
+        loadSound("shoot", "/assets/sounds/SHOOT.mp3"); // Added gunshot sound
+        loadSound("explosion", "/assets/sounds/EXPLOSION.mp3"); // Added gunshot sound
+        loadSound("hit", "/assets/sounds/HIT.mp3"); // Added gunshot sound
+        loadSound("lightning", "/assets/sounds/LIGHTNING.mp3"); // Added gunshot sound
+        // If sound files don't exist yet, create a default one
+        if (soundEffects.isEmpty()) {
         loadSound("shoot", "/assets/sounds/SHOOT.mp3");
         loadSound("explosion", "/assets/sounds/EXPLOSION.mp3");
 
@@ -101,21 +107,21 @@ public class SoundManager {
             e.printStackTrace();
         }
     }
-    
+
     private void loadSoundAsMedia(String name, String path) {
         try {
             java.net.URL soundUrl = getClass().getResource(path);
             if (soundUrl != null) {
                 Media media = new Media(soundUrl.toExternalForm());
                 System.out.println("Successfully created Media for: " + name);
-                
+
                 // Store the MediaPlayer in a ready state
                 MediaPlayer mediaPlayer = new MediaPlayer(media);
                 mediaPlayer.setOnEndOfMedia(() -> {
                     mediaPlayer.stop();
                     mediaPlayer.seek(Duration.ZERO);
                 });
-                
+
                 soundEffects.put(name, mediaPlayer);
                 System.out.println("Loaded sound effect as Media: " + name + " from " + path);
             } else {
@@ -169,7 +175,7 @@ public class SoundManager {
                     // Make button clicks louder
                     volume = Math.min(1.0, volume * 2.0);
                 }
-                
+
                 // Handle different types of sound objects
                 if (sound instanceof AudioClip) {
                     AudioClip clip = (AudioClip) sound;

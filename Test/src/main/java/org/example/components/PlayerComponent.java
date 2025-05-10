@@ -504,6 +504,7 @@ public class PlayerComponent extends Component {
         }
 
         health -= dmg;
+        SoundManager.getInstance().playSound("hit"); // Play hit sound
         FXGL.getWorldProperties().setValue("health", health);
 
         // Check if player died
