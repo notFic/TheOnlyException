@@ -10,8 +10,8 @@
         <URL value="@/css/styles.css" />
     </stylesheets>
     <children>
-        <Pane maxHeight="450" maxWidth="400" styleClass="game-over-pane">
-            <VBox alignment="CENTER" maxHeight="450.0" maxWidth="400.0" minHeight="450.0" minWidth="400.0" prefHeight="450.0" prefWidth="400.0" spacing="15" styleClass="game-over-box">
+        <Pane maxHeight="350.0" maxWidth="400" minHeight="350.0" prefHeight="350.0" styleClass="game-over-pane">
+            <VBox alignment="CENTER" maxHeight="350.0" maxWidth="400.0" minHeight="350.0" minWidth="400.0" prefHeight="350.0" prefWidth="400.0" spacing="15" styleClass="game-over-box">
                 <padding>
                     <Insets bottom="25" left="35" right="35" top="25" />
                 </padding>
