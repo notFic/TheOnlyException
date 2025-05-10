@@ -1,19 +1,30 @@
 package org.example.components;
 
-import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
 
 import java.util.Random;
 
-public class LaserComponent extends Component {
+public class LaserComponent extends GameComponent {
     private Point2D direction;
-    private final double speed = 20;
     private int enemiesHit = 0;
-    private int damage;
 
     public LaserComponent() {
         Random rand = new Random();
         this.damage = 25;
+        this.speed = 20.0;
+    }
+
+    @Override
+    protected void initialize() {
+        // Component-specific initialization
+    }
+
+    @Override
+    protected void updateComponent(double tpf) {
+        if (direction != null) {
+            entity.translate(direction);
+            updateOpacity(); // Call method to update opacity
+        }
     }
 
     public void setEnemiesHit() {
@@ -21,24 +32,14 @@ public class LaserComponent extends Component {
         if (enemiesHit > 4) {
             enemiesHit = 4;
         }
-        setDamage();
+        updateDamageByHits();
     }
 
     public void setDirection(Point2D direction) {
         this.direction = direction.normalize().multiply(speed);
     }
 
-    @Override
-    public void onUpdate(double tpf) {
-        entity.translate(direction);
-        updateOpacity(); // Call method to update opacity
-    }
-
-    public int getDamage() {
-        return damage;
-    }
-
-    public void setDamage() {
+    public void updateDamageByHits() {
         this.damage -= 5 * enemiesHit;
         if (damage < 5) {
             damage = 5;
@@ -53,7 +54,7 @@ public class LaserComponent extends Component {
             opacity = 0.50;
         } else if (damage == 13) {
             opacity = 0.35;
-        } else if (damage <= 5) { // Changed to <= to include 5 and below
+        } else if (damage <= 5) {
             opacity = 0.20;
         }
         entity.setOpacity(opacity); // Set the opacity of the entity.

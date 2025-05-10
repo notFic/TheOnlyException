@@ -5,10 +5,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6e27113-e10b-4f4b-824e-63578634f0bd" name="Changes" comment="merging to main">
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/components/FoodComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/components/FoodComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/core/GameEntityFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/core/GameEntityFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/components/BulletComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/components/BulletComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/components/LaserComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/components/LaserComponent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/upgrades/UpgradeRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/upgrades/UpgradeRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameEntityFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/GameEntityFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/BulletComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/BulletComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/DropComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/DropComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/FoodComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/FoodComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/LaserComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/LaserComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/PlayerComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/PlayerComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/SwordComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/SwordComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/VoltChainComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/VoltChainComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/EntityType.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/EntityType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/SoundManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/SoundManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager$SpawnCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager$SpawnCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/WaveManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/data/LeaderboardDatabase.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/data/LeaderboardDatabase.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/model/OptionType.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/model/OptionType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/model/Player.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/model/Player.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/model/UpgradeOption.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/model/UpgradeOption.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ExplosiveMinesComponent$MineBehaviorComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ExplosiveMinesComponent$MineBehaviorComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ExplosiveMinesComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/ExplosiveMinesComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LevelUpMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LevelUpMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LoginScene.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LoginScene.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/MainMenuScene.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/MainMenuScene.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/RegisterScene.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/RegisterScene.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/SettingsScene.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/SettingsScene.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/upgrades/UpgradeRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/upgrades/UpgradeRegistry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/utils/AuthManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/utils/AuthManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/utils/DatabaseManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/utils/DatabaseManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/utils/PasswordUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/utils/PasswordUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/utils/ResourceLoader.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/utils/ResourceLoader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/utils/UIAnimations.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/utils/UIAnimations.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/FXGL-11-May-2025-01.10.15.log" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
