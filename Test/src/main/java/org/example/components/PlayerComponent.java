@@ -42,8 +42,8 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 // Component controlling player movement, animations, health, and game progress
 public class PlayerComponent extends Component {
     private double speed = 1.6; // Player movement speed
-    private int health = 200; // Current health
-    private int maxHealth = 200; // Maximum health, increases on level-up
+    private int health = 150; // Current health
+    private int maxHealth = 150; // Maximum health, increases on level-up
     private int level = 1; // Current level
     private int exp = 0; // Current experience points
     private int expToNextLevel = 100; // EXP needed for next level
@@ -600,20 +600,22 @@ public class PlayerComponent extends Component {
 
     // Reset player state for a new game
     public void resetPlayerState() {
-        health = 100;
-        maxHealth = 100;
+        health = 150;
+        maxHealth = 150;
         level = 1;
         exp = 0;
         expToNextLevel = 100;
-        speed = 1.5;
+        speed = 1.6;
         isAlive = true;
 
         // Clear weapon levels
         weaponLevels.clear();
+        // Initialize gun at level 1
+        weaponLevels.put("gun", 1);
 
         FXGL.getWorldProperties().setValue("health", health);
         FXGL.getWorldProperties().setValue("level", level);
-        FXGL.getWorldProperties().setValue("exp", exp);
+        FXGL.getWorldProperties().setValue("rawExp", exp);
         System.out.println("Player state reset: health=" + health + ", isAlive=" + isAlive + ", level=" + level);
         updateHealthBar();
     }
@@ -749,7 +751,6 @@ public class PlayerComponent extends Component {
         level++;
         exp -= expToNextLevel; // Subtract EXP used for level-up
         expToNextLevel = (int) (expToNextLevel * 1.5);
-        maxHealth += 10; // Increase max health
         health = Math.min(health + 20, maxHealth); // Heal on level-up
 
         // Update game world properties
