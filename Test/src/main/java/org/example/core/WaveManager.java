@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Manages wave-based enemy spawning system similar to Vampire Survivors.
@@ -30,18 +32,26 @@ import java.util.Random;
 public class WaveManager {
     private static WaveManager instance; // Singleton instance
     private final Random random = new Random();
-    private boolean isActive = false;
+    private volatile boolean isActive = false;
     private int currentWave = 1;
     private Entity player;
     private final List<String> availableEnemyTypes = new ArrayList<>();
-    private int activeEnemyCount = 0; // Tracks active enemies
+    private final AtomicInteger activeEnemyCount = new AtomicInteger(0); // Thread-safe counter
 
     // Wave configuration parameters
     private final int WAVE_DURATION_SECONDS = 60; // Each wave lasts 60 seconds
     private final int BASE_ENEMIES_PER_WAVE = 20; // Base enemies for wave 1
-    private final double ENEMY_INCREASE_FACTOR = 1.3; // Reduced from 1.5 to 1.3 for slower growth
-    private final double BASE_SPAWN_INTERVAL = 1.5; // Initial spawn interval
-    private final double MIN_SPAWN_INTERVAL = 0.15; // Minimum spawn interval
+    private final double ENEMY_INCREASE_FACTOR = 1.2; // Further reduced from 1.3 to 1.2
+    private final double BASE_SPAWN_INTERVAL = 2.0; // Increased from 1.5 to 2.0
+    private final double MIN_SPAWN_INTERVAL = 0.3; // Increased from 0.15 to 0.3
+
+    // Optimization parameters
+    private final int MAX_ENEMIES_HARD_CAP = 150; // Hard cap on total enemies regardless of wave
+    private final int CLEANUP_FREQUENCY_MS = 2000; // Check for distant enemies every 2 seconds
+    private boolean cleanupScheduled = false;
+    private long lastCleanupTime = 0;
+    private final int VIEW_MARGIN = 1500; // Distance outside viewport before enemies get cleaned up
+    private final long ENEMY_LIFETIME_NS = 25_000_000_000L; // 25 seconds before distant cleanup
 
     // Enemy pool management
     private final Map<Integer, List<String>> waveEnemyPools = new HashMap<>(); // Maps wave number → available enemy types
@@ -49,8 +59,31 @@ public class WaveManager {
     private final Map<Integer, Integer> waveMaxEnemies = new HashMap<>(); // Maps wave number → max enemies
     private final Map<Integer, String> waveFormations = new HashMap<>(); // Maps wave number → spawn formation
 
-    // Timer reference for spawning
+    // Object pool for enemy entities (future implementation)
+    private final Map<String, List<Entity>> enemyPool = new ConcurrentHashMap<>();
+
+    // Batch processing for formations
+    private final List<SpawnCommand> pendingSpawns = new ArrayList<>();
+    private boolean formationInProgress = false;
+
+    // Task references
     private Runnable spawnTask;
+    private Runnable cleanupTask;
+
+    // Simple command pattern for batched spawning
+    private static class SpawnCommand {
+        String type;
+        double x;
+        double y;
+        int delay;
+
+        SpawnCommand(String type, double x, double y, int delay) {
+            this.type = type;
+            this.x = x;
+            this.y = y;
+            this.delay = delay;
+        }
+    }
 
     // Listener to track enemy removal
     private final EntityWorldListener enemyRemovalListener = new EntityWorldListener() {
@@ -62,8 +95,8 @@ public class WaveManager {
         @Override
         public void onEntityRemoved(Entity entity) {
             if (entity.getType() == EntityType.ENEMY) {
-                activeEnemyCount--;
-                System.out.println("Enemy removed (damage). Active enemies: " + activeEnemyCount);
+                activeEnemyCount.decrementAndGet();
+                // No logging in production code
             }
         }
     };
@@ -80,8 +113,11 @@ public class WaveManager {
      */
     public static WaveManager getInstance() {
         if (instance == null) {
-            instance = new WaveManager();
-            System.out.println("WaveManager singleton initialized");
+            synchronized (WaveManager.class) {
+                if (instance == null) {
+                    instance = new WaveManager();
+                }
+            }
         }
         return instance;
     }
@@ -118,10 +154,13 @@ public class WaveManager {
             if (wave >= 6) enemyPool.add("giantFlyEnemy");
             waveEnemyPools.put(wave, enemyPool);
 
-            double spawnInterval = Math.max(BASE_SPAWN_INTERVAL * Math.pow(0.85, wave - 1), MIN_SPAWN_INTERVAL);
+            // Slower spawn rates for better performance
+            double spawnInterval = Math.max(BASE_SPAWN_INTERVAL * Math.pow(0.9, wave - 1), MIN_SPAWN_INTERVAL);
             waveSpawnRates.put(wave, spawnInterval);
 
+            // Fewer enemies per wave for better performance
             int maxEnemies = (int)(BASE_ENEMIES_PER_WAVE * Math.pow(ENEMY_INCREASE_FACTOR, wave - 1));
+            maxEnemies = Math.min(maxEnemies, MAX_ENEMIES_HARD_CAP); // Hard cap regardless of wave
             waveMaxEnemies.put(wave, maxEnemies);
 
             if (wave % 5 == 0) {
@@ -139,18 +178,29 @@ public class WaveManager {
      */
     public void start(Entity player) {
         this.player = player;
-        boolean state = this.player.isActive();
         this.currentWave = 1;
         this.isActive = true;
-        this.activeEnemyCount = 0; // Reset counter
+        this.activeEnemyCount.set(0); // Reset counter
         FXGL.getWorldProperties().setValue("wave", currentWave);
-        System.out.println("WaveManager started. Player active: " + state + ", Initial wave: " + currentWave);
 
         // Add listener for enemy removal
         FXGL.getGameWorld().addWorldListener(enemyRemovalListener);
 
         scheduleEnemySpawning();
-        System.out.println("Wave system fully started. Current wave: " + currentWave);
+        scheduleCleanupTask();
+    }
+
+    /**
+     * Schedule the periodic cleanup task
+     */
+    private void scheduleCleanupTask() {
+        cleanupTask = () -> {
+            if (!isActive) return;
+            cleanupOldEnemies();
+        };
+
+        // Run cleanup every 2 seconds instead of with every spawn
+        FXGL.getGameTimer().runAtInterval(cleanupTask, Duration.millis(CLEANUP_FREQUENCY_MS));
     }
 
     /**
@@ -158,9 +208,19 @@ public class WaveManager {
      */
     public void stop() {
         this.isActive = false;
-        this.activeEnemyCount = 0; // Reset counter
+        this.activeEnemyCount.set(0); // Reset counter
         FXGL.getGameWorld().removeWorldListener(enemyRemovalListener);
-        System.out.println("Wave system stopped");
+
+        // Cancel tasks
+        if (spawnTask != null) {
+            FXGL.getGameTimer().clear();
+            spawnTask = null;
+        }
+
+        if (cleanupTask != null) {
+            FXGL.getGameTimer().clear();
+            cleanupTask = null;
+        }
     }
 
     /**
@@ -176,16 +236,21 @@ public class WaveManager {
             if (expectedWave > currentWave) {
                 currentWave = expectedWave;
                 FXGL.getWorldProperties().setValue("wave", currentWave);
-                System.out.println("Transitioning to Wave " + currentWave + " at survival time: " + survivalTime + "s");
                 announceNewWave();
+            }
+
+            // Skip spawning if a formation is in progress to reduce lag
+            if (formationInProgress) {
+                return;
             }
 
             double spawnInterval = waveSpawnRates.getOrDefault(currentWave, BASE_SPAWN_INTERVAL);
             double spawnChance = 0.5 / spawnInterval;
             int spawnCount = 1;
 
-            if (currentWave > 5 && random.nextDouble() < 0.2) {
-                spawnCount = Math.min(currentWave / 4, 3);
+            // Less frequent multi-spawns
+            if (currentWave > 5 && random.nextDouble() < 0.15) {
+                spawnCount = Math.min(currentWave / 5, 2); // Reduced count
             }
 
             if (random.nextDouble() < spawnChance) {
@@ -194,7 +259,9 @@ public class WaveManager {
                 }
             }
         };
-        FXGL.getGameTimer().runAtInterval(spawnTask, Duration.seconds(0.5));
+
+        // Reduced frequency - check every 0.8 seconds instead of 0.5
+        FXGL.getGameTimer().runAtInterval(spawnTask, Duration.seconds(0.8));
     }
 
     /**
@@ -203,78 +270,77 @@ public class WaveManager {
      */
     private void spawnEnemyForCurrentWave(int survivalTime) {
         if (!isActive || player == null) {
-            System.out.println("Skipping enemy spawn: WaveManager inactive or player null");
             return;
         }
-
-        // Cleanup old enemies outside viewport
-        cleanupOldEnemies();
 
         List<String> enemyPool = waveEnemyPools.getOrDefault(currentWave, List.of("enemy"));
         String formation = waveFormations.getOrDefault(currentWave, "random");
 
         int baseMax = waveMaxEnemies.getOrDefault(currentWave, BASE_ENEMIES_PER_WAVE);
-        double timeScaling = 1.0 + (survivalTime / 600.0);
+        double timeScaling = 1.0 + (survivalTime / 900.0); // Reduced scaling
         int maxEnemies = (int)(baseMax * timeScaling);
-        int waveAllowance = Math.min(currentWave * 3, 30);
+        maxEnemies = Math.min(maxEnemies, MAX_ENEMIES_HARD_CAP);
+        int waveAllowance = Math.min(currentWave * 2, 20); // Reduced allowance
 
-        if (activeEnemyCount >= maxEnemies + waveAllowance) {
-            System.out.println("Enemy spawn skipped: Active enemies (" + activeEnemyCount + ") exceed max (" + (maxEnemies + waveAllowance) + ")");
+        // Skip spawn if we exceed the enemy cap
+        if (activeEnemyCount.get() >= maxEnemies + waveAllowance) {
             return;
         }
 
         String enemyType;
-        if (currentWave >= 6 && random.nextDouble() < 0.05 * (currentWave / 6.0)) {
+        if (currentWave >= 6 && random.nextDouble() < 0.03 * (currentWave / 6.0)) { // Reduced boss chance
             int bossIndex = Math.min(enemyPool.size() - 1, enemyPool.size() - 2);
             enemyType = enemyPool.get(Math.max(bossIndex, 0));
         } else {
             enemyType = enemyPool.get(random.nextInt(enemyPool.size()));
         }
 
-        System.out.println("Spawning enemy for Wave " + currentWave + ": Type=" + enemyType + ", Formation=" + formation + ", Active enemies=" + (activeEnemyCount + 1));
-
-        switch (formation) {
-            case "circle":
-                spawnEnemyInCircleFormation(enemyType);
-                break;
-            case "line":
-                spawnEnemyInLineFormation(enemyType);
-                break;
-            case "spiral":
-                spawnEnemyInSpiralFormation(enemyType);
-                break;
-            case "random":
-            default:
-                spawnEnemyOutsideViewport(enemyType);
-                break;
-        }
+        // Standard random spawn is most common
+        spawnEnemyOutsideViewport(enemyType);
     }
 
     /**
      * Cleanup enemies that are too far from the viewport to reduce entity count
      */
     private void cleanupOldEnemies() {
+        // Throttle cleanups
+        long now = System.nanoTime();
+        if (now - lastCleanupTime < CLEANUP_FREQUENCY_MS * 1_000_000) {
+            return;
+        }
+        lastCleanupTime = now;
+
         double viewMinX = FXGL.getGameScene().getViewport().getX();
         double viewMinY = FXGL.getGameScene().getViewport().getY();
         double viewMaxX = viewMinX + FXGL.getAppWidth();
         double viewMaxY = viewMinY + FXGL.getAppHeight();
-        double margin = 1000;
 
         List<Entity> enemies = FXGL.getGameWorld().getEntitiesByType(EntityType.ENEMY);
+        int cleaned = 0;
+
         for (Entity enemy : enemies) {
             double x = enemy.getX();
             double y = enemy.getY();
-            long spawnTime = enemy.getProperties().exists("spawnTime") ? enemy.getObject("spawnTime") : System.nanoTime();
-            if (!enemy.getProperties().exists("spawnTime")) {
-                System.out.println("Warning: Enemy at (" + x + ", " + y + ") missing spawnTime");
-            }
-            long lifetime = System.nanoTime() - spawnTime;
-            boolean isOld = lifetime > 30_000_000_000L; // 30 seconds
 
-            if (isOld && (x < viewMinX - margin || x > viewMaxX + margin || y < viewMinY - margin || y > viewMaxY + margin)) {
-                enemy.getComponent(EnemyComponent.class).die(); // Use die for cleanup
-                activeEnemyCount--; // Decrement counter (listener handles damage-based removal)
-                System.out.println("Removed old enemy at (" + x + ", " + y + ") to reduce lag. Active enemies: " + activeEnemyCount);
+            // Default to current time if missing
+            long spawnTime = enemy.getProperties().exists("spawnTime") ?
+                    enemy.getObject("spawnTime") : System.nanoTime();
+
+            long lifetime = System.nanoTime() - spawnTime;
+            boolean isOld = lifetime > ENEMY_LIFETIME_NS;
+            boolean isFarAway = (x < viewMinX - VIEW_MARGIN || x > viewMaxX + VIEW_MARGIN ||
+                    y < viewMinY - VIEW_MARGIN || y > viewMaxY + VIEW_MARGIN);
+
+            // More aggressive cleanup
+            if ((isOld && isFarAway) ||
+                    (activeEnemyCount.get() > MAX_ENEMIES_HARD_CAP * 0.9 && isFarAway)) {
+                enemy.getComponent(EnemyComponent.class).die();
+                cleaned++;
+
+                // Limit cleanup count per cycle to prevent stuttering
+                if (cleaned >= 10) {
+                    break;
+                }
             }
         }
     }
@@ -283,62 +349,225 @@ public class WaveManager {
      * Announce a new wave with console prints and UI notifications
      */
     private void announceNewWave() {
-        System.out.println("=========================================");
-        System.out.println("Wave " + currentWave + " approaching!");
-        System.out.println("New wave started: " + currentWave);
-        System.out.println("Max enemies: " + waveMaxEnemies.getOrDefault(currentWave, BASE_ENEMIES_PER_WAVE));
-        System.out.println("Spawn interval: " + waveSpawnRates.getOrDefault(currentWave, BASE_SPAWN_INTERVAL));
-        System.out.println("Enemy types available: " + waveEnemyPools.getOrDefault(currentWave, List.of("enemy")));
-
         FXGL.getNotificationService().pushNotification("Wave " + currentWave + " started!");
 
+        // Special wave handling
         if (currentWave % 5 == 0) {
             String formation = waveFormations.getOrDefault(currentWave, "random");
-            System.out.println("WARNING: Special formation incoming! Formation: " + formation);
             FXGL.getNotificationService().pushNotification("WARNING: Special " + formation + " formation incoming!");
 
+            // Delay special formation to let any frame drops recover
             FXGL.getGameTimer().runOnceAfter(() -> {
                 String enemyType = waveEnemyPools.get(currentWave).get(
                         random.nextInt(waveEnemyPools.get(currentWave).size()));
-                System.out.println("Spawning special formation for Wave " + currentWave + " with enemy: " + enemyType);
 
-                String formationType = waveFormations.get(currentWave);
-                if (formationType == null) formationType = "circle";
-
-                switch (formationType) {
-                    case "line":
-                        spawnEnemyInLineFormation(enemyType);
-                        break;
-                    case "spiral":
-                        spawnEnemyInSpiralFormation(enemyType);
-                        break;
-                    case "circle":
-                    default:
-                        spawnEnemyInCircleFormation(enemyType);
-                        break;
-                }
-            }, Duration.seconds(2));
+                // Batch enemy formations to reduce individual entity creation overhead
+                batchSpawnFormation(enemyType, formation);
+            }, Duration.seconds(3));
         }
 
         if (currentWave % 10 == 0) {
-            System.out.println("DANGER: Massive enemy wave approaching!");
             FXGL.getNotificationService().pushNotification("DANGER: Massive enemy wave approaching!");
 
+            // Further delay to prevent lag by spacing out formation spawns
             FXGL.getGameTimer().runOnceAfter(() -> {
                 String enemyType = waveEnemyPools.get(currentWave).get(
                         random.nextInt(waveEnemyPools.get(currentWave).size()));
-                System.out.println("Spawning first formation (circle) for Wave " + currentWave + " with enemy: " + enemyType);
-                spawnEnemyInCircleFormation(enemyType);
-            }, Duration.seconds(3));
 
+                // Batch process first formation
+                batchSpawnFormation(enemyType, "circle");
+            }, Duration.seconds(4));
+
+            // Add extra delay between formations to prevent lag spikes
             FXGL.getGameTimer().runOnceAfter(() -> {
                 String secondEnemyType = waveEnemyPools.get(currentWave).get(
                         random.nextInt(waveEnemyPools.get(currentWave).size()));
-                System.out.println("Spawning second formation (spiral) for Wave " + currentWave + " with enemy: " + secondEnemyType);
-                spawnEnemyInSpiralFormation(secondEnemyType);
-            }, Duration.seconds(6));
+
+                // Batch process second formation
+                batchSpawnFormation(secondEnemyType, "spiral");
+            }, Duration.seconds(8));
         }
-        System.out.println("=========================================");
+    }
+
+    /**
+     * Batch process enemy formation spawns to reduce overhead
+     * @param enemyType The type of enemy to spawn
+     * @param formation The formation pattern to use
+     */
+    private void batchSpawnFormation(String enemyType, String formation) {
+        formationInProgress = true;
+        pendingSpawns.clear();
+
+        switch (formation) {
+            case "circle":
+                prepareCircleFormation(enemyType);
+                break;
+            case "line":
+                prepareLineFormation(enemyType);
+                break;
+            case "spiral":
+                prepareSpiralFormation(enemyType);
+                break;
+        }
+
+        // Process spawn commands in batches to reduce overhead
+        processPendingSpawns();
+    }
+
+    /**
+     * Process pending spawn commands with efficient batching
+     */
+    private void processPendingSpawns() {
+        if (pendingSpawns.isEmpty()) {
+            formationInProgress = false;
+            return;
+        }
+
+        // Group by delay to batch process
+        Map<Integer, List<SpawnCommand>> delayGroups = new HashMap<>();
+        for (SpawnCommand cmd : pendingSpawns) {
+            delayGroups.computeIfAbsent(cmd.delay, k -> new ArrayList<>()).add(cmd);
+        }
+
+        // Process each delay group
+        delayGroups.forEach((delay, commands) -> {
+            FXGL.getGameTimer().runOnceAfter(() -> {
+                // Execute all commands at this delay timing at once
+                commands.forEach(cmd -> {
+                    SpawnData data = new SpawnData(cmd.x, cmd.y);
+                    data.put("player", player);
+                    Entity enemy = FXGL.getGameWorld().spawn(cmd.type, data);
+                    enemy.setProperty("spawnTime", System.nanoTime());
+                    activeEnemyCount.incrementAndGet();
+                });
+
+                // Check if this was the last batch
+                if (delay == delayGroups.keySet().stream().mapToInt(i -> i).max().orElse(0)) {
+                    formationInProgress = false;
+                }
+            }, Duration.millis(delay));
+        });
+
+        pendingSpawns.clear();
+    }
+
+    /**
+     * Prepare a circle formation of enemies (batched)
+     * @param enemyType The type of enemy to spawn
+     */
+    private void prepareCircleFormation(String enemyType) {
+        double radius = 800;
+        // Limit count based on wave to prevent excessive spawns
+        final int count = Math.min(8 + Math.min((currentWave - 5), 6), 14);
+
+        Point2D playerPos = player.getPosition();
+        double viewMinX = FXGL.getGameScene().getViewport().getX();
+        double viewMinY = FXGL.getGameScene().getViewport().getY();
+        double viewMaxX = viewMinX + FXGL.getAppWidth();
+        double viewMaxY = viewMinY + FXGL.getAppHeight();
+
+        for (int i = 0; i < count; i++) {
+            double angle = (2 * Math.PI / count) * i;
+            double x = playerPos.getX() + radius * Math.cos(angle);
+            double y = playerPos.getY() + radius * Math.sin(angle);
+
+            if (x >= viewMinX && x <= viewMaxX && y >= viewMinY && y <= viewMaxY) {
+                double adjustedRadius = radius * 1.5;
+                x = playerPos.getX() + adjustedRadius * Math.cos(angle);
+                y = playerPos.getY() + adjustedRadius * Math.sin(angle);
+            }
+
+            // Add to pending spawn commands instead of direct spawning
+            pendingSpawns.add(new SpawnCommand(enemyType, x, y, 150 * i));
+        }
+    }
+
+    /**
+     * Prepare a line formation of enemies (batched)
+     * @param enemyType The type of enemy to spawn
+     */
+    private void prepareLineFormation(String enemyType) {
+        double distance = 800;
+        // Limit count based on wave to prevent excessive spawns
+        int count = Math.min(6 + Math.min((currentWave - 5), 3), 9);
+        double spacing = 100; // Increased spacing for fewer enemies
+
+        int side = random.nextInt(4);
+        double startX, startY, dirX = 0, dirY = 0;
+
+        double viewMinX = FXGL.getGameScene().getViewport().getX();
+        double viewMinY = FXGL.getGameScene().getViewport().getY();
+        double viewMaxX = viewMinX + FXGL.getAppWidth();
+        double viewMaxY = viewMinY + FXGL.getAppHeight();
+
+        switch (side) {
+            case 0: // Top
+                startX = viewMinX + FXGL.getAppWidth() / 2 - (count * spacing) / 2;
+                startY = viewMinY - distance;
+                dirX = 1;
+                dirY = 0;
+                break;
+            case 1: // Right
+                startX = viewMaxX + distance;
+                startY = viewMinY + FXGL.getAppHeight() / 2 - (count * spacing) / 2;
+                dirX = 0;
+                dirY = 1;
+                break;
+            case 2: // Bottom
+                startX = viewMinX + FXGL.getAppWidth() / 2 - (count * spacing) / 2;
+                startY = viewMaxY + distance;
+                dirX = 1;
+                dirY = 0;
+                break;
+            case 3: // Left
+            default:
+                startX = viewMinX - distance;
+                startY = viewMinY + FXGL.getAppHeight() / 2 - (count * spacing) / 2;
+                dirX = 0;
+                dirY = 1;
+                break;
+        }
+
+        for (int i = 0; i < count; i++) {
+            double x = startX + dirX * spacing * i;
+            double y = startY + dirY * spacing * i;
+
+            // Add to pending spawn commands instead of direct spawning
+            pendingSpawns.add(new SpawnCommand(enemyType, x, y, 200 * i));
+        }
+    }
+
+    /**
+     * Prepare a spiral formation of enemies (batched)
+     * @param enemyType The type of enemy to spawn
+     */
+    private void prepareSpiralFormation(String enemyType) {
+        // Limit count based on wave to prevent excessive spawns
+        final int count = Math.min(10 + Math.min((currentWave - 5), 6), 16);
+        double baseRadius = 700;
+        double radiusIncrement = 50; // Increased increment for wider spacing
+
+        Point2D playerPos = player.getPosition();
+        double viewMinX = FXGL.getGameScene().getViewport().getX();
+        double viewMinY = FXGL.getGameScene().getViewport().getY();
+        double viewMaxX = viewMinX + FXGL.getAppWidth();
+        double viewMaxY = viewMinY + FXGL.getAppHeight();
+
+        for (int i = 0; i < count; i++) {
+            double angle = (2 * Math.PI / count) * i * 1.5;
+            double radius = baseRadius + radiusIncrement * i;
+            double x = playerPos.getX() + radius * Math.cos(angle);
+            double y = playerPos.getY() + radius * Math.sin(angle);
+
+            if (x >= viewMinX && x <= viewMaxX && y >= viewMinY && y <= viewMaxY) {
+                radius = radius * 1.5;
+                x = playerPos.getX() + radius * Math.cos(angle);
+                y = playerPos.getY() + radius * Math.sin(angle);
+            }
+
+            // Add to pending spawn commands instead of direct spawning
+            pendingSpawns.add(new SpawnCommand(enemyType, x, y, 200 * i));
+        }
     }
 
     /**
@@ -372,11 +601,13 @@ public class WaveManager {
     public void reset() {
         currentWave = 1;
         isActive = false;
-        activeEnemyCount = 0; // Reset counter
+        activeEnemyCount.set(0);
+        formationInProgress = false;
+        pendingSpawns.clear();
         spawnTask = null;
+        cleanupTask = null;
         FXGL.getWorldProperties().setValue("wave", 1);
         FXGL.getGameWorld().removeWorldListener(enemyRemovalListener);
-        System.out.println("WaveManager reset: Wave set to 1, spawnTask cleared");
     }
 
     /**
@@ -417,156 +648,9 @@ public class WaveManager {
         data.put("player", player);
         Entity enemy = FXGL.getGameWorld().spawn(enemyType, data);
         enemy.setProperty("spawnTime", System.nanoTime());
-        activeEnemyCount++; // Increment counter
-    }
-
-    /**
-     * Spawn enemies in a circle formation around the player
-     * @param enemyType The type of enemy to spawn
-     */
-    private void spawnEnemyInCircleFormation(String enemyType) {
-        double radius = 800;
-        final int count = currentWave > 5 ? 8 + Math.min((currentWave - 5), 8) : 8;
-
-        Point2D playerPos = player.getPosition();
-        double viewMinX = FXGL.getGameScene().getViewport().getX();
-        double viewMinY = FXGL.getGameScene().getViewport().getY();
-        double viewMaxX = viewMinX + FXGL.getAppWidth();
-        double viewMaxY = viewMinY + FXGL.getAppHeight();
-
-        for (int i = 0; i < count; i++) {
-            final int index = i;
-            FXGL.getGameTimer().runOnceAfter(() -> {
-                double angle = (2 * Math.PI / count) * index;
-                double x = playerPos.getX() + radius * Math.cos(angle);
-                double y = playerPos.getY() + radius * Math.sin(angle);
-
-                if (x >= viewMinX && x <= viewMaxX && y >= viewMinY && y <= viewMaxY) {
-                    double adjustedRadius = radius * 1.5;
-                    x = playerPos.getX() + adjustedRadius * Math.cos(angle);
-                    y = playerPos.getY() + adjustedRadius * Math.sin(angle);
-                }
-
-                SpawnData data = new SpawnData(x, y);
-                data.put("player", player);
-                Entity enemy = FXGL.getGameWorld().spawn(enemyType, data);
-                enemy.setProperty("spawnTime", System.nanoTime());
-                activeEnemyCount++; // Increment counter
-            }, Duration.millis(100 * i));
-        }
-    }
-
-    /**
-     * Spawn enemies in a line formation
-     * @param enemyType The type of enemy to spawn
-     */
-    private void spawnEnemyInLineFormation(String enemyType) {
-        double distance = 800;
-        int count = 6;
-        double spacing = 80;
-
-        if (currentWave > 5) {
-            count = 6 + Math.min((currentWave - 5), 4);
-        }
-
-        int side = random.nextInt(4);
-        final double finalCount = count;
-        final double finalSpacing = spacing;
-        double startX, startY, dirX = 0, dirY = 0;
-
-        double viewMinX = FXGL.getGameScene().getViewport().getX();
-        double viewMinY = FXGL.getGameScene().getViewport().getY();
-        double viewMaxX = viewMinX + FXGL.getAppWidth();
-        double viewMaxY = viewMinY + FXGL.getAppHeight();
-
-        switch (side) {
-            case 0: // Top
-                startX = viewMinX + FXGL.getAppWidth() / 2 - (count * spacing) / 2;
-                startY = viewMinY - distance;
-                dirX = 1;
-                dirY = 0;
-                break;
-            case 1: // Right
-                startX = viewMaxX + distance;
-                startY = viewMinY + FXGL.getAppHeight() / 2 - (count * spacing) / 2;
-                dirX = 0;
-                dirY = 1;
-                break;
-            case 2: // Bottom
-                startX = viewMinX + FXGL.getAppWidth() / 2 - (count * spacing) / 2;
-                startY = viewMaxY + distance;
-                dirX = 1;
-                dirY = 0;
-                break;
-            case 3: // Left
-            default:
-                startX = viewMinX - distance;
-                startY = viewMinY + FXGL.getAppHeight() / 2 - (count * spacing) / 2;
-                dirX = 0;
-                dirY = 1;
-                break;
-        }
-
-        final double finalStartX = startX;
-        final double finalStartY = startY;
-        final double finalDirX = dirX;
-        final double finalDirY = dirY;
-
-        for (int i = 0; i < count; i++) {
-            final int index = i;
-            FXGL.getGameTimer().runOnceAfter(() -> {
-                double x = finalStartX + finalDirX * finalSpacing * index;
-                double y = finalStartY + finalDirY * finalSpacing * index;
-
-                SpawnData data = new SpawnData(x, y);
-                data.put("player", player);
-                Entity enemy = FXGL.getGameWorld().spawn(enemyType, data);
-                enemy.setProperty("spawnTime", System.nanoTime());
-                activeEnemyCount++; // Increment counter
-            }, Duration.millis(150 * i));
-        }
-    }
-
-/**
- * Spawn enemies in a spiral formation
- * @param enemyType The type of enemy to spawn
- */
-private void spawnEnemyInSpiralFormation(String enemyType) {
-    final int count = currentWave > 5 ? 10 + Math.min((currentWave - 5), 10) : 10;
-    double baseRadius = 700;
-    double radiusIncrement = 40;
-
-    Point2D playerPos = player.getPosition();
-    double viewMinX = FXGL.getGameScene().getViewport().getX();
-    double viewMinY = FXGL.getGameScene().getViewport().getY();
-    double viewMaxX = viewMinX + FXGL.getAppWidth();
-    double viewMaxY = viewMinY + FXGL.getAppHeight();
-
-    for (int i = 0; i < count; i++) {
-        final int index = i;
-        FXGL.getGameTimer().runOnceAfter(() -> {
-            double angle = (2 * Math.PI / count) * index * 1.5;
-            double radius = baseRadius + radiusIncrement * index;
-            double x = playerPos.getX() + radius * Math.cos(angle);
-            double y = playerPos.getY() + radius * Math.sin(angle);
-
-            if (x >= viewMinX && x <= viewMaxX && y >= viewMinY && y <= viewMaxY) {
-                radius = radius * 1.5;
-                x = playerPos.getX() + radius * Math.cos(angle);
-                y = playerPos.getY() + radius * Math.sin(angle);
-            }
-
-            SpawnData data = new SpawnData(x, y);
-            data.put("player", player);
-            Entity enemy = FXGL.getGameWorld().spawn(enemyType, data);
-            enemy.setProperty("spawnTime", System.nanoTime());
-            activeEnemyCount++; // Increment counter
-        }, Duration.millis(120 * i));
+        activeEnemyCount.incrementAndGet();
     }
 }
-}
-
-
 
 
 
