@@ -466,7 +466,6 @@ public class PlayerComponent extends Component {
                 return;
             }
         }
-
         health -= dmg;
         FXGL.getWorldProperties().setValue("health", health);
 
@@ -632,50 +631,41 @@ public class PlayerComponent extends Component {
         timeline.play();
     }
 
-    // Add experience points and check for level-up
     public void addExp(int expGained) {
         if (!isAlive) return;
         exp += expGained;
-        FXGL.getWorldProperties().setValue("exp", exp);
+        FXGL.getWorldProperties().setValue("rawExp", exp);
         System.out.println("DEBUG: Player gained " + expGained + " EXP, total EXP = " + exp);
-        
+
         // Update the EXP bar when gaining experience
         if (gameApp != null) {
             gameApp.updateExpBar();
         }
-        
+
         while (exp >= expToNextLevel) {
             levelUp();
         }
     }
 
-    // Level up player and apply stat boosts
     private void levelUp() {
         level++;
-
-        // Store original exp value (will be negative after subtracting expToNextLevel)
-        int originalExp = exp - expToNextLevel;
-
-        // Temporarily set exp to full for UI display purposes
-        exp = expToNextLevel;
-        FXGL.getWorldProperties().setValue("exp", exp);
+        exp -= expToNextLevel; // Subtract EXP used for level-up
+        expToNextLevel = (int) (expToNextLevel * 1.5);
+        maxHealth += 10; // Increase max health
+        health = Math.min(health + 20, maxHealth); // Heal on level-up
 
         // Update game world properties
         FXGL.getWorldProperties().setValue("level", level);
+        FXGL.getWorldProperties().setValue("rawExp", exp);
         FXGL.getWorldProperties().setValue("health", health);
 
-        // Force UI update if game app is available
+        // Force UI update
         if (gameApp != null) {
             gameApp.updateExpBar();
         }
 
-        // Show level up menu with weapon choices
+        // Show level up menu
         showLevelUpMenu();
-
-        // After menu is shown, reset exp to correct value
-        exp = originalExp;
-        expToNextLevel = (int) (expToNextLevel * 1.5);
-        FXGL.getWorldProperties().setValue("exp", exp);
 
         updateHealthBar();
     }
