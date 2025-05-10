@@ -1,0 +1,736 @@
+10:41:11.182 [main                     ] DEBUG Logger               - Configured Logger
+10:41:11.196 [main                     ] DEBUG GameApplication      - Logging settings
+Title: Prototype Game
+Version: 0.1.5
+Width: 1280
+Height: 720
+Fullscreen: false
+Intro: false
+Profiling: false
+Single step:false
+App Mode: DEVELOPER
+Menu Key: ESCAPE
+Stage Style: DECORATED
+Scene Factory: class org.example.core.GameApp$1
+
+10:41:12.835 [JavaFX Application Thread] DEBUG FXGLApplication      - Initializing FXGL
+10:41:12.845 [JavaFX Application Thread] INFO  Engine               - FXGL-21+dev-SNAPSHOT (26.03.2024 21.04) on WINDOWS (J:24 FX:21.0.1)
+10:41:12.846 [JavaFX Application Thread] DEBUG Engine               - JRE Vendor Name: Oracle Corporation
+10:41:12.847 [JavaFX Application Thread] DEBUG Engine               - Running on OS: Windows 11 version 10.0
+10:41:12.847 [JavaFX Application Thread] DEBUG Engine               - Architecture: amd64
+10:41:12.847 [JavaFX Application Thread] INFO  Engine               - Source code and latest versions at: https://github.com/AlmasB/FXGL
+10:41:12.847 [JavaFX Application Thread] INFO  Engine               -       Ask questions and discuss at: https://github.com/AlmasB/FXGL/discussions
+10:41:12.847 [JavaFX Application Thread] INFO  Engine               -              Join the FXGL chat at: https://gitter.im/AlmasB/FXGL
+10:41:13.380 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Creating a JavaFX scene
+10:41:13.565 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Target settings size: 1280.0 x 720.0
+10:41:13.565 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled scene size:    1280.0 x 720.0
+10:41:13.567 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled ratio: (1.0, 1.0)
+10:41:13.570 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Set initial scene to FXGLStartupScene
+10:41:13.582 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Opening main window
+10:41:13.890 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Window border size: (14.4000244140625, 37.5999755859375)
+10:41:13.891 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled size: 1280.0 x 720.0
+10:41:13.891 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scaled ratio: (1.0, 1.0)
+10:41:13.892 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Scene size: 1280.0 x 720.0
+10:41:13.894 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Stage size: 1294.4000244140625 x 757.5999755859375
+10:41:13.945 [FXGL Background Thread 1 ] DEBUG Engine               - Initializing environment variables
+10:41:14.123 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - User app class for loading assets: class org.example.core.GameApp
+10:41:14.124 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Applying CSS: fxgl_dark.css
+10:41:14.130 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/ui/css/fxgl_dark.css
+10:41:14.373 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Initializing application scenes
+10:41:14.660 [FXGL Background Thread 1 ] DEBUG GameWorld            - Game world initialized
+10:41:14.831 [FXGL Background Thread 1 ] DEBUG PhysicsWorld         - Physics world initialized: appHeight=720, physics.ppm=50.0
+10:41:14.831 [FXGL Background Thread 1 ] DEBUG PhysicsWorld         - Using strategy: BRUTE_FORCE
+10:41:14.841 [FXGL Background Thread 1 ] DEBUG GameScene            - Game scene initialized: 1280x720
+10:41:15.735 [FXGL Background Thread 1 ] DEBUG GameApplicationServi - Application scenes initialized
+10:41:15.810 [FXGL Background Thread 1 ] DEBUG SystemBundleService  - Loading FXGL system data
+10:41:15.815 [FXGL Background Thread 1 ] DEBUG FileSystemAccess     - Reading from: C:\Users\ginac\IdeaProjects\TheOnlyException3\system\fxgl.bundle
+10:41:15.825 [FXGL Background Thread 1 ] DEBUG SystemBundleService  - Bundle FXGL: {}
+10:41:15.825 [FXGL Background Thread 1 ] DEBUG UpdaterService       - Checking for updates
+10:41:15.857 [FXGL Background Thread 4 ] DEBUG FXGLApplication      - Loading fonts
+10:41:15.859 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl-samples/21.1/fxgl-samples-21.1.jar!/assets/ui/fonts/VarelaRound-Regular.ttf
+10:41:15.862 [FXGL Background Thread 1 ] DEBUG FXGLApplication      - Loading default localization
+10:41:15.864 [FXGL Background Thread 1 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/languages/english.lang
+10:41:15.904 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/ui/fonts/Abel-Regular.ttf
+10:41:15.926 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/ui/fonts/TerminalLandMono-Regular.otf
+10:41:15.949 [FXGL Background Thread 4 ] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/ui/fonts/Courier-Prime.ttf
+10:41:15.964 [FXGL Background Thread 1 ] INFO  FXGLApplication      - FXGL initialization took: 2.018 sec
+10:41:16.003 [JavaFX Application Thread] DEBUG Input                - Registered new binding: action0 - A
+10:41:16.006 [JavaFX Application Thread] DEBUG Input                - Registered new binding: action1 - D
+10:41:16.008 [JavaFX Application Thread] DEBUG Input                - Registered new binding: action2 - W
+10:41:16.010 [JavaFX Application Thread] DEBUG Input                - Registered new binding: action3 - S
+10:41:16.012 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/textures/fxgl_icon.png
+10:41:16.231 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: jar:file:/C:/Users/ginac/.m2/repository/com/github/AlmasB/FXGL/fxgl/21.1/fxgl-21.1.jar!/fxglassets/textures/fxgl_default_cursor.png
+10:41:16.240 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Screenshot - CTRL+8
+10:41:16.243 [JavaFX Application Thread] DEBUG Input                - Registered new binding: System info dump - CTRL+9
+10:41:16.246 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Restart - CTRL+R
+10:41:16.248 [JavaFX Application Thread] DEBUG Input                - Registered new binding: Toggle Debug Camera - CTRL+7
+10:41:16.263 [JavaFX Application Thread] DEBUG LoopRunner           - Starting loop
+10:41:16.263 [JavaFX Application Thread] DEBUG LoopRunner           - Initializing JavaFX AnimationTimerLoop
+10:41:16.278 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:16.301 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLStartupScene and adding to FXGLMainMenuDummyScene
+10:41:16.303 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLStartupScene -> FXGLMainMenuDummyScene
+10:41:16.303 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: LoginScene
+10:41:16.308 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:16.387 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLMainMenuDummyScene and adding to LoginScene
+10:41:16.389 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLMainMenuDummyScene -> LoginScene
+10:41:17.295 [JavaFX Application Thread] DEBUG FXGLApplication      - Registering font factories with UI factory
+10:41:17.571 [FXGL Background Thread 2 ] INFO  UpdaterService       - Your current version:  21+dev-SNAPSHOT
+10:41:17.572 [FXGL Background Thread 2 ] INFO  UpdaterService       - Latest stable version: 21.1
+10:41:18.848 [FXGL Background Thread 3 ] DEBUG Engine               - Logging environment variables
+10:41:18.851 [FXGL Background Thread 3 ] DEBUG Engine               - achievements: []
+10:41:18.851 [FXGL Background Thread 3 ] DEBUG Engine               - actualHeight: 720.0
+10:41:18.851 [FXGL Background Thread 3 ] DEBUG Engine               - actualHeightProperty: ReadOnlyDoubleProperty [value: 720.0]
+10:41:18.852 [FXGL Background Thread 3 ] DEBUG Engine               - actualWidth: 1280.0
+10:41:18.852 [FXGL Background Thread 3 ] DEBUG Engine               - actualWidthProperty: ReadOnlyDoubleProperty [value: 1280.0]
+10:41:18.852 [FXGL Background Thread 3 ] DEBUG Engine               - appIcon: fxgl_icon.png
+10:41:18.852 [FXGL Background Thread 3 ] DEBUG Engine               - applicationMode: DEVELOPER
+10:41:18.852 [FXGL Background Thread 3 ] DEBUG Engine               - cSSList: [fxgl_dark.css]
+10:41:18.882 [FXGL Background Thread 3 ] DEBUG Engine               - collisionDetectionStrategy: BRUTE_FORCE
+10:41:18.882 [FXGL Background Thread 3 ] DEBUG Engine               - configClass: Optional.empty
+10:41:18.882 [FXGL Background Thread 3 ] DEBUG Engine               - credits: []
+10:41:18.915 [FXGL Background Thread 3 ] DEBUG Engine               - defaultCursor: CursorInfo(imageName=fxgl_default_cursor.png, hotspotX=7.0, hotspotY=6.0)
+10:41:18.916 [FXGL Background Thread 3 ] DEBUG Engine               - devBBoxColorProperty: ObjectProperty [value: 0xff0000ff]
+10:41:18.916 [FXGL Background Thread 3 ] DEBUG Engine               - devEnableDebugCameraProperty: BooleanProperty [value: false]
+10:41:18.916 [FXGL Background Thread 3 ] DEBUG Engine               - devSensorColorProperty: ObjectProperty [value: 0xffff00ff]
+10:41:18.916 [FXGL Background Thread 3 ] DEBUG Engine               - devShowBBoxProperty: BooleanProperty [value: false]
+10:41:18.916 [FXGL Background Thread 3 ] DEBUG Engine               - devShowPositionProperty: BooleanProperty [value: false]
+10:41:18.916 [FXGL Background Thread 3 ] DEBUG Engine               - enabledMenuItems: []
+10:41:18.917 [FXGL Background Thread 3 ] DEBUG Engine               - engineServices: [class com.almasb.fxgl.app.services.FXGLAssetLoaderService, class com.almasb.fxgl.app.FXGLApplication$GameApplicationService, class com.almasb.fxgl.app.services.FXGLDialogService, class com.almasb.fxgl.app.services.IOTaskExecutorService, class com.almasb.fxgl.io.FileSystemService, class com.almasb.fxgl.localization.LocalizationService, class com.almasb.fxgl.app.services.SystemBundleService, class com.almasb.fxgl.profile.SaveLoadService, class com.almasb.fxgl.ui.FXGLUIFactoryServiceProvider, class com.almasb.fxgl.ui.FXGLDialogFactoryServiceProvider, class com.almasb.fxgl.audio.AudioPlayer, class com.almasb.fxgl.notification.impl.NotificationServiceProvider, class com.almasb.fxgl.achievement.AchievementService, class com.almasb.fxgl.cutscene.CutsceneService, class com.almasb.fxgl.minigames.MiniGameService, class com.almasb.fxgl.net.NetService, class com.almasb.fxgl.app.services.UpdaterService, class com.almasb.fxgl.dev.DevService]
+10:41:18.917 [FXGL Background Thread 3 ] DEBUG Engine               - fontGame: Abel-Regular.ttf
+10:41:18.917 [FXGL Background Thread 3 ] DEBUG Engine               - fontMono: TerminalLandMono-Regular.otf
+10:41:18.917 [FXGL Background Thread 3 ] DEBUG Engine               - fontSizeScaleUI: 1.0
+10:41:18.917 [FXGL Background Thread 3 ] DEBUG Engine               - fontText: Courier-Prime.ttf
+10:41:18.917 [FXGL Background Thread 3 ] DEBUG Engine               - fontUI: VarelaRound-Regular.ttf
+10:41:18.917 [FXGL Background Thread 3 ] DEBUG Engine               - fullScreen: BooleanProperty [value: false]
+10:41:18.917 [FXGL Background Thread 3 ] DEBUG Engine               - gameDifficulty: MEDIUM
+10:41:18.918 [FXGL Background Thread 3 ] DEBUG Engine               - gameDifficultyProperty: ObjectProperty [value: MEDIUM]
+10:41:18.918 [FXGL Background Thread 3 ] DEBUG Engine               - globalMusicVolume: 0.5
+10:41:18.918 [FXGL Background Thread 3 ] DEBUG Engine               - globalMusicVolumeProperty: DoubleProperty [value: 0.5]
+10:41:18.918 [FXGL Background Thread 3 ] DEBUG Engine               - globalSoundVolume: 0.5
+10:41:18.918 [FXGL Background Thread 3 ] DEBUG Engine               - globalSoundVolumeProperty: DoubleProperty [value: 0.5]
+10:41:18.918 [FXGL Background Thread 3 ] DEBUG Engine               - height: 720
+10:41:18.919 [FXGL Background Thread 3 ] DEBUG Engine               - is3D: false
+10:41:18.919 [FXGL Background Thread 3 ] DEBUG Engine               - isAndroid: false
+10:41:18.919 [FXGL Background Thread 3 ] DEBUG Engine               - isBrowser: false
+10:41:18.919 [FXGL Background Thread 3 ] DEBUG Engine               - isClickFeedbackEnabled: false
+10:41:18.919 [FXGL Background Thread 3 ] DEBUG Engine               - isCloseConfirmation: false
+10:41:18.919 [FXGL Background Thread 3 ] DEBUG Engine               - isDesktop: true
+10:41:18.919 [FXGL Background Thread 3 ] DEBUG Engine               - isDeveloperMenuEnabled: false
+10:41:18.919 [FXGL Background Thread 3 ] DEBUG Engine               - isEmbedded: false
+10:41:18.919 [FXGL Background Thread 3 ] DEBUG Engine               - isEntityPreloadEnabled: true
+10:41:18.920 [FXGL Background Thread 3 ] DEBUG Engine               - isExperimentalTiledLargeMap: false
+10:41:18.920 [FXGL Background Thread 3 ] DEBUG Engine               - isFileSystemWriteAllowed: true
+10:41:18.920 [FXGL Background Thread 3 ] DEBUG Engine               - isFullScreenAllowed: false
+10:41:18.920 [FXGL Background Thread 3 ] DEBUG Engine               - isFullScreenFromStart: false
+10:41:18.920 [FXGL Background Thread 3 ] DEBUG Engine               - isGameMenuEnabled: false
+10:41:18.920 [FXGL Background Thread 3 ] DEBUG Engine               - isIOS: false
+10:41:18.920 [FXGL Background Thread 3 ] DEBUG Engine               - isIntroEnabled: false
+10:41:18.920 [FXGL Background Thread 3 ] DEBUG Engine               - isLinux: false
+10:41:18.920 [FXGL Background Thread 3 ] DEBUG Engine               - isMac: false
+10:41:18.921 [FXGL Background Thread 3 ] DEBUG Engine               - isMainMenuEnabled: true
+10:41:18.921 [FXGL Background Thread 3 ] DEBUG Engine               - isManualResizeEnabled: false
+10:41:18.921 [FXGL Background Thread 3 ] DEBUG Engine               - isMobile: false
+10:41:18.921 [FXGL Background Thread 3 ] DEBUG Engine               - isNative: false
+10:41:18.921 [FXGL Background Thread 3 ] DEBUG Engine               - isPauseMusicWhenMinimized: true
+10:41:18.921 [FXGL Background Thread 3 ] DEBUG Engine               - isPreserveResizeRatio: false
+10:41:18.921 [FXGL Background Thread 3 ] DEBUG Engine               - isProfilingEnabled: false
+10:41:18.921 [FXGL Background Thread 3 ] DEBUG Engine               - isScaleAffectedOnResize: true
+10:41:18.921 [FXGL Background Thread 3 ] DEBUG Engine               - isSingleStep: false
+10:41:18.921 [FXGL Background Thread 3 ] DEBUG Engine               - isUserProfileEnabled: false
+10:41:18.921 [FXGL Background Thread 3 ] DEBUG Engine               - isWindows: true
+10:41:18.923 [FXGL Background Thread 3 ] DEBUG Engine               - language: ObjectProperty [value: ENGLISH]
+10:41:18.923 [FXGL Background Thread 3 ] DEBUG Engine               - menuKey: ESCAPE
+10:41:18.923 [FXGL Background Thread 3 ] DEBUG Engine               - mouseSensitivity: 0.2
+10:41:18.923 [FXGL Background Thread 3 ] DEBUG Engine               - notificationViewClass: class com.almasb.fxgl.notification.view.XboxNotificationView
+10:41:18.923 [FXGL Background Thread 3 ] DEBUG Engine               - pixelsPerMeter: 50.0
+10:41:18.923 [FXGL Background Thread 3 ] DEBUG Engine               - platform: WINDOWS
+10:41:18.923 [FXGL Background Thread 3 ] DEBUG Engine               - prefHeightProperty: ReadOnlyDoubleProperty [value: 720.0]
+10:41:18.924 [FXGL Background Thread 3 ] DEBUG Engine               - prefWidthProperty: ReadOnlyDoubleProperty [value: 1280.0]
+10:41:18.924 [FXGL Background Thread 3 ] DEBUG Engine               - profileDir: profiles/
+10:41:18.924 [FXGL Background Thread 3 ] DEBUG Engine               - profileName: StringProperty [value: DEFAULT]
+10:41:18.924 [FXGL Background Thread 3 ] DEBUG Engine               - randomSeed: -1
+10:41:18.925 [FXGL Background Thread 3 ] DEBUG Engine               - runtimeInfo: RuntimeInfo(platform=WINDOWS, version=21+dev-SNAPSHOT, build=26.03.2024 21.04)
+10:41:18.925 [FXGL Background Thread 3 ] DEBUG Engine               - saveFileExt: sav
+10:41:18.925 [FXGL Background Thread 3 ] DEBUG Engine               - scaledHeightProp$fxgl: DoubleProperty [bound, value: 720.0]
+10:41:18.925 [FXGL Background Thread 3 ] DEBUG Engine               - scaledWidthProp$fxgl: DoubleProperty [bound, value: 1280.0]
+10:41:18.925 [FXGL Background Thread 3 ] DEBUG Engine               - sceneFactory: org.example.core.GameApp$1@5fcb8a1f
+10:41:18.925 [FXGL Background Thread 3 ] DEBUG Engine               - secondsIn24h: 60
+10:41:18.925 [FXGL Background Thread 3 ] DEBUG Engine               - soundMenuBack: menu/back.wav
+10:41:18.926 [FXGL Background Thread 3 ] DEBUG Engine               - soundMenuPress: menu/press.wav
+10:41:18.926 [FXGL Background Thread 3 ] DEBUG Engine               - soundMenuSelect: menu/select.wav
+10:41:18.926 [FXGL Background Thread 3 ] DEBUG Engine               - soundNotification: core/notification.wav
+10:41:18.926 [FXGL Background Thread 3 ] DEBUG Engine               - stageStyle: DECORATED
+10:41:18.926 [FXGL Background Thread 3 ] DEBUG Engine               - supportedLanguages: [ENGLISH, FRENCH, GERMAN, HUNGARIAN, RUSSIAN]
+10:41:18.926 [FXGL Background Thread 3 ] DEBUG Engine               - ticksPerSecond: -1
+10:41:18.926 [FXGL Background Thread 3 ] DEBUG Engine               - title: Prototype Game
+10:41:18.926 [FXGL Background Thread 3 ] DEBUG Engine               - urlGithub: https://github.com/AlmasB/FXGL
+10:41:18.927 [FXGL Background Thread 3 ] DEBUG Engine               - urlLeaderboard: http://fxgl-top.herokuapp.com/
+10:41:18.927 [FXGL Background Thread 3 ] DEBUG Engine               - urlPOM: https://raw.githubusercontent.com/AlmasB/FXGL/release/README.md
+10:41:18.927 [FXGL Background Thread 3 ] DEBUG Engine               - userAppClass: class org.example.core.GameApp
+10:41:18.927 [FXGL Background Thread 3 ] DEBUG Engine               - version: 0.1.5
+10:41:18.927 [FXGL Background Thread 3 ] DEBUG Engine               - versionCheckDays: 7
+10:41:18.927 [FXGL Background Thread 3 ] DEBUG Engine               - width: 1280
+10:41:18.927 [FXGL Background Thread 3 ] DEBUG Engine               - Logging services
+10:41:18.927 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.FXGLAssetLoaderService
+10:41:18.927 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.FXGLApplication$GameApplicationService
+10:41:18.928 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.FXGLDialogService
+10:41:18.928 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.IOTaskExecutorService
+10:41:18.928 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.io.FileSystemService
+10:41:18.928 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.localization.LocalizationService
+10:41:18.928 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.SystemBundleService
+10:41:18.928 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.profile.SaveLoadService
+10:41:18.928 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.ui.FXGLUIFactoryServiceProvider
+10:41:18.929 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.ui.FXGLDialogFactoryServiceProvider
+10:41:18.929 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.audio.AudioPlayer
+10:41:18.929 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.notification.impl.NotificationServiceProvider
+10:41:18.929 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.achievement.AchievementService
+10:41:18.929 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.cutscene.CutsceneService
+10:41:18.929 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.minigames.MiniGameService
+10:41:18.929 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.net.NetService
+10:41:18.929 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.app.services.UpdaterService
+10:41:18.929 [FXGL Background Thread 3 ] DEBUG Engine               - class com.almasb.fxgl.dev.DevService
+10:41:21.116 [JavaFX Application Thread] DEBUG GameWorld            - Game world initialized
+10:41:21.118 [JavaFX Application Thread] DEBUG PhysicsWorld         - Physics world initialized: appHeight=720, physics.ppm=50.0
+10:41:21.118 [JavaFX Application Thread] DEBUG PhysicsWorld         - Using strategy: BRUTE_FORCE
+10:41:21.121 [JavaFX Application Thread] DEBUG GameScene            - Game scene initialized: 1280x720
+10:41:21.188 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: MainMenuScene
+10:41:21.217 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:21.228 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from LoginScene and adding to MainMenuScene
+10:41:21.231 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - LoginScene -> MainMenuScene
+10:41:21.234 [JavaFX Application Thread] DEBUG GameWorld            - Game world initialized
+10:41:21.237 [JavaFX Application Thread] DEBUG PhysicsWorld         - Physics world initialized: appHeight=720, physics.ppm=50.0
+10:41:21.237 [JavaFX Application Thread] DEBUG PhysicsWorld         - Using strategy: BRUTE_FORCE
+10:41:21.239 [JavaFX Application Thread] DEBUG GameScene            - Game scene initialized: 1280x720
+10:41:21.293 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: MainMenuScene
+10:41:21.332 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:21.337 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from MainMenuScene and adding to MainMenuScene
+10:41:21.338 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - MainMenuScene -> MainMenuScene
+10:41:23.052 [JavaFX Application Thread] DEBUG GameApplicationServi - Starting new game
+10:41:23.054 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: MainMenuScene
+10:41:23.055 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:23.057 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from MainMenuScene and adding to MainMenuScene
+10:41:23.059 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - MainMenuScene <- MainMenuScene
+10:41:23.059 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: MainMenuScene
+10:41:23.059 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:23.060 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from MainMenuScene and adding to LoginScene
+10:41:23.062 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - LoginScene <- MainMenuScene
+10:41:23.137 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: LoginScene
+10:41:23.137 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:23.137 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from LoginScene and adding to FXGLMainMenuDummyScene
+10:41:23.138 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLMainMenuDummyScene <- LoginScene
+10:41:23.138 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:23.177 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLMainMenuDummyScene and adding to FXGLLoadingScene
+10:41:23.178 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLMainMenuDummyScene -> FXGLLoadingScene
+10:41:23.178 [JavaFX Application Thread] DEBUG GameApplicationServi - Clearing previous game
+10:41:23.178 [JavaFX Application Thread] DEBUG GameScene            - Clearing game scene
+10:41:23.178 [JavaFX Application Thread] DEBUG GameWorld            - Clearing game world
+10:41:23.179 [JavaFX Application Thread] DEBUG PhysicsWorld         - Clearing physics world
+10:41:23.184 [FXGL Background Thread 2 ] DEBUG FXGLApplication      - Initializing game
+10:41:23.308 [FXGL Background Thread 2 ] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/dasd.png
+10:41:23.455 [FXGL Background Thread 2 ] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/player-scaled.png
+10:41:23.864 [FXGL Background Thread 2 ] INFO  FXGLApplication      - Game initialization took: 0.679 sec
+10:41:23.871 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:23.905 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from FXGLLoadingScene and adding to GameScene
+10:41:23.906 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - FXGLLoadingScene -> GameScene
+10:41:24.476 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/MaggotWalk-scaled.png
+10:41:24.492 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/BeetleMove-scaled.png
+10:41:24.498 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/MantisMove-scaled.png
+10:41:24.505 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/BeeMove-scaled.png
+10:41:24.512 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/GiantFly.png
+10:41:24.522 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/DragonFly.png
+10:41:35.376 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:41:35.376 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:35.386 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:41:35.387 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:41:38.486 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:41:38.486 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:38.487 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:41:38.487 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:41:38.503 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:41:38.505 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:41:47.310 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:41:47.311 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:47.314 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:41:47.314 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:41:48.694 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:41:48.694 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:48.695 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:41:48.695 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:41:52.488 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:41:52.488 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:52.489 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:41:52.489 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:41:54.895 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:41:54.896 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:54.897 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:41:54.897 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:41:57.299 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:41:57.300 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:41:59.644 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:41:59.644 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:41:59.646 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:41:59.648 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:42:01.790 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:42:01.791 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:42:01.791 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:42:01.791 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:42:07.148 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:42:07.149 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:07.267 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:42:07.267 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:42:07.267 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:42:07.268 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:42:10.966 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:42:10.967 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:42:10.967 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:42:10.967 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:42:16.096 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:42:16.096 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:17.327 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:42:17.327 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:42:17.329 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:42:17.329 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:42:20.109 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:42:20.109 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:42:20.110 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:42:20.110 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:42:21.033 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:21.033 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:21.750 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:42:21.750 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:42:23.190 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:23.190 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:24.103 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:42:24.104 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:25.241 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:25.241 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:27.183 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:27.183 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:28.039 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:42:28.039 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:42:28.039 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:42:28.039 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:42:29.618 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:42:29.618 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:42:29.619 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:42:29.619 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:42:30.783 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:42:30.784 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:30.932 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:30.932 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:32.914 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:32.914 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:34.817 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:34.817 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:35.681 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:42:35.682 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:36.931 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:36.932 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:38.429 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:42:38.430 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:42:38.511 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:42:38.511 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:42:38.513 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:42:38.513 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:42:40.102 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:42:40.102 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:42:40.102 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:42:40.102 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:42:40.388 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:40.388 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:41.859 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:42:41.859 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:42.121 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:42.121 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:44.641 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:44.641 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:46.071 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:42:46.071 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:42:46.071 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:42:46.072 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:42:48.666 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:42:48.666 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:42:48.666 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:42:48.666 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:42:49.014 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:49.015 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:49.816 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:42:49.817 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:51.166 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:51.168 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:53.704 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:53.704 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:56.170 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:42:56.171 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:56.373 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:56.374 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:58.160 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:42:58.162 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:42:58.589 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:42:58.589 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:43:00.568 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:00.569 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:01.510 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/glassparticle.png" was not found!
+10:43:01.510 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:43:01.659 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:43:01.659 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:03.140 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:03.140 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:03.151 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:43:03.151 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:43:03.152 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:43:03.152 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:43:04.849 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:43:04.850 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:43:04.850 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:43:04.850 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:43:08.301 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:08.301 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:09.928 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:43:09.928 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:10.079 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:10.079 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:11.891 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:11.891 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:14.609 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:14.611 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:15.511 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:43:15.512 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:17.033 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:17.033 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:18.467 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:43:18.467 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:43:19.112 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:19.112 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:20.856 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:43:20.856 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:21.204 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:21.204 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:23.246 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:23.246 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:25.701 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:25.701 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:26.499 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:43:26.499 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:27.916 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:27.916 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:30.390 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:30.390 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:31.936 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:43:31.936 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:32.090 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:43:32.090 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:43:32.090 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:43:32.090 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:43:34.347 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:43:34.347 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:43:34.348 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:43:34.348 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:43:34.524 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:34.524 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:38.059 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:38.059 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:38.141 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:43:38.141 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:43:40.087 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/glassparticle.png" was not found!
+10:43:40.089 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:43:40.426 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:40.426 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:41.028 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:43:41.028 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:41.437 [JavaFX Application Thread] DEBUG FXGLAssetLoaderServi - Loading from file system: file:/C:/Users/ginac/IdeaProjects/TheOnlyException3/Test/target/classes/assets/textures/lightning_strike.png
+10:43:42.854 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:42.854 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:44.802 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:44.802 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:46.730 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:43:46.730 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:47.631 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:47.631 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:50.408 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:50.408 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:55.072 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:43:55.073 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:43:55.549 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:43:55.549 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:01.744 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:44:01.744 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:08.734 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:44:08.735 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:44:13.437 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/glassparticle.png" was not found!
+10:44:13.438 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:44:13.999 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:44:14.000 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:14.727 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:44:14.727 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:44:14.728 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:44:14.728 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:44:17.423 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:44:17.423 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:44:17.423 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:44:17.423 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:44:18.768 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:44:18.768 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:20.986 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:44:20.987 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:22.467 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:44:22.468 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:24.669 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:44:24.669 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:24.674 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:44:24.674 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:27.287 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:44:27.287 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:30.045 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:44:30.047 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:31.005 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:44:31.005 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:32.311 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:44:32.311 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:33.397 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:44:33.397 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:44:34.577 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:44:34.577 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:38.705 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:44:38.706 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:38.938 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:44:38.939 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:41.523 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:44:41.523 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:47.420 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:44:47.420 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:48.105 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:44:48.105 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:50.608 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:44:50.608 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:52.225 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/glassparticle.png" was not found!
+10:44:52.225 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:44:56.347 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:44:56.348 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:44:58.080 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:44:58.081 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:00.572 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:00.572 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:01.540 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:45:01.540 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:45:02.044 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/glassparticle.png" was not found!
+10:45:02.044 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:45:02.608 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:02.608 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:03.436 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:45:03.436 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:45:03.437 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:45:03.437 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:45:16.125 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:45:16.125 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:45:16.126 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:45:16.126 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:45:19.710 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:45:19.710 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:19.719 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:19.719 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:21.876 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:21.876 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:24.002 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:24.002 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:24.962 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:45:24.962 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:26.224 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:26.224 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:28.469 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:28.470 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:30.422 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:45:30.422 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:30.742 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:30.742 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:32.052 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:45:32.052 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:45:32.174 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/glassparticle.png" was not found!
+10:45:32.175 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:45:32.494 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:32.494 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:34.342 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:34.342 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:34.984 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:45:34.984 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:36.230 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:36.230 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:38.056 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:38.056 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:39.516 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:45:39.516 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:39.813 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:39.813 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:41.306 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:41.306 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:43.105 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:43.105 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:43.703 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:45:43.703 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:43.973 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:45:43.973 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:45:43.973 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:45:43.973 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:45:47.282 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:45:47.282 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:45:47.282 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:45:47.282 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:45:50.072 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:50.073 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:50.384 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:45:50.384 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:45:50.902 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/glassparticle.png" was not found!
+10:45:50.902 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:45:52.246 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:52.246 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:53.751 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:45:53.751 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:54.186 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:54.186 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:56.520 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:56.520 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:45:59.355 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:45:59.355 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:00.072 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:46:00.072 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:01.388 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:01.388 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:03.537 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:03.537 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:04.993 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:46:04.994 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:05.484 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:05.484 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:06.786 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:46:06.786 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:46:07.655 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:07.656 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:07.756 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/glassparticle.png" was not found!
+10:46:07.756 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:46:09.766 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:09.767 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:10.160 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:46:10.161 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:11.742 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:11.743 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:14.358 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:14.359 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:15.978 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:46:15.978 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:17.021 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:17.022 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:18.744 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:18.744 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:19.603 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:46:19.603 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:46:19.603 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:46:19.605 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:46:21.430 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:46:21.430 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:46:21.430 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:46:21.431 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:46:24.584 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:46:24.584 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:24.594 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:24.594 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:26.676 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:46:26.676 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:46:26.951 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/glassparticle.png" was not found!
+10:46:26.951 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:46:26.980 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:26.980 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:28.766 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:28.766 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:29.837 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:46:29.837 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:30.824 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:30.824 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:32.695 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:32.695 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:35.374 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:46:35.374 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:35.385 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:35.385 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:37.969 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:37.970 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:40.644 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:40.644 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:48.918 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:46:48.919 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:51.402 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:51.402 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:46:51.598 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:46:51.598 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:46:52.059 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/glassparticle.png" was not found!
+10:46:52.060 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:46:56.251 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:46:56.251 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:00.105 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:47:00.105 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:01.416 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:47:01.416 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:03.108 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:47:03.108 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:05.050 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:47:05.050 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:05.848 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:47:05.848 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:06.995 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:47:06.995 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:08.653 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:47:08.653 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:09.904 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:47:09.904 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:10.372 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:47:10.372 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:11.069 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:47:11.069 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:47:11.254 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/glassparticle.png" was not found!
+10:47:11.254 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:47:12.527 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:47:12.527 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:14.789 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:47:14.790 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:14.910 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:47:14.911 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:16.206 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Push state: DialogSubScene
+10:47:16.207 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:47:16.207 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from GameScene and adding to DialogSubScene
+10:47:16.207 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene -> DialogSubScene
+10:47:19.561 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Pop state: DialogSubScene
+10:47:19.561 [JavaFX Application Thread] DEBUG Input                - Clearing active input actions
+10:47:19.562 [JavaFX Application Thread] DEBUG GameApplicationServi - Removing overlay from DialogSubScene and adding to GameScene
+10:47:19.562 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - GameScene <- DialogSubScene
+10:47:22.634 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:47:22.634 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:25.713 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:47:25.713 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:26.816 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:47:26.817 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:28.088 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:47:28.088 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:30.255 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:47:30.255 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:31.895 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:47:31.895 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:32.086 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:47:32.086 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:33.250 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/spark.png" was not found!
+10:47:33.250 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:47:33.784 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/particles/glassparticle.png" was not found!
+10:47:33.784 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load RESIZABLE_IMAGE
+10:47:34.152 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:47:34.152 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:47:55.147 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/orange_particle.png" was not found!
+10:47:55.147 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:48:07.167 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Asset "/assets/textures/green_particle.png" was not found!
+10:48:07.167 [JavaFX Application Thread] WARN  FXGLAssetLoaderServi - Failed to load IMAGE
+10:48:28.699 [JavaFX Application Thread] DEBUG LoopRunner           - Pausing loop
+10:48:39.243 [JavaFX Application Thread] DEBUG LoopRunner           - Resuming loop
+10:48:46.092 [JavaFX Application Thread] DEBUG FXGLApplication      - Exiting FXGL
+10:48:46.094 [JavaFX Application Thread] DEBUG LoopRunner           - Stopping loop
+10:48:46.094 [JavaFX Application Thread] DEBUG SystemBundleService  - Saving FXGL system data
+10:48:46.101 [JavaFX Application Thread] DEBUG FileSystemAccess     - Writing to: C:\Users\ginac\IdeaProjects\TheOnlyException3\system\fxgl.bundle
+10:48:46.109 [JavaFX Application Thread] DEBUG Async                - Shutting down background threads
+10:48:46.110 [JavaFX Application Thread] DEBUG PrimaryStageWindow   - Closing main window
+10:48:46.166 [JavaFX Application Thread] DEBUG Logger               - Closing Logger

@@ -467,7 +467,7 @@ public class PlayerComponent extends Component {
             }
         }
 
-//        health -= dmg;
+        health -= dmg;
         FXGL.getWorldProperties().setValue("health", health);
 
         // Check if player died
