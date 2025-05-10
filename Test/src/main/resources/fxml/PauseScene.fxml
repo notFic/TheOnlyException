@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane fx:id="root" prefHeight="720.0" prefWidth="1280.0" styleClass="overlay-container" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controllers.PauseController">
+
+    <stylesheets>
+        <URL value="@/css/styles.css" />
+    </stylesheets>
+
+    <!-- Semi-transparent Overlay -->
+    <Rectangle fx:id="overlay" fill="#00000080" height="720.0" width="1280.0" />
+
+    <!-- Centered Pause Pane -->
+    <Pane maxHeight="550.0" maxWidth="400" minHeight="550.0" prefHeight="550.0" styleClass="login-pane">
+        <VBox alignment="CENTER" maxHeight="530.0" maxWidth="400.0" minHeight="530.0" minWidth="400.0" prefHeight="530.0" prefWidth="400.0" spacing="10.0" styleClass="login-box">
+            <padding>
+                <Insets bottom="25.0" left="40.0" right="40.0" top="25.0" />
+            </padding>
+
+            <Text fx:id="title" fill="WHITE" styleClass="login-title-label" text="PAUSED" />
+            
+            <!-- Buttons -->
+            <Button fx:id="resumeButton" onAction="#resumeGame" text="Resume Game" styleClass="login-action-button" prefWidth="250.0">
+                <VBox.margin>
+                    <Insets top="20.0" bottom="10.0" />
+                </VBox.margin>
+            </Button>
+            
+            <Separator prefWidth="320.0">
+                <VBox.margin>
+                    <Insets top="10" bottom="10" />
+                </VBox.margin>
+            </Separator>
+            
+            <!-- Audio Settings -->
+            <Text fill="WHITE" styleClass="login-title-label" text="Settings" style="-fx-font-size: 24px;">
+                <VBox.margin>
+                    <Insets top="10.0" bottom="10.0" />
+                </VBox.margin>
+            </Text>
+            
+            <!-- Music Volume -->
+            <HBox alignment="CENTER_LEFT" spacing="10" prefWidth="320.0">
+                <Label text="Music Volume:" textFill="WHITE" />
+                <Label fx:id="musicVolumeLabel" text="50%" textFill="WHITE" />
+            </HBox>
+            <Slider fx:id="musicVolumeSlider" min="0" max="1" value="0.5" prefWidth="320.0" />
+            
+            <!-- Sound Effects Volume -->
+            <HBox alignment="CENTER_LEFT" spacing="10" prefWidth="320.0">
+                <VBox.margin>
+                    <Insets top="10.0" />
+                </VBox.margin>
+                <Label text="Sound Effects:" textFill="WHITE" />
+                <Label fx:id="soundEffectsVolumeLabel" text="50%" textFill="WHITE" />
+            </HBox>
+            <Slider fx:id="soundEffectsVolumeSlider" min="0" max="1" value="0.5" prefWidth="320.0" />
+            
+            <Separator prefWidth="320.0">
+                <VBox.margin>
+                    <Insets top="20" bottom="20" />
+                </VBox.margin>
+            </Separator>
+            
+            <!-- Return to Main Menu Button -->
+            <Button fx:id="mainMenuButton" onAction="#returnToMainMenu" text="Main Menu" styleClass="login-action-button" prefWidth="250.0">
+                <VBox.margin>
+                    <Insets top="10.0" />
+                </VBox.margin>
+            </Button>
+            
+        </VBox>
+    </Pane>
+</StackPane> 
