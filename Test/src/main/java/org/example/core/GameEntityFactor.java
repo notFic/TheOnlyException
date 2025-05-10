@@ -11,6 +11,8 @@ import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -45,32 +47,22 @@ public class GameEntityFactor implements EntityFactory {
 
     @Spawns("tiledBackground")
     public Entity newTiledBackground(SpawnData data) {
-        int worldWidth = data.get("worldWidth");
-        int worldHeight = data.get("worldHeight");
+        int worldWidth = data.get("worldWidth"); // 2560
+        int worldHeight = data.get("worldHeight"); // 1440
 
-        // TILE SIZE
-        double tileWidth = 24;
-        double tileHeight = 24;
+        // Create a canvas with the world size
+        Canvas canvas = new Canvas(worldWidth, worldHeight);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        int tilesX = (int) Math.ceil((double) worldWidth / tileWidth);
-        int tilesY = (int) Math.ceil((double) worldHeight / tileHeight);
-
-        // CREATE CANVAS WITH FULL WORLD SIZE
-        javafx.scene.canvas.Canvas canvas = new javafx.scene.canvas.Canvas(worldWidth, worldHeight);
-        javafx.scene.canvas.GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        // TEMPORARY BACKGROUND || GENERIC AHH GRASS
-        var backgroundImage = FXGL.image("dasd.png");
-
-        // DRAW THE TILE PATTERN
-        for (int x = 0; x < tilesX; x++) {
-            for (int y = 0; y < tilesY; y++) {
-                gc.drawImage(
-                        backgroundImage,
-                        0, 0, backgroundImage.getWidth(), backgroundImage.getHeight(),
-                        x * tileWidth, y * tileHeight, tileWidth, tileHeight
-                );
-            }
+        // Load the worlda.png image (1536x1024)
+        var backgroundImage = FXGL.image("worlda.png");
+        if (backgroundImage == null) {
+            System.err.println("Error: worlda.png not found. Using fallback color.");
+            gc.setFill(Color.GREEN); // Fallback color if image is missing
+            gc.fillRect(0, 0, worldWidth, worldHeight);
+        } else {
+            // Stretch the image to fill the entire world
+            gc.drawImage(backgroundImage, 0, 0, worldWidth, worldHeight);
         }
 
         return entityBuilder()
@@ -132,7 +124,6 @@ public class GameEntityFactor implements EntityFactory {
                 .build();
     }
 
-
     @Spawns("enemy")
     public Entity newEnemy(SpawnData data) {
         Entity player = (Entity) data.getData().getOrDefault("player", null);
@@ -144,7 +135,7 @@ public class GameEntityFactor implements EntityFactory {
 
         if (showHitbox) {
             // VISIBLE HITBOX FOR DEBUGGING
-            hitbox.setFill(Color.color(1, 0, 0, 0.3)); // // SEMI-TRANSPARENT RED
+            hitbox.setFill(Color.color(1, 0, 0, 0.3)); // SEMI-TRANSPARENT RED
             hitbox.setStroke(Color.GREEN);
             hitbox.setStrokeWidth(2);
         } else {
@@ -172,7 +163,7 @@ public class GameEntityFactor implements EntityFactory {
 
         if (showHitbox) {
             // VISIBLE HITBOX FOR DEBUGGING
-            hitbox.setFill(Color.color(1, 0, 0, 0.3)); // // SEMI-TRANSPARENT RED
+            hitbox.setFill(Color.color(1, 0, 0, 0.3)); // SEMI-TRANSPARENT RED
             hitbox.setStroke(Color.GREEN);
             hitbox.setStrokeWidth(2);
         } else {
@@ -237,8 +228,6 @@ public class GameEntityFactor implements EntityFactory {
                 .build();
     }
 
-
-
     @Spawns("tankEnemy")
     public Entity newTankEnemy(SpawnData data) {
         Entity player = (Entity) data.getData().getOrDefault("player", null);
@@ -250,7 +239,7 @@ public class GameEntityFactor implements EntityFactory {
 
         if (showHitbox) {
             // VISIBLE HITBOX FOR DEBUGGING
-            hitbox.setFill(Color.color(1, 0, 0, 0.3)); // // SEMI-TRANSPARENT RED
+            hitbox.setFill(Color.color(1, 0, 0, 0.3)); // SEMI-TRANSPARENT RED
             hitbox.setStroke(Color.GREEN);
             hitbox.setStrokeWidth(2);
         } else {

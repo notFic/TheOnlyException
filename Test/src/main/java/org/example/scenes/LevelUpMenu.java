@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -177,19 +178,31 @@ public class LevelUpMenu {
         levelText.setFont(Font.font("Verdana", 14));
         levelText.setFill(currentLevel == 0 ? Color.GOLD : Color.LIGHTGREEN);
 
-        // Create a colored rectangle as icon placeholder
-        Rectangle placeholder = new Rectangle(ICON_SIZE, ICON_SIZE);
-        placeholder.setFill(option.getColor());
-        placeholder.setArcWidth(10);
-        placeholder.setArcHeight(10);
-        placeholder.setStroke(Color.WHITE);
-        placeholder.setStrokeWidth(2);
+        // Create the icon (image or fallback placeholder)
+        StackPane iconPane;
+        try {
+            // Load the power-up image
+            ImageView imageView = new ImageView(FXGL.image(option.getImagePath()));
+            imageView.setFitWidth(ICON_SIZE);
+            imageView.setFitHeight(ICON_SIZE);
+            imageView.setPreserveRatio(true);
+            iconPane = new StackPane(imageView);
+        } catch (Exception e) {
+            // Fallback to original placeholder if image fails to load
+            Rectangle placeholder = new Rectangle(ICON_SIZE, ICON_SIZE);
+            placeholder.setFill(option.getColor());
+            placeholder.setArcWidth(10);
+            placeholder.setArcHeight(10);
+            placeholder.setStroke(Color.WHITE);
+            placeholder.setStrokeWidth(2);
 
-        Text initial = new Text(option.getName().substring(0, 1).toUpperCase());
-        initial.setFont(Font.font("Verdana", FontWeight.BOLD, 36));
-        initial.setFill(Color.WHITE);
+            Text initial = new Text(option.getName().substring(0, 1).toUpperCase());
+            initial.setFont(Font.font("Verdana", FontWeight.BOLD, 36));
+            initial.setFill(Color.WHITE);
 
-        StackPane iconPane = new StackPane(placeholder, initial);
+            iconPane = new StackPane(placeholder, initial);
+            System.err.println("Warning: Failed to load image for " + option.getImagePath() + ": " + e.getMessage());
+        }
 
         // Create a wrapper with proper dimensions
         StackPane iconWrapper = new StackPane(iconPane);
@@ -202,7 +215,7 @@ public class LevelUpMenu {
         shadow.setColor(Color.BLACK);
         iconWrapper.setEffect(shadow);
 
-        // Create upgrade description with only the next level info
+        // Create upgrade description with next level info for specific upgrades
         String description = option.getDescription();
         if ("lightning".equals(option.getId())) {
             // If at max level, show maxed out message
@@ -219,6 +232,22 @@ public class LevelUpMenu {
             } else {
                 // Show only the next level description
                 description = org.example.powerups.PoisonAuraComponent.getLevelDescription(currentLevel, true);
+            }
+        } else if ("shield".equals(option.getId())) {
+            // If at max level, show maxed out message
+            if (currentLevel >= 5) {
+                description = "MAXED OUT";
+            } else {
+                // Show only the next level description
+                description = org.example.powerups.ShieldComponent.getLevelDescription(currentLevel, true);
+            }
+        } else if ("auto_heal".equals(option.getId())) {
+            // If at max level, show maxed out message
+            if (currentLevel >= 5) {
+                description = "MAXED OUT";
+            } else {
+                // Show only the next level description
+                description = org.example.powerups.AutoHealComponent.getLevelDescription(currentLevel, true);
             }
         }
 

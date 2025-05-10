@@ -42,8 +42,8 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
 // Component controlling player movement, animations, health, and game progress
 public class PlayerComponent extends Component {
     private double speed = 1.5; // Player movement speed
-    private int health = 100; // Current health
-    private int maxHealth = 100; // Maximum health, increases on level-up
+    private int health = 200; // Current health
+    private int maxHealth = 200; // Maximum health, increases on level-up
     private int level = 1; // Current level
     private int exp = 0; // Current experience points
     private int expToNextLevel = 100; // EXP needed for next level
@@ -80,7 +80,7 @@ public class PlayerComponent extends Component {
     private ExplosiveMinesComponent explosiveMines;
     private AutoHealComponent autoHeal;
     private ShieldComponent shield;
-    
+
     // Store timer references to cancel them when needed
     private com.almasb.fxgl.time.TimerAction lightningStrikeTimer;
     private com.almasb.fxgl.time.TimerAction explosiveMinesTimer;
@@ -213,17 +213,17 @@ public class PlayerComponent extends Component {
             lightningStrikeTimer.expire();
             lightningStrikeTimer = null;
         }
-        
+
         if (explosiveMinesTimer != null) {
             explosiveMinesTimer.expire();
             explosiveMinesTimer = null;
         }
-        
+
         if (autoHealTimer != null) {
             autoHealTimer.expire();
             autoHealTimer = null;
         }
-        
+
         if (shieldTimer != null) {
             shieldTimer.expire();
             shieldTimer = null;
@@ -236,7 +236,7 @@ public class PlayerComponent extends Component {
             // Get the appropriate cooldown based on the current level
             double cooldown = LightningStrikeComponent.getCooldownForLevel(getWeaponLevel("lightning"));
             System.out.println("Setting Lightning Strike cooldown to: " + cooldown + " seconds");
-            
+
             // Activate lightning strike based on the level-specific cooldown
             lightningStrikeTimer = FXGL.getGameTimer().runAtInterval(() -> {
                 if (isAlive && getWeaponLevel("lightning") > 0 && lightningstrike != null) {
@@ -572,7 +572,7 @@ public class PlayerComponent extends Component {
     private void showDamageText(double dmg) {
         // Create the damage text with original styling
         var damageText = FXGL.getUIFactoryService().newText(String.valueOf((int) dmg), Color.RED, 22);
-        
+
         // Add directly to game world at the hit position
         Point2D hitPosition = entity.getPosition().subtract(0, 30);
         var textEntity = FXGL.entityBuilder()
@@ -580,26 +580,26 @@ public class PlayerComponent extends Component {
                 .view(damageText)
                 .zIndex(100)
                 .buildAndAttach();
-        
+
         // Determine jump direction based on mouse position
         boolean jumpRight = true; // Default to right
-        
+
         Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
         double screenWidth = FXGL.getGameScene().getAppWidth();
-        
+
         // If mouse is to the left of screen center, jump left
         // If mouse is to the right or at center, jump right
         jumpRight = mouseScreenPos.getX() >= screenWidth / 2;
-        
+
         // Distance and height for the jump
         int xDistance = 30;
         int yPeak = 25;
-        
+
         // Set the direction based on mouse position
         if (!jumpRight) {
             xDistance = -xDistance;
         }
-        
+
         // Create a path for the arc movement
         javafx.scene.shape.Path path = new javafx.scene.shape.Path();
         path.getElements().add(new javafx.scene.shape.MoveTo(0, 0));
@@ -607,27 +607,27 @@ public class PlayerComponent extends Component {
                 xDistance / 2.0, -yPeak,  // Control point
                 xDistance, 0             // End point
         ));
-        
+
         // Create a compound animation that combines path and fade
         javafx.animation.PathTransition pathTransition = new javafx.animation.PathTransition(
                 javafx.util.Duration.seconds(0.6), path, damageText);
         pathTransition.setInterpolator(javafx.animation.Interpolator.EASE_OUT);
-        
+
         // Create the fade transition
         javafx.animation.FadeTransition fadeTransition = new javafx.animation.FadeTransition(
                 javafx.util.Duration.seconds(0.25), damageText);
         fadeTransition.setFromValue(1.0);
         fadeTransition.setToValue(0.0);
-        
+
         // Create a timeline for managing the timing of both animations
         javafx.animation.Timeline timeline = new javafx.animation.Timeline(
             new javafx.animation.KeyFrame(javafx.util.Duration.ZERO, e -> pathTransition.play()),
             new javafx.animation.KeyFrame(javafx.util.Duration.seconds(0.4), e -> fadeTransition.play())
         );
-        
+
         // Remove entity when animations are done
         fadeTransition.setOnFinished(e -> textEntity.removeFromWorld());
-        
+
         // Start the timeline
         timeline.play();
     }
@@ -638,12 +638,12 @@ public class PlayerComponent extends Component {
         exp += expGained;
         FXGL.getWorldProperties().setValue("exp", exp);
         System.out.println("DEBUG: Player gained " + expGained + " EXP, total EXP = " + exp);
-        
+
         // Update the EXP bar when gaining experience
         if (gameApp != null) {
             gameApp.updateExpBar();
         }
-        
+
         while (exp >= expToNextLevel) {
             levelUp();
         }
@@ -749,7 +749,7 @@ public class PlayerComponent extends Component {
                 shield.activatePowerUp();
                 FXGL.getNotificationService().pushNotification("Acquired Firewall Shield!");
             }
-        } 
+        }
         // For already acquired lightning strike, update the timer when reaching cooldown reduction levels
         else if ("lightning".equals(weaponId) && (newLevel == 3 || newLevel == 6)) {
             System.out.println("Updating Lightning Strike cooldown to level " + newLevel);
@@ -764,7 +764,7 @@ public class PlayerComponent extends Component {
             }
         }
     }
-    
+
     // Handle weapon selection from level-up menu
     public void onWeaponSelected(String weaponId, int newLevel) {
         // Update the weapon/powerup level using the non-resuming method

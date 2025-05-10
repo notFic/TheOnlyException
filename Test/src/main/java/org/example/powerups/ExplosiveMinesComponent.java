@@ -9,10 +9,13 @@ import com.almasb.fxgl.particle.ParticleEmitter;
 import com.almasb.fxgl.particle.ParticleEmitters;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
+import com.almasb.fxgl.texture.AnimatedTexture;
+import com.almasb.fxgl.texture.AnimationChannel;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.example.components.EnemyComponent;
 import org.example.core.EntityType;
@@ -21,13 +24,14 @@ import org.example.components.PlayerComponent;
 public class ExplosiveMinesComponent extends Component {
     private static final double SPAWN_INTERVAL = 2.0; // Seconds between mine spawns
     private static final double MINE_LIFETIME = 5.0; // Seconds before explosion
-    private static final double EXPLOSION_RADIUS = 100.0; // Base explosion radius, matching PoisonAura
+    private static final double EXPLOSION_RADIUS = 100.0; // Base explosion radius
     private static final double EXPLOSION_RADIUS_UPGRADED = 150.0; // With Heap Overflow
-    private static final double EXPLOSION_DAMAGE = 20.0; // Damage dealt by explosion
+    private static final double EXPLOSION_DAMAGE = 40.0; // Damage dealt by explosion
     private static final double BURN_ZONE_DURATION = 1.0; // Burn zone lifetime
     private static final double BURN_ZONE_DAMAGE = 5.0; // Damage per tick
     private static final double BURN_ZONE_TICK_INTERVAL = 0.5; // Seconds between ticks
     private static final double EXPLOSION_VISUAL_DURATION = 0.5; // Seconds for visual effect
+    private static final boolean DEBUG_VISUALIZER = true; // Toggle debug radius visualizer
 
     private boolean isActive = false;
     private double spawnTimer = 0.0;
@@ -64,20 +68,42 @@ public class ExplosiveMinesComponent extends Component {
     private void spawnMine() {
         Point2D playerCenter = entity.getCenter();
 
-        Circle mineVisual = new Circle(10, Color.DARKORANGE);
-        mineVisual.setStroke(Color.ORANGE);
-        mineVisual.setStrokeWidth(1.5);
+        // Load datawipemine.png and create animated texture
+        AnimationChannel mineChannel = new AnimationChannel(
+                FXGL.image("datawipemine.png"),
+                8, // Number of frames
+                24, // Frame width
+                24, // Frame height
+                Duration.seconds(0.8), // Total animation duration (0.1s per frame)
+                0, // Start frame
+                7  // End frame
+        );
+        AnimatedTexture mineTexture = new AnimatedTexture(mineChannel);
+        mineTexture.loop(); // Start and loop the animation
 
         Entity mine = FXGL.entityBuilder()
                 .type(EntityType.MINE)
-                .at(playerCenter.subtract(10, 10))
-                .view(mineVisual)
+                .at(playerCenter.subtract(24, 24)) // Center 48x48 sprite
+                .view(mineTexture)
                 .with(new CollidableComponent(true))
-                .bbox(new HitBox(BoundingShape.circle(10)))
+                .bbox(new HitBox(BoundingShape.box(48, 48))) // Match scaled sprite
+                .scale(2.0, 2.0) // Scale 24x24 sprite to 48x48
                 .zIndex(500)
                 .buildAndAttach();
 
         mine.addComponent(new MineBehaviorComponent());
+    }
+
+    void cameraShake(){
+        Node root = FXGL.getGameScene().getRoot();
+
+        TranslateTransition shake = new TranslateTransition(Duration.seconds(0.1), root);
+        shake.setFromY(-3);
+        shake.setToY(3);
+        shake.setCycleCount(4);
+        shake.setAutoReverse(true);
+        shake.setOnFinished(e -> root.setTranslateY(0)); // reset just in case
+        shake.play();
     }
 
     private class MineBehaviorComponent extends Component {
@@ -96,17 +122,41 @@ public class ExplosiveMinesComponent extends Component {
         private void explode() {
             Point2D center = entity.getCenter();
             double radius = level >= 2 ? EXPLOSION_RADIUS_UPGRADED : EXPLOSION_RADIUS;
+            double scaleFactor = (2 * radius) / 64.0; // Scale 64x64 sprite to diameter 2*radius (200x200 or 300x300)
 
-            // Visual explosion effect (centered circle)
-            Circle explosionVisual = new Circle(radius, Color.color(1.0, 0.5, 0.0, 0.3));
-            explosionVisual.setStroke(Color.ORANGE);
-            explosionVisual.setStrokeWidth(2.0);
+            // Visual explosion effect (animated sprite)
+            AnimationChannel explosionChannel = new AnimationChannel(
+                    FXGL.image("datawipeexplosion.png"),
+                    10, // Number of frames
+                    64, // Frame width
+                    64, // Frame height
+                    Duration.seconds(EXPLOSION_VISUAL_DURATION), // 0.5 seconds total
+                    0, // Start frame
+                    9  // End frame
+            );
+            AnimatedTexture explosionTexture = new AnimatedTexture(explosionChannel);
+            explosionTexture.play(); // Play once
+
             Entity explosionEntity = FXGL.entityBuilder()
-                    .at(center)
-                    .view(explosionVisual)
+                    .at(center.subtract(radius, radius)) // Center scaled sprite (200x200 or 300x300)
+                    .view(explosionTexture)
+                    .scale(scaleFactor, scaleFactor) // Scale to diameter 2*radius
                     .zIndex(1000)
                     .buildAndAttach();
             FXGL.getGameTimer().runOnceAfter(explosionEntity::removeFromWorld, Duration.seconds(EXPLOSION_VISUAL_DURATION));
+
+            // Debug radius visualizer (optional)
+            if (DEBUG_VISUALIZER) {
+                Circle debugCircle = new Circle(radius, Color.TRANSPARENT);
+                debugCircle.setStroke(Color.RED);
+                debugCircle.setStrokeWidth(2.0);
+                Entity debugEntity = FXGL.entityBuilder()
+                        .at(center.subtract(radius, radius)) // Center circle
+                        .view(debugCircle)
+                        .zIndex(1001)
+                        .buildAndAttach();
+                FXGL.getGameTimer().runOnceAfter(debugEntity::removeFromWorld, Duration.seconds(EXPLOSION_VISUAL_DURATION));
+            }
 
             // Particle effect for explosion
             ParticleEmitter emitter = ParticleEmitters.newExplosionEmitter(50);
@@ -130,47 +180,7 @@ public class ExplosiveMinesComponent extends Component {
             FXGL.getGameWorld().getEntitiesByType(EntityType.ENEMY).stream()
                     .filter(e -> e.isActive() && e.getCenter().distance(center) <= radius)
                     .forEach(e -> e.getComponent(EnemyComponent.class).damage(EXPLOSION_DAMAGE, e.getCenter()));
-
-            // Spawn burn zone if level 2 (Heap Overflow)
-            if (level >= 2) {
-                Rectangle burnVisual = new Rectangle(50, 50, Color.color(1.0, 0.5, 0.0, 0.5));
-                burnVisual.setStroke(Color.ORANGE);
-                burnVisual.setStrokeWidth(1.5);
-
-                Entity burnZone = FXGL.entityBuilder()
-                        .type(EntityType.BURN_ZONE)
-                        .at(center.subtract(25, 25))
-                        .view(burnVisual)
-                        .with(new CollidableComponent(true))
-                        .bbox(new HitBox(BoundingShape.box(50, 50)))
-                        .zIndex(500)
-                        .buildAndAttach();
-
-                burnZone.addComponent(new BurnZoneComponent());
-            }
-        }
-    }
-
-    private class BurnZoneComponent extends Component {
-        private double lifetime = 0.0;
-        private double damageTimer = 0.0;
-
-        @Override
-        public void onUpdate(double tpf) {
-            lifetime += tpf;
-            damageTimer += tpf;
-
-            if (lifetime >= BURN_ZONE_DURATION) {
-                entity.removeFromWorld();
-                return;
-            }
-
-            if (damageTimer >= BURN_ZONE_TICK_INTERVAL) {
-                damageTimer = 0.0;
-                FXGL.getGameWorld().getEntitiesByType(EntityType.ENEMY).stream()
-                        .filter(e -> e.isActive() && entity.getBoundingBoxComponent().isCollidingWith(e.getBoundingBoxComponent()))
-                        .forEach(e -> e.getComponent(EnemyComponent.class).damage(BURN_ZONE_DAMAGE, e.getCenter()));
-            }
+            cameraShake();
         }
     }
 }

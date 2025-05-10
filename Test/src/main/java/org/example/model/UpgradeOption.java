@@ -8,13 +8,15 @@ public class UpgradeOption {
     private final String description;
     private final Color color;
     private final OptionType type;
+    private final String imagePath; // New field for image path
 
-    public UpgradeOption(String id, String name, String description, Color color, OptionType type) {
+    public UpgradeOption(String id, String name, String description, Color color, OptionType type, String imagePath) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.color = color;
-        this.type = type;               // WEAPON OR POWERUP
+        this.type = type;
+        this.imagePath = imagePath;
     }
 
     public String getId() {
@@ -36,4 +38,8 @@ public class UpgradeOption {
     public OptionType getType() {
         return type;
     }
-} 
+
+    public String getImagePath() {
+        return imagePath;
+    }
+}
