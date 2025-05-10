@@ -185,46 +185,46 @@ public class EnemyComponent extends Component {
         }
 
         showDamageText(dmg, hitPosition);
-
+//Modify damage to call die when health reaches 0.
         if (health <= 0) {
-            if(Math.random() < 0.5){
-                FXGL.spawn("drop", entity.getCenter());
-            }
-
-            entity.removeFromWorld();
-            
-            // GRANT EXP to player based on enemy type
-            if (player != null && player.hasComponent(PlayerComponent.class)) {
-                
-                int expValue = 10; // BASE VALUE
-                
-                // ADJUST EXP BASED ON ENEMY TYPE
-                switch(type) {
-                    case "maggot":
-                        expValue = 10;
-                        break;
-                    case "beetle":
-                        expValue = 15;
-                        break;
-                    case "mantis":
-                        expValue = 30;
-                        break;
-                    case "bee":
-                        expValue = 20;
-                        break;
-                    case "giantfly":
-                        expValue = 100;
-                        break;
-                    case "dragonfly":
-                        expValue = 40;
-                        break;
-                }
-                
-                player.getComponent(PlayerComponent.class).addExp(expValue);
-            }
+            die();
         }
     }
+    //Added die method to handle drop spawning, experience granting, and removeFromWorld.
+    public void die() {
+        // Spawn drop with 50% chance
+        if (Math.random() < 0.5) {
+            FXGL.spawn("drop", entity.getCenter());
+        }
 
+        // Grant EXP to player based on enemy type
+        if (player != null && player.hasComponent(PlayerComponent.class)) {
+            int expValue = 10; // BASE VALUE
+            switch (type) {
+                case "maggot":
+                    expValue = 10;
+                    break;
+                case "beetle":
+                    expValue = 15;
+                    break;
+                case "mantis":
+                    expValue = 30;
+                    break;
+                case "bee":
+                    expValue = 20;
+                    break;
+                case "giantfly":
+                    expValue = 100;
+                    break;
+                case "dragonfly":
+                    expValue = 40;
+                    break;
+            }
+            player.getComponent(PlayerComponent.class).addExp(expValue);
+        }
+
+        entity.removeFromWorld(); // Return to pool
+    }
     private void showDamageText(double dmg, Point2D hitPosition) {
         // Create the damage text with original styling
         var damageText = FXGL.getUIFactoryService().newText(String.valueOf((int) dmg), Color.WHITE, 22);

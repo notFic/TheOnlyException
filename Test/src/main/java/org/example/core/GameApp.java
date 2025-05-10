@@ -309,7 +309,7 @@ public class GameApp extends GameApplication {
         FXGL.getGameTimer().clear();
         resetGameState();
 
-        FXGL.getGameWorld().addEntityFactory(new GameEntityFactor());
+        FXGL.getGameWorld().addEntityFactory(new GameEntityFactory());
 
         if (!storedPlayerName.equals("Unknown")) {
             FXGL.getWorldProperties().setValue("playerName", storedPlayerName);

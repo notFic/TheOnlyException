@@ -25,7 +25,7 @@ import org.example.components.PlayerComponent;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-public class GameEntityFactor implements EntityFactory {
+public class GameEntityFactory implements EntityFactory {
 
     /*
     dinhi i-define ang mga entities (player, bullet, enemy, etc) and ang sa pag
