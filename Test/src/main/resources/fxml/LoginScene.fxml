@@ -16,7 +16,7 @@
         <MediaView fx:id="backgroundMediaView" fitHeight="720.0" fitWidth="1280.0" preserveRatio="true" />
 
         <Pane maxHeight="450" maxWidth="400" styleClass="login-pane">
-            <VBox alignment="CENTER" maxHeight="450.0" maxWidth="400.0" minHeight="450.0" minWidth="400.0" prefHeight="450.0" prefWidth="400.0" spacing="15" styleClass="login-box">
+            <VBox alignment="CENTER" maxHeight="450.0" maxWidth="400.0" minHeight="450.0" minWidth="400.0" prefHeight="450.0" prefWidth="400.0" spacing="10.0" styleClass="login-box">
                 <padding>
                     <Insets bottom="25" left="35" right="35" top="25" />
                 </padding>
@@ -36,19 +36,19 @@
                     </VBox.margin>
                 </PasswordField>
 
-                <!-- Add Remember Me Checkbox -->
-                <CheckBox fx:id="rememberMeCheckBox" text="Remember Me" styleClass="login-checkbox">
-                    <VBox.margin>
-                        <Insets top="10" />
-                    </VBox.margin>
-                </CheckBox>
+
 
                 <Button fx:id="loginButton" maxHeight="45.0" maxWidth="330.0" minHeight="45.0" minWidth="330.0" onAction="#handleLogin" prefHeight="45.0" prefWidth="330.0" styleClass="login-action-button" text="LOGIN">
                     <VBox.margin>
                         <Insets top="20" />
                     </VBox.margin>
                 </Button>
-
+                <!-- Add Remember Me Checkbox -->
+                <CheckBox fx:id="rememberMeCheckBox" styleClass="login-checkbox" text="Remember Me">
+                    <VBox.margin>
+                        <Insets top="10" />
+                    </VBox.margin>
+                </CheckBox>
                 <Button fx:id="registerButton" onAction="#handleRegister" styleClass="login-switch-button" text="Don't have an account? Register">
                     <VBox.margin>
                         <Insets top="15" />

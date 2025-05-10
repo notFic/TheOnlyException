@@ -6,9 +6,9 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
+import com.almasb.fxgl.texture.AnimatedTexture;
+import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.example.components.EnemyComponent;
 import org.example.core.EntityType;
@@ -25,12 +25,16 @@ public class FireTrailComponent extends Component {
 
     private static final double TRAIL_SPAWN_DISTANCE = 20; // Distance between trail segments
     private static final double TRAIL_LIFETIME = 3.0; // Duration each segment lasts
-    private static final double TRAIL_SIZE = 40; // Size of each trail segment
+    private static final double TRAIL_SIZE = 40; // Size of each trail segment (hitbox size)
+
+    private static final double TRAIL_OFFSET_X = 25.0; // X offset for trail segments
+    private static final double TRAIL_OFFSET_Y = 30.0; // Y offset for trail segments
+
     private static final double DIRECT_DAMAGE = 4.0; // Damage when in trail
-    private static final double DIRECT_DAMAGE_INTERVAL = 0.5; // Damage every 2 seconds
+    private static final double DIRECT_DAMAGE_INTERVAL = 0.5; // Damage every 0.5 seconds
     private static final double BURN_DURATION = 3.0; // Duration of burn effect
     private static final double BURN_TICK_INTERVAL = 1.0; // Burn damage every 1 second
-    private static final double BURN_TICK_DAMAGE = 2.0; // Damage per burn tick (total 1.5 over 3 seconds)
+    private static final double BURN_TICK_DAMAGE = 2.0; // Damage per burn tick
 
     private boolean isActive = false;
     private boolean isGamePaused = false; // Track game pause state
@@ -106,20 +110,49 @@ public class FireTrailComponent extends Component {
     private void spawnTrailSegment() {
         Point2D playerCenter = entity.getCenter();
 
-        Rectangle trailVisual = new Rectangle(TRAIL_SIZE, TRAIL_SIZE, Color.color(1, 0.3, 0, 0.5));
-        trailVisual.setStroke(Color.RED);
-        trailVisual.setStrokeWidth(1.5);
+        // Create the animated texture for smolder.png
+        AnimationChannel smolderChannel = new AnimationChannel(
+                FXGL.image("smolder.png"),
+                4, // Number of frames
+                16, // Frame width (corrected to 16)
+                16, // Frame height (corrected to 16)
+                Duration.seconds(0.8), // Total animation duration (0.2s per frame)
+                0, // Start frame
+                3  // End frame
+        );
+
+        AnimatedTexture trailVisual = new AnimatedTexture(smolderChannel);
+        trailVisual.loop(); // Start looping animation immediately
+
+        // Scale the sprite to match TRAIL_SIZE (40x40 hitbox)
+        double scaleFactor = TRAIL_SIZE / 16.0; // Scale 16x16 sprite to 40x40
+        trailVisual.setScaleX(scaleFactor);
+        trailVisual.setScaleY(scaleFactor);
+
+        // Apply the X and Y offset to the trail segment position
+        Point2D adjustedPosition = playerCenter
+                .subtract(TRAIL_SIZE / 2, TRAIL_SIZE / 2) // Center the hitbox
+                .add(TRAIL_OFFSET_X, TRAIL_OFFSET_Y); // Apply the offset
+
+        // Adjust the visual position to center the scaled sprite on the hitbox
+        double scaledSpriteSize = 16 * scaleFactor; // Should be 40
+        trailVisual.setTranslateX(-(scaledSpriteSize / 2));
+        trailVisual.setTranslateY(-(scaledSpriteSize / 2));
 
         Entity trail = FXGL.entityBuilder()
                 .type(EntityType.FIRETRAIL)
-                .at(playerCenter.subtract(TRAIL_SIZE / 2, TRAIL_SIZE / 2))
+                .at(adjustedPosition)
                 .view(trailVisual)
                 .with(new CollidableComponent(true))
                 .bbox(new HitBox(BoundingShape.box(TRAIL_SIZE, TRAIL_SIZE)))
-                .zIndex(500)
+                .zIndex(-1)
                 .buildAndAttach();
 
         trailSegments.add(trail);
+
+        System.out.println("FireTrail: Spawned trail segment at " + adjustedPosition +
+                " with offset (" + TRAIL_OFFSET_X + ", " + TRAIL_OFFSET_Y + ")" +
+                ", Scale factor: " + scaleFactor);
 
         // Use real-time timer for cleanup
         Timer timer = new Timer(true);
@@ -128,6 +161,7 @@ public class FireTrailComponent extends Component {
             public void run() {
                 if (trail.isActive()) {
                     FXGL.runOnce(() -> {
+                        trailVisual.stop(); // Stop animation on cleanup
                         trail.removeFromWorld();
                         trailSegments.remove(trail);
                     }, Duration.ZERO);
