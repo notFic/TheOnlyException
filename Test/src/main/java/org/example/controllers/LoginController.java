@@ -10,6 +10,7 @@ import javafx.scene.control.CheckBox; // Added import
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import org.example.core.ButtonSoundHelper;
 import org.example.core.GameApp;
 import org.example.utils.DatabaseManager;
 import org.example.utils.ResourceLoader;
@@ -47,6 +48,9 @@ public class LoginController {
             userField.setText(rememberedUser);
             rememberMeCheckBox.setSelected(true);
         }
+
+        // Add button click sounds
+        ButtonSoundHelper.addClickSoundToAll(loginButton, registerButton);
 
         // Add listener to load stylesheet when scene is available
         backgroundMediaView.sceneProperty().addListener((obs, oldScene, newScene) -> {

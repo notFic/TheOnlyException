@@ -8,6 +8,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import org.example.core.ButtonSoundHelper;
 import org.example.core.GameApp;
 import org.example.scenes.MainMenuScene;
 
@@ -54,6 +55,9 @@ public class PauseController {
         // Add hover effects to buttons
         addHoverEffect(resumeButton);
         addHoverEffect(mainMenuButton);
+        
+        // Add button click sounds
+        ButtonSoundHelper.addClickSoundToAll(resumeButton, mainMenuButton);
     }
     
     private void updateMusicVolumeLabel(double value) {

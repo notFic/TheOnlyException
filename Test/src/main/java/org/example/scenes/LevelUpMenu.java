@@ -17,6 +17,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import org.example.upgrades.UpgradeRegistry;
 import org.example.components.PlayerComponent;
+import org.example.core.ButtonSoundHelper;
 import org.example.core.GameApp;
 import org.example.model.OptionType;
 import org.example.model.UpgradeOption;
@@ -74,6 +75,11 @@ public class LevelUpMenu {
             Button button = createUpgradeCard(option);
             optionButtons.add(button);
             weaponGrid.getChildren().add(button);
+        }
+        
+        // Add click sound to all option buttons
+        for (Button button : optionButtons) {
+            ButtonSoundHelper.addClickSound(button);
         }
 
         // Add components to the container

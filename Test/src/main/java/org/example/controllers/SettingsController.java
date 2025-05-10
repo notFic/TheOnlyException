@@ -8,6 +8,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import org.example.core.ButtonSoundHelper;
 import org.example.scenes.MainMenuScene;
 
 public class SettingsController {
@@ -63,6 +64,9 @@ public class SettingsController {
         // Add hover effects to buttons
         addHoverEffect(saveButton);
         addHoverEffect(cancelButton);
+        
+        // Add button click sounds
+        ButtonSoundHelper.addClickSoundToAll(saveButton, cancelButton);
     }
     
     private void updateMusicVolumeLabel(double value) {
