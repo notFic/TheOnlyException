@@ -23,28 +23,78 @@ import org.example.components.PlayerComponent;
 import org.example.core.SoundManager;
 
 public class ExplosiveMinesComponent extends Component {
-    private static final double SPAWN_INTERVAL = 2.0; // Seconds between mine spawns
     private static final double MINE_LIFETIME = 5.0; // Seconds before explosion
-    private static final double EXPLOSION_RADIUS = 100.0; // Base explosion radius
-    private static final double EXPLOSION_RADIUS_UPGRADED = 150.0; // With Heap Overflow
-    private static final double EXPLOSION_DAMAGE = 40.0; // Damage dealt by explosion
+    private static final double EXPLOSION_RADIUS = 100.0; // Explosion radius
     private static final double EXPLOSION_VISUAL_DURATION = 0.5; // Seconds for visual effect
-//    private static final boolean DEBUG_VISUALIZER = false; // Toggle debug radius visualizer
 
     private boolean isActive = false;
     private double spawnTimer = 0.0;
-    private int level = 0;
+    private PlayerComponent playerComponent;
+    
+    // Default values (Level 1)
+    private double spawnInterval = 4.0; // Seconds between mine spawns
+    private double explosionDamage = 20.0; // Damage dealt by explosion
 
     @Override
     public void onAdded() {
-        level = entity.getComponent(PlayerComponent.class).getWeaponLevel("explosive_mines");
+        playerComponent = entity.getComponent(PlayerComponent.class);
+        updateLevelValues();
         activatePowerUp();
     }
 
     public void activatePowerUp() {
         if (isActive) return;
+        updateLevelValues();
         isActive = true;
         spawnTimer = 0.0;
+    }
+
+    private void updateLevelValues() {
+        if (playerComponent == null) return;
+        
+        int level = playerComponent.getWeaponLevel("explosive_mines");
+        if (level <= 0) return;
+        
+        System.out.println("ExplosiveMines activated at level: " + level);
+        System.out.println("Previous values - Interval: " + spawnInterval + ", Damage: " + explosionDamage);
+        
+        // Update values based on level
+        switch (level) {
+            case 1:
+                spawnInterval = 4.0;
+                explosionDamage = 20.0;
+                break;
+            case 2:
+                spawnInterval = 4.0;
+                explosionDamage = 35.0;
+                break;
+            case 3:
+                spawnInterval = 3.0;
+                explosionDamage = 35.0;
+                break;
+            case 4:
+                spawnInterval = 3.0;
+                explosionDamage = 50.0;
+                break;
+            case 5:
+                spawnInterval = 2.0;
+                explosionDamage = 50.0;
+                break;
+            case 6:
+                spawnInterval = 1.0;
+                explosionDamage = 50.0;
+                break;
+            default:
+                // If level > 6, cap at level 6
+                if (level > 6) {
+                    spawnInterval = 1.0;
+                    explosionDamage = 50.0;
+                }
+                break;
+        }
+        
+        System.out.println("Updated ExplosiveMines values - Level: " + level + 
+                         ", Interval: " + spawnInterval + ", Damage: " + explosionDamage);
     }
 
     public void deactivatePowerUp() {
@@ -55,9 +105,14 @@ public class ExplosiveMinesComponent extends Component {
     @Override
     public void onUpdate(double tpf) {
         if (!isActive) return;
+        
+        // Periodically check if level values need updating
+        if (playerComponent != null) {
+            updateLevelValues();
+        }
 
         spawnTimer += tpf;
-        if (spawnTimer >= SPAWN_INTERVAL) {
+        if (spawnTimer >= spawnInterval) {
             spawnMine();
             spawnTimer = 0.0;
         }
@@ -119,8 +174,8 @@ public class ExplosiveMinesComponent extends Component {
 
         private void explode() {
             Point2D center = entity.getCenter();
-            double radius = level >= 2 ? EXPLOSION_RADIUS_UPGRADED : EXPLOSION_RADIUS;
-            double scaleFactor = (2 * radius) / 64.0; // Scale 64x64 sprite to diameter 2*radius (200x200 or 300x300)
+            double radius = EXPLOSION_RADIUS;
+            double scaleFactor = (2 * radius) / 64.0; // Scale 64x64 sprite to diameter 2*radius
 
             // Visual explosion effect (animated sprite)
             AnimationChannel explosionChannel = new AnimationChannel(
@@ -136,25 +191,12 @@ public class ExplosiveMinesComponent extends Component {
             explosionTexture.play(); // Play once
             SoundManager.getInstance().playSound("explosion"); // Play gunshot sound
             Entity explosionEntity = FXGL.entityBuilder()
-                    .at(center.subtract(radius, radius)) // Center scaled sprite (200x200 or 300x300)
+                    .at(center.subtract(radius, radius)) // Center scaled sprite
                     .view(explosionTexture)
                     .scale(scaleFactor, scaleFactor) // Scale to diameter 2*radius
                     .zIndex(1000)
                     .buildAndAttach();
             FXGL.getGameTimer().runOnceAfter(explosionEntity::removeFromWorld, Duration.seconds(EXPLOSION_VISUAL_DURATION));
-
-//            // Debug radius visualizer (optional)
-//            if (DEBUG_VISUALIZER) {
-//                Circle debugCircle = new Circle(radius, Color.TRANSPARENT);
-//                debugCircle.setStroke(Color.RED);
-//                debugCircle.setStrokeWidth(2.0);
-//                Entity debugEntity = FXGL.entityBuilder()
-//                        .at(center.subtract(radius, radius)) // Center circle
-//                        .view(debugCircle)
-//                        .zIndex(1001)
-//                        .buildAndAttach();
-//                FXGL.getGameTimer().runOnceAfter(debugEntity::removeFromWorld, Duration.seconds(EXPLOSION_VISUAL_DURATION));
-//            }
 
             // Particle effect for explosion
             ParticleEmitter emitter = ParticleEmitters.newExplosionEmitter(50);
@@ -174,11 +216,37 @@ public class ExplosiveMinesComponent extends Component {
                     .buildAndAttach();
             FXGL.getGameTimer().runOnceAfter(particleEntity::removeFromWorld, Duration.seconds(0.5));
 
+            // Get the current damage value from the parent component
+            double currentDamage = explosionDamage;
+            
+            // Debug print
+            System.out.println("Mine exploding with damage: " + currentDamage + " and radius: " + radius);
+
             // Damage enemies in radius
             FXGL.getGameWorld().getEntitiesByType(EntityType.ENEMY).stream()
                     .filter(e -> e.isActive() && e.getCenter().distance(center) <= radius)
-                    .forEach(e -> e.getComponent(EnemyComponent.class).damage(EXPLOSION_DAMAGE, e.getCenter()));
+                    .forEach(e -> e.getComponent(EnemyComponent.class).damage(currentDamage, e.getCenter()));
             cameraShake();
+        }
+    }
+    
+    /**
+     * Returns the description for the current level or next level if nextLevel is true
+     * @param level Current level
+     * @param nextLevel Whether to get next level description
+     * @return Description string for the level
+     */
+    public static String getLevelDescription(int level, boolean nextLevel) {
+        if (nextLevel) level++;
+        
+        switch (level) {
+            case 1: return "Spawn 1 mine every 4 secs deals 20 dmg";
+            case 2: return "Explosion deals 35 dmg";
+            case 3: return "Spawn 1 mine every 3 secs";
+            case 4: return "Explosion deals 50 dmg";
+            case 5: return "Spawn 1 mine every 2 secs";
+            case 6: return "Spawn 1 mine every sec";
+            default: return level > 6 ? "MAXED OUT" : "Places mines that explode after a delay";
         }
     }
 }

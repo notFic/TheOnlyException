@@ -5,17 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6e27113-e10b-4f4b-824e-63578634f0bd" name="Changes" comment="merging to main">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/components/DropComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/components/DropComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/components/PlayerComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/components/PlayerComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/core/SoundManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/core/SoundManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/LightningStrikeComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/LightningStrikeComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/DropComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/DropComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/ExplosiveMinesComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/powerups/ExplosiveMinesComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LevelUpMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/Test/src/main/java/org/example/scenes/LevelUpMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/components/PlayerComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/components/PlayerComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/core/SoundManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/core/SoundManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/LightningStrikeComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/powerups/LightningStrikeComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-11-May-2025-00.15.57.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/FXGL-11-May-2025-00.17.23.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LevelUpMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/Test/target/classes/org/example/scenes/LevelUpMenu.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,12 +31,12 @@
     &quot;assignee&quot;: &quot;martianK3jC&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/fictionithink/TheOnlyException.git",
-    "accountId": "39af587a-5829-4bac-bc14-0998e4cb53db"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/fictionithink/TheOnlyException.git&quot;,
+    &quot;accountId&quot;: &quot;39af587a-5829-4bac-bc14-0998e4cb53db&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/AppData/Local/Temp/tmp_3_GameEntityFactory.class" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/AppData/Local/Temp/tmp_4_GameEntityFactory.class" root0="FORCE_HIGHLIGHTING" />
@@ -64,7 +59,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "hahaha-nabuang-nako",
+    "git-widget-placeholder": "m",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/ginac/Downloads/TheOnlyException/TheOnlyException",
     "node.js.selected.package.tslint": "(autodetect)",
