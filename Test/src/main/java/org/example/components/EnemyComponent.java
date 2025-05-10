@@ -197,6 +197,18 @@ public class EnemyComponent extends Component {
             FXGL.spawn("drop", entity.getCenter());
         }
 
+        // Check for food drop based on auto_heal level
+        if (player != null && player.hasComponent(PlayerComponent.class)) {
+            PlayerComponent playerComponent = player.getComponent(PlayerComponent.class);
+            int autoHealLevel = playerComponent.getWeaponLevel("auto_heal");
+            if (autoHealLevel > 0) {
+                double foodDropChance = 0.05 * autoHealLevel; // 5% per level, max 25% at level 5
+                if (Math.random() < foodDropChance) {
+                    FXGL.spawn("food", entity.getCenter());
+                }
+            }
+        }
+
         // Grant EXP to player based on enemy type
         if (player != null && player.hasComponent(PlayerComponent.class)) {
             int expValue = 10; // BASE VALUE

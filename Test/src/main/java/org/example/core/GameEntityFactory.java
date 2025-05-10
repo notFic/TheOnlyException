@@ -24,6 +24,7 @@ import org.example.components.BulletComponent;
 import org.example.components.DropComponent;
 import org.example.components.EnemyComponent;
 import org.example.components.PlayerComponent;
+import org.example.components.FoodComponent;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -357,6 +358,37 @@ public class GameEntityFactory implements EntityFactory {
                 .viewWithBBox(new Rectangle(10, 10, Color.YELLOW))
                 .with(new ProjectileComponent(direction, 1000)) // <---- Here change speed
                 .with(new VoltChainComponent(chainCount))
+                .collidable()
+                .build();
+    }
+
+    @Spawns("food")
+    public Entity newFood(SpawnData data) {
+        // Create a cross shape for the food
+        var foodShape = new javafx.scene.shape.Path();
+        foodShape.getElements().addAll(
+            new javafx.scene.shape.MoveTo(0, 7.5),
+            new javafx.scene.shape.LineTo(15, 7.5),
+            new javafx.scene.shape.MoveTo(7.5, 0),
+            new javafx.scene.shape.LineTo(7.5, 15)
+        );
+        foodShape.setStroke(Color.RED);
+        foodShape.setStrokeWidth(3);
+
+        // Create a background circle
+        var background = new javafx.scene.shape.Circle(7.5, 7.5, 7.5);
+        background.setFill(Color.RED);
+        background.setOpacity(0.3);
+
+        // Group the shapes
+        var foodGroup = new javafx.scene.Group(background, foodShape);
+
+        return entityBuilder()
+                .type(EntityType.FOOD)
+                .from(data)
+                .view(foodGroup)
+                .bbox(new HitBox(BoundingShape.box(15, 15)))
+                .with(new FoodComponent())
                 .collidable()
                 .build();
     }

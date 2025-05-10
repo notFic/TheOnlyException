@@ -450,22 +450,30 @@ public class PlayerComponent extends Component {
 
     // Apply damage to player
     public void damage(int dmg) {
-        if (!isAlive || (autoHeal != null && autoHeal.isInvulnerable())) return;
-
-        // Check for Safe Mode invulnerability
-        if (autoHeal != null && autoHeal.canTriggerInvulnerability() && (health - dmg) <= (maxHealth * 0.1)) {
-            autoHeal.triggerInvulnerability();
-            return;
-        }
+        if (!isAlive) return;
 
         // Apply shield damage absorption if shield is active
-        if (shield != null) {
+        if (shield != null && dmg > 0) { // Only absorb damage, not healing
             dmg = shield.absorbDamage(dmg);
             if (dmg <= 0) {
                 // Shield absorbed all damage
                 return;
             }
         }
+
+        // Handle healing (negative damage)
+        if (dmg < 0) {
+            int oldHealth = health;
+            health = Math.min(health - dmg, maxHealth); // Subtract negative to add health
+            int actualHeal = health - oldHealth; // Calculate actual amount healed
+            FXGL.getWorldProperties().setValue("health", health);
+            updateHealthBar();
+            
+            // Show healing text
+            showHealingText(actualHeal);
+            return;
+        }
+
         health -= dmg;
         FXGL.getWorldProperties().setValue("health", health);
 
@@ -498,6 +506,70 @@ public class PlayerComponent extends Component {
 
         showDamageText(dmg);
         updateHealthBar();
+    }
+
+    // Show floating healing text
+    private void showHealingText(int healAmount) {
+        // Create the healing text with green color
+        var healingText = FXGL.getUIFactoryService().newText("+" + healAmount + " HP", Color.GREEN, 22);
+
+        // Add directly to game world at the player position
+        Point2D healPosition = entity.getPosition().subtract(0, 30);
+        var textEntity = FXGL.entityBuilder()
+                .at(healPosition)
+                .view(healingText)
+                .zIndex(100)
+                .buildAndAttach();
+
+        // Determine jump direction based on mouse position
+        boolean jumpRight = true; // Default to right
+
+        Point2D mouseScreenPos = FXGL.getInput().getMousePositionUI();
+        double screenWidth = FXGL.getGameScene().getAppWidth();
+
+        // If mouse is to the left of screen center, jump left
+        // If mouse is to the right or at center, jump right
+        jumpRight = mouseScreenPos.getX() >= screenWidth / 2;
+
+        // Distance and height for the jump
+        int xDistance = 30;
+        int yPeak = 25;
+
+        // Set the direction based on mouse position
+        if (!jumpRight) {
+            xDistance = -xDistance;
+        }
+
+        // Create a path for the arc movement
+        javafx.scene.shape.Path path = new javafx.scene.shape.Path();
+        path.getElements().add(new javafx.scene.shape.MoveTo(0, 0));
+        path.getElements().add(new javafx.scene.shape.QuadCurveTo(
+                xDistance / 2.0, -yPeak,  // Control point
+                xDistance, 0             // End point
+        ));
+
+        // Create a compound animation that combines path and fade
+        javafx.animation.PathTransition pathTransition = new javafx.animation.PathTransition(
+                javafx.util.Duration.seconds(0.6), path, healingText);
+        pathTransition.setInterpolator(javafx.animation.Interpolator.EASE_OUT);
+
+        // Create the fade transition
+        javafx.animation.FadeTransition fadeTransition = new javafx.animation.FadeTransition(
+                javafx.util.Duration.seconds(0.25), healingText);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+
+        // Create a timeline for managing the timing of both animations
+        javafx.animation.Timeline timeline = new javafx.animation.Timeline(
+            new javafx.animation.KeyFrame(javafx.util.Duration.ZERO, e -> pathTransition.play()),
+            new javafx.animation.KeyFrame(javafx.util.Duration.seconds(0.4), e -> fadeTransition.play())
+        );
+
+        // Remove entity when animations are done
+        fadeTransition.setOnFinished(e -> textEntity.removeFromWorld());
+
+        // Start the timeline
+        timeline.play();
     }
 
     // Reset player state for a new game
