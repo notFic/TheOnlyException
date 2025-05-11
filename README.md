@@ -169,3 +169,14 @@ git clone https://github.com/fictionithink/TheOnlyException.git
 
 ![Screenshot 2025-05-11 142606](https://github.com/user-attachments/assets/fd874b09-5fa6-4062-875c-54e05eb047f4)
 
+---
+
+## 👥 Team Members
+
+- **Kurt Derrick Basalo**  
+- **Kesha Jane L. Ceniza**  
+- **John Kheinzy Mandawe**  
+- **John Niko Merenillo**  
+- **Primo Christian Montejo**
+
+---
