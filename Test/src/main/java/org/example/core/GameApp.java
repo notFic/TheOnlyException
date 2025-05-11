@@ -92,8 +92,9 @@ public class GameApp extends GameApplication {
         System.out.println("initSettings called - setting up game settings");
         settings.setWidth(1280);
         settings.setHeight(720);
-        settings.setTitle("Prototype Game");
-        settings.setVersion("0.1.5");
+        settings.setTitle("System Crash");
+        settings.setVersion("5.10.25");
+        settings.setAppIcon("SystemCrashLogo.png");
         // Load Pixelify Sans fonts
         Font.loadFont(getClass().getResourceAsStream("/fonts/PixelifySans_Bold.ttf"), 52);
         Font.loadFont(getClass().getResourceAsStream("/fonts/PixelifySans_SemiBold.ttf"), 24);
