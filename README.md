@@ -2,6 +2,8 @@
 
 **System Crash** is a roguelike survival game inspired by *Soul Knight* and *HoloCure*, developed in Java using JavaFX and FXGL. Players battle waves of endlessly spawning enemies using melee and ranged attacks to survive as long as possible. The game features dynamic combat, power-ups, leaderboards, and user authentication—designed with a strong emphasis on object-oriented programming and clean, interactive UI.
 
+For QA Testers: this branch has been refactored for easier access for you guys. simply clone this project into your preferred IDE (in our case, we used Intellij), and switch to this branch (offline-version). If everything went as is, you shouldn't encounter any problems. If you guys ever do, please reach out to us so we can address the problem swiftly.
+
 ---
 
 ## 🎮 Project Overview
