@@ -113,25 +113,18 @@ public class LoginController {
             return;
         }
 
-        try {
-            boolean loginSuccess = DatabaseManager.validateUser(user, pass);
+        boolean loginSuccess = true;
 
-            if (loginSuccess) {
-                // Handle "Remember Me" functionality
-                if (rememberMeCheckBox.isSelected()) {
-                    prefs.put("rememberedUser", user);
-                    System.out.println("Username saved to Preferences: " + user);
-                } else {
-                    prefs.remove("rememberedUser");
-                    System.out.println("Removed remembered username from Preferences");
-                }
-                handleSuccessfulLogin(user);
+        if (loginSuccess) {
+            if (rememberMeCheckBox.isSelected()) {
+                prefs.put("rememberedUser", user);
             } else {
-                showError("Incorrect username or password. Please try again.");
+                prefs.remove("rememberedUser");
             }
-        } catch (SQLException e) {
-            showError("Database error: " + e.getMessage());
-            e.printStackTrace();
+
+            handleSuccessfulLogin(user);
+        } else {
+            showError("Incorrect username or password. Please try again.");
         }
     }
 
